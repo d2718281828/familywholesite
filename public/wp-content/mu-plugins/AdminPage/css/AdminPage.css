@@ -1,0 +1,115 @@
+.esb_field_wrap {
+  margin-bottom: 10px;
+  border: solid 1px #ddd;
+  border-radius: 3px;
+  padding: 3px;
+}
+.esb_field_wrap div {
+  display: inline-block;
+  vertical-align: top;
+}
+.esb_field_wrap .wrap-label {
+  width: 18vw;
+  text-align: right;
+  margin-right: 5px;
+}
+.esb_field_wrap .wrap-input  {
+  width: 54vw;
+}
+.esb_field_wrap .wrap-input input[type="text"]
+{
+  width: 90%;
+}
+.esb_field_wrap .wrap-input .select2-input  {
+  width: 90% !important;
+}
+.base-section{
+  height: 180px;
+}
+.current-value{
+  background-color: #aaa;
+  width: 18vw;
+  margin-right: 10px;
+  border: solid 1px red;
+  display: inline-block;
+  overflow-x: hidden;
+}
+.wrap-selection{
+  height: 160px;
+  width: 80%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  display:inline-block;
+}
+.selection-slide{
+  overflow-x: scroll;
+  overflow-y: hidden;
+  width: 3000px;
+}
+.wrap-selection .image-option {
+  background-color: #aaa;
+  margin-right: 10px;
+}
+.wrap-selection .image-option img {
+  height: 130px;
+}
+.wrap-label label{
+  font-weight: bold;
+  margin-right: 10px;
+}
+.tab-section {
+  width: 100%;
+  border-bottom: 1px solid #444;
+}
+.tab-section ul {
+  margin-bottom: -1px;
+}
+.tab-section li{
+  list-style: none;
+  padding: 8px;
+  margin: 0 4px;
+  display: inline-block;
+  border: 1px solid #444;
+  background-color: #ccc;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.tab-section li.current{
+  border-top: 1px solid #444;
+  border-left: 1px solid #444;
+  border-right: 1px solid #444;
+  border-bottom: 1px solid rgb(241,241,241);
+  background-color: transparent;
+}
+/* admin page documentation */
+.admin-page-content strong {
+  font-weight: bold;
+  color: #33a;
+}
+.admin-page-content ul {
+  margin-left: 20px;
+}
+.admin-page-content ul li {
+  list-style: disc;
+}
+.admin-page-content .xmp{
+  margin-left: 4%;
+  padding-left: 3%;
+  background-color: #f9f9ff;
+  border-left: 2px solid #00b;
+}
+.admin-page-content h2{
+  background-color: #363679;
+  color: #fff;
+  width:100%;
+  padding-top:4px;
+  padding-bottom:4px;
+}
+.admin-page-content h3{
+  border-top:solid 2px #33a;
+}
+.admin-page-content h4{
+  color:#33a;
+  color:#33a;
+  font-weight:bold;
+}

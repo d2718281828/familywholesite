@@ -1,0 +1,23 @@
+/*  styling for the metabox */
+.metabox-field{
+  margin-top: 5px;
+  margin-bottom: 20px;
+}
+.metabox-field label {
+    width: 30%;
+}
+.metafield {
+    width: 50%;
+}
+.metabox-label{
+  font-weight: bold;
+  display:inline-block;
+  margin-right: 10px;
+  color: #007;
+}
+.metabox-field-desc{
+  display:inline-block;
+}
+.metabox-value{
+  margin-top: 8px;
+}
