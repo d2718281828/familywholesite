@@ -10,10 +10,9 @@ License: GPLv2 or later
 Text Domain: gsgdomain
 */
 // to disable it set TRACEIT to false.
-define("TRACEIT",false);
+define("TRACEIT",true);
 
 function traceit($m){
-    return;
     error_log($m);
     $dir = wp_upload_dir();
     $tracefile = $dir["basedir"]."/application.trace";
