@@ -1,5 +1,12 @@
 <?php
-
+/*
+Plugin Name: Family Site
+Plugin URI:
+Description: Family Site
+Author: Derek Storkey
+Version: 0.1
+Author URI:
+*/
 class FamilySite {
 
   public function __construct(){
