@@ -17,8 +17,8 @@ class FamilySite {
 
   protected function setupCPTs(){
 
-    $z = new CptHelper("person", "Person", "People", [])
-    ->addField(new FieldHelper("date_birth", "Date or Birth", "Date the person was born"))
+    $z = (new CptHelper("person", "Person", "People", []))
+        ->addField(new FieldHelper("date_birth", "Date or Birth", "Date the person was born"))
     ;
   }
 
