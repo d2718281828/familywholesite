@@ -3,6 +3,7 @@ namespace FamilySite;
 use CPTHelper\CptHelper;
 use CPTHelper\FieldHelper;
 use CPTHelper\DateHelper;
+use CPTHelper\CPTSelectHelper;
 /*
 Plugin Name: Family Site
 Plugin URI:
