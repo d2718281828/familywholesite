@@ -1,6 +1,7 @@
 <?php
 namespace FamilySite;
-use CPTHelper\CPTHelper;
+use CPTHelper\CptHelper;
+use CPTHelper\FieldHelper;
 /*
 Plugin Name: Family Site
 Plugin URI:
