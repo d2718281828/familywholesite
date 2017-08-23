@@ -32,7 +32,7 @@ class FamilySite {
         ->addField(new CPTSelectHelper("place_death", "Place of Death", "Place the person was living when they died", ["posttype"=>"fs_place"]))
         ->addField(new CPTSelectHelper("father", "Father", "", ["posttype"=>"fs_person"]))
         ->addField(new CPTSelectHelper("mother", "Mother", "", ["posttype"=>"fs_person"]))
-        ->addField(new SelectHelper("gender", "Gender", "", ["posttype"=>"fs_person"])
+        ->addField((new SelectHelper("gender", "Gender", "", ["posttype"=>"fs_person"]))
             ->addOption("M","Male")
             ->addOption("F","Female")
         )
