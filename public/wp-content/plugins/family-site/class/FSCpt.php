@@ -4,7 +4,7 @@ use CPTHelper\CptHelper;
 
 class FSCpt extends CptHelper {
 
-  protected function setup {
+  protected function setup() {
     $this->prefix = "fs_";
   }
 
