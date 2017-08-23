@@ -12,6 +12,7 @@ use CPTHelper\CptHelper;
 use CPTHelper\FieldHelper;
 use CPTHelper\DateHelper;
 use CPTHelper\CPTSelectHelper;
+use CPTHelper\SelectHelper;
 
 require_once("class/FSCpt.php");
 
