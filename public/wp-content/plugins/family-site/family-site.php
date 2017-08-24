@@ -49,7 +49,7 @@ class FamilySite {
         ->addField(new FieldHelper("long", "Longitude", "In degrees, + is East, - is West."))
     ;
     $z = (new FSCpt("post", null, null, []))
-        ->addField(new DateHelper("actual_date", "Actual date", "Date event started"))
+        ->addField(new DateHelper("actual_date", "Actual date", "Date that the picture was actually taken"))
         ->addField(new CPTSelectHelper("event", "Event", "", ["posttype"=>"fs_event"]))
     ;
   }

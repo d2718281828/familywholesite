@@ -63,8 +63,8 @@ class VeilOfSecrecy {
         return $m;
     }
     protected function check(){
-        error_log("****** Checking <<<<");
-        //if (is_user_logged_in()) return true;
+        //error_log("****** Checking <<<<");
+        if (is_user_logged_in()) return true;
 
         if (isset($_REQUEST["vos_password"])) {
             $token = $this->makeToken($_REQUEST["vos_password"]);
