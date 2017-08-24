@@ -37,6 +37,7 @@ class FamilySite {
             ->addOption("M","Male")
             ->addOption("F","Female")
         )
+        ->addField(new FieldHelper("birthname", "Birth Name", "Full name at birth"))
     ;
     $z = (new FSCpt("event", "Event", "Events", []))
         ->addField(new DateHelper("actual_date", "Actual date", "Date event started"))
@@ -46,6 +47,10 @@ class FamilySite {
     $z = (new FSCpt("place", "Place", "Places", []))
         ->addField(new FieldHelper("lat", "Latitude", "In degrees and decimals of a degree, + is North"))
         ->addField(new FieldHelper("long", "Longitude", "In degrees, + is East, - is West."))
+    ;
+    $z = (new FSCpt("post", null, null, []))
+        ->addField(new DateHelper("actual_date", "Actual date", "Date event started"))
+        ->addField(new CPTSelectHelper("event", "Event", "", ["posttype"=>"fs_event"]))
     ;
   }
 

@@ -1,13 +1,42 @@
 <?php
 namespace CPTHelper;
-//use CPTHelper\FieldHelper;
-
-//require_once("serviceFunctions.php");
 /**
  * Class CptHelper - represents a custom post type.
- * You can also add custom fields for the post type, using FieldHelper and related classes.
+ * You can also add custom fields for the post type, using addField(new FieldHelper()) and related classes.
+ * You can extend this class to provide a standard prefix and further modify behaviour
+ * There are a lot of methods apart from addField to modify the behaviour. They all return $this to allow chaining.
+ *
+ * Compared to just using register_post_type() directly it doesnt add much value, but it is much more useful when you also add fields.
+ * It is just one more line to add a new field which automatically gets added to the meta box for the post and gets saved for you.
+ *
+ * Late in the project, I added instance classes too, which feed off the CptHelper to get info about their custom data values.
+ * There are currently a lot of functions in GSG related to specific post types which would have been better written on their instance classes.
+ */
+
+/*
+ * Sample usage (GsgCpt) is a child class that just sets a prefix):
+       $case = new GsgCpt("casestudy","Case Study","Case Studies",[],__FILE__);
+       $case->urlSlug('case_studies')
+           ->addField(new FieldHelper("post-class","Post-specific CSS classes","The class will be added to post and to links. Can be multiple, separated by spaces."))
+           ->addField(new PostSelector("author_contact","Author contact or organisation","The real author, if a known contact in the system",["posttypes"=>["gsg_contact","gsg_nab"]]))
+           ->addField(new FieldHelper("actual_author","Actual Case Study Author","The real author, if not a contact in the system"))
+           ->addField(new MediaSelector2("author_image","Author Photo","If not a contact, upload the image to the media library first, then refer to it here."))
+           ->addField(new FieldHelper("video_url","Video URL","Works for Youtube and Vimeo hosted videos - include the entire URL. We dont host videos on our own server."))
+           ->addField(new FieldHelper("sub-heading","Subheading under the main header","This appears just below the white box on the page."))
+           ->addField(new FieldHelper("title-short","Short version of the title","The default will be an abbreviation to ".$this->title_chars_short." chars"))
+           ->addField(new FieldHelper("title-very-short","Very short version of the title","The default will be an abbreviation to ".$this->title_chars_very_short." chars"))
+           ->addField(new GSGStatistic("statistics","Stand-out Statistics","The most important statistics, highlighted for the public"))
+           ->addField(new MediaSelector2("casestudy_logo","Logo for the case study","If there is one, it will be shown below the hero image."))
+           ->addField(new FieldHelper("sequence","Sequence","Used to infuence the order that posts, pages etc are shown.".$seqdesc))
+           ->addField(new CPTSelectHelper("nabowner","Owning NAB","Which NAB 'owns' - is responsible for the content of - this item.",["posttype"=>"gsg_nab"]))
+           ->allowComments()
+           ->allowExcerpt();
+
  */
 class CptHelper {
+
+    // class variable to keep track of them all
+    static protected $registrations = [];
 
     protected $slug;
     protected $labels;
@@ -18,6 +47,7 @@ class CptHelper {
     protected $supports = [];
     protected $metaFields = [];
     protected $constants = [];
+    protected $instanceClass = 'CPost';
     protected $flushRules = false;
     /**
     * Is the post type built-in, or created somewhere else.
@@ -50,6 +80,7 @@ class CptHelper {
             }
         }
         add_action( 'init', [$this,'register'] );
+
     }
 
     /**
@@ -86,6 +117,7 @@ class CptHelper {
 
             if (TRACEIT) traceit("!!!!!!!!actually registering the post type ".print_r($optslist,true));
             $cpt = register_post_type($this->posttype(), $optslist);
+            self::$registrations[$this->posttype()] = $this;
 
             if ($this->showInQueries){
                 add_action( 'pre_get_posts', [$this,'add_to_query'] );
@@ -224,17 +256,18 @@ class CptHelper {
         $this->constants[] = [$name,$value];
         return $this;
     }
-    // for debug
-    protected function trace_delete($m){
-        error_log($m);
-        //echo '<br />'.$m;
-        $logfile = fopen("application.trace", "a");
-        fwrite($logfile,"\n".$m);
-        fclose($logfile);
-    }
     protected function tracePost(){
         global $post;
         if (TRACEIT) traceit( ($post) ? "POST-".$post->ID : "No Post");
+    }
+
+    /**
+     * Static function which uses a class static variable which stores all of the CptHelpers indexed by the post type.
+     * @param $slug
+     * @return mixed|null
+     */
+    static function get($slug){
+        return isset(self::$registrations[$slug]) ? self::$registrations[$slug] : null;
     }
 }
 
