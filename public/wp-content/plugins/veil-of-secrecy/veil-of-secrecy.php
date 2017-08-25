@@ -108,6 +108,8 @@ HDR;
     }
     protected function welcomeMessage(){
         $old = get_site_option('vos_welcome_page');
+        if ($old==-1) return;
+        
         $post = get_post($old);
 
         echo "<div class='welcome'>";
