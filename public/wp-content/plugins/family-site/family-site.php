@@ -21,10 +21,13 @@ class FamilySite {
   public function __construct(){
 
     $this->setupCPTs();
-    $this->setupTaxes();
+
+    add_action("init", [$this, "init"]);
 
   }
-
+  public function init(){
+    $this->setupTaxes();
+  }
   protected function setupCPTs(){
 
     $z = (new FSCpt("person", "Person", "People", []))
