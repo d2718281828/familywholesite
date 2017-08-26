@@ -15,6 +15,10 @@ use CPTHelper\CPTSelectHelper;
 use CPTHelper\SelectHelper;
 
 require_once("class/FSCpt.php");
+require_once("class/FSPost.php");
+//require_once("class/FSPerson.php");
+//require_once("class/FSEvent.php");
+//require_once("class/FSPlace.php");
 
 class FamilySite {
 

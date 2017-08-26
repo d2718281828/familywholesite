@@ -1,8 +1,11 @@
 <?php
+use FamilySite\FSPost;
 /**
  * Prints HTML with meta information for the categories, tags and comments.
  */
 function twentyseventeen_entry_footer() {
+  global $post;
+  if ($post->post_type=="post") $obj = new FSPost($post);
 
 	/* translators: used between list items, there is a space after the comma */
 	$separate_meta = __( ', ', 'twentyseventeen' );
@@ -34,6 +37,12 @@ function twentyseventeen_entry_footer() {
 					echo '</span>';
 				}
 			}
+      if ($obj){
+        $xtags = $obj->xtags();
+        foreach($xtags as $xtag){
+          echo " ".$xtag->Name." ";
+        }
+      } else echo "NO OBJ";
 
 			twentyseventeen_edit_link();
 
