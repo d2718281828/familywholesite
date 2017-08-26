@@ -141,6 +141,11 @@ class CptHelper {
     }
     public function admin_init(){
         foreach($this->metaFields as $field) $field->admin_init();
+
+        // We dont need this for the metabox, only if the child class wants to do some more
+        if (method_exists($this,"on_save")){
+          add_action('save_post',[$this, 'further_save'], 1,2);
+        }
     }
     protected function globaldefault(){
         return [
@@ -154,6 +159,10 @@ class CptHelper {
     }
     public function posttype(){
         return $this->builtin ? $this->slug : $this->prefix.$this->slug;
+    }
+    public function further_save($post_id, $post){
+        if ($post->post_type != $this->posttype()) return;
+        $this->on_save($post_id, $post);
     }
     // TODO got to get the current list and add ours to it
     public function add_to_query($query){
