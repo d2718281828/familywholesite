@@ -43,7 +43,7 @@ function twentyseventeen_entry_footer() {
         foreach($xtags as $xtag){
           echo " tag=".$xtag->name." ";
         }
-      } else echo "NO OBJ";
+      }
 
 			twentyseventeen_edit_link();
 
