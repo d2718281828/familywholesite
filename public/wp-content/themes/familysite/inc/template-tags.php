@@ -4,8 +4,7 @@ use FamilySite\FSPost;
  * Prints HTML with meta information for the categories, tags and comments.
  */
 function twentyseventeen_entry_footer() {
-  global $post;
-  if ($post->post_type=="post") $obj = new FSPost($post);
+  global $cpost;
 
 	/* translators: used between list items, there is a space after the comma */
 	$separate_meta = __( ', ', 'twentyseventeen' );
@@ -37,13 +36,13 @@ function twentyseventeen_entry_footer() {
 					echo '</span>';
 				}
 			}
-      if (false && $obj){
-        $xtags = $obj->xtags();
-	if (count($xtags)==0) echo "No tags";
+      if ($cpost){
+        $xtags = $cpost->xtags();
+	      if (count($xtags)==0) echo "No tags";
         foreach($xtags as $xtag){
           echo " tag=".$xtag->name." ";
         }
-      }
+      } else echo "No CPost";
 
 			twentyseventeen_edit_link();
 

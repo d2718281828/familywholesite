@@ -16,9 +16,9 @@ use CPTHelper\SelectHelper;
 
 require_once("class/FSCpt.php");
 require_once("class/FS_Post.php");
-//require_once("class/FSPerson.php");
-//require_once("class/FSEvent.php");
-//require_once("class/FSPlace.php");
+require_once("class/Person.php");
+require_once("class/Event.php");
+require_once("class/Place.php");
 
 class FamilySite {
 
@@ -27,15 +27,24 @@ class FamilySite {
     $this->setupCPTs();
 
     add_action("init", [$this, "init"]);
+    add_action("wp_head", [$this, "wp_head"]);
 
   }
   public function init(){
     $this->setupTaxes();
   }
+  public function wp_head(){
+    // if this is a single page set up the cpost which will be used in templates
+    if (is_single()){
+      global $post;
+      $GLOBALS["cpost"] = CptHelper::make($post);
+    } else $GLOBALS["cpost"] = null;
+  }
   protected function setupCPTs(){
 
     $z = (new FSCpt("person", "Person", "People", []))
         ->set_taxonomy("person_tax")
+        ->setClass("Person")
         ->addField(new DateHelper("date_birth", "Date of Birth", "Date the person was born, yyyy/mm/dd"))
         ->addField(new CPTSelectHelper("place_birth", "Place of Birth", "Place the person was living in immediately after birth", ["posttype"=>"fs_place"]))
         ->addField(new DateHelper("date_death", "Date of Death", "Date the person was born, yyyy/mm/dd"))
@@ -50,12 +59,14 @@ class FamilySite {
     ;
     $z = (new FSCpt("event", "Event", "Events", []))
         ->set_taxonomy("event_tax")
+        ->setClass("Event")
         ->addField(new DateHelper("actual_date", "Actual date", "Date event started"))
         ->addField(new FieldHelper("duration", "Duration", "The length of the event in days"))
         ->addField(new CPTSelectHelper("event_place", "Place of the event", "Place where the event occurred", ["posttype"=>"fs_place"]))
     ;
     $z = (new FSCpt("place", "Place", "Places", []))
         ->set_taxonomy("place_tax")
+        ->setClass("Place")
         ->addField(new FieldHelper("lat", "Latitude", "In degrees and decimals of a degree, + is North"))
         ->addField(new FieldHelper("long", "Longitude", "In degrees, + is East, - is West."))
     ;

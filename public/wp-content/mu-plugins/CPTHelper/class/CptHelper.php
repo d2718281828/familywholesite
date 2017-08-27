@@ -89,6 +89,10 @@ class CptHelper {
     protected function setup(){
 
     }
+    public function setClass($class){
+      $this->instanceClass = $class;
+      return $this;
+    }
     /**
      * Fired on plugin activation or deactivation
      * This mechanism doesnt work - it will still be necessary to manually flush in Settings/Permalinks.
@@ -141,11 +145,6 @@ class CptHelper {
     }
     public function admin_init(){
         foreach($this->metaFields as $field) $field->admin_init();
-
-        // We dont need this for the metabox, only if the child class wants to do some more
-        if (method_exists($this,"on_save")){
-          add_action('save_post',[$this, 'further_save'], 1,2);
-        }
     }
     protected function globaldefault(){
         return [
@@ -159,10 +158,6 @@ class CptHelper {
     }
     public function posttype(){
         return $this->builtin ? $this->slug : $this->prefix.$this->slug;
-    }
-    public function further_save($post_id, $post){
-        if ($post->post_type != $this->posttype()) return;
-        $this->on_save($post_id, $post);
     }
     // TODO got to get the current list and add ours to it
     public function add_to_query($query){
@@ -210,7 +205,6 @@ class CptHelper {
     public function saveMetaBox($post_id)
     {
         if (TRACEIT) traceit("=================== Save MetaBox has been triggered post=".$post_id);
-	if (!isset($_REQUEST[$this->noncefield()])) return;
         if (!wp_verify_nonce( $_REQUEST[$this->noncefield()], plugin_basename( __FILE__ ))) return;
 
         if (TRACEIT) traceit("=================== nonce is good");
@@ -278,6 +272,23 @@ class CptHelper {
      */
     static function get($slug){
         return isset(self::$registrations[$slug]) ? self::$registrations[$slug] : null;
+    }
+    static function make($p,$type = null){
+        if (is_object($p)) {
+            $cpt = self::get($p->post_type);
+            if (!$cpt) return null;
+            $class = $cpt->instanceClass;
+            return new $class($p);
+        } elseif (is_numeric($p)){
+            if (!$type) return null;
+            $cpt = self::get($type);
+            if (!$cpt) return null;
+            $class = $cpt->instanceClass;
+            return new $class($p);
+        } else {
+            return null;
+        }
+        return null;
     }
 }
 
