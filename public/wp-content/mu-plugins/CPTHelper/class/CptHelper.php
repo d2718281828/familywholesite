@@ -121,7 +121,6 @@ class CptHelper {
 
             if (TRACEIT) traceit("!!!!!!!!actually registering the post type ".print_r($optslist,true));
             $cpt = register_post_type($this->posttype(), $optslist);
-            self::$registrations[$this->posttype()] = $this;
 
             if ($this->showInQueries){
                 add_action( 'pre_get_posts', [$this,'add_to_query'] );
@@ -132,6 +131,7 @@ class CptHelper {
                 flush_rewrite_rules();   // only on plugin (de)activation
             }
         }
+        self::$registrations[$this->posttype()] = $this;
         if ($this->metaFields){
             add_action( 'add_meta_boxes', [$this, 'addMetaBox'] );
 

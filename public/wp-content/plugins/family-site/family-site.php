@@ -35,16 +35,18 @@ class FamilySite {
   }
   public function wp_head(){
     // if this is a single page set up the cpost which will be used in templates
+    error_log("In WP HEAD");
     if (is_single()){
       global $post;
       $GLOBALS["cpost"] = CptHelper::make($post);
+      error_log("In wp head is single, cpost ".( $GLOBALS["cpost"] ? "is good": "is NULL")." post type=".$post->post_type);
     } else $GLOBALS["cpost"] = null;
   }
   protected function setupCPTs(){
 
     $z = (new FSCpt("person", "Person", "People", []))
         ->set_taxonomy("person_tax")
-        ->setClass("Person")
+        ->setClass("FamilySite\Person")
         ->addField(new DateHelper("date_birth", "Date of Birth", "Date the person was born, yyyy/mm/dd"))
         ->addField(new CPTSelectHelper("place_birth", "Place of Birth", "Place the person was living in immediately after birth", ["posttype"=>"fs_place"]))
         ->addField(new DateHelper("date_death", "Date of Death", "Date the person was born, yyyy/mm/dd"))
@@ -59,18 +61,19 @@ class FamilySite {
     ;
     $z = (new FSCpt("event", "Event", "Events", []))
         ->set_taxonomy("event_tax")
-        ->setClass("Event")
+        ->setClass("FamilySite\Event")
         ->addField(new DateHelper("actual_date", "Actual date", "Date event started"))
         ->addField(new FieldHelper("duration", "Duration", "The length of the event in days"))
         ->addField(new CPTSelectHelper("event_place", "Place of the event", "Place where the event occurred", ["posttype"=>"fs_place"]))
     ;
     $z = (new FSCpt("place", "Place", "Places", []))
         ->set_taxonomy("place_tax")
-        ->setClass("Place")
+        ->setClass("FamilySite\Place")
         ->addField(new FieldHelper("lat", "Latitude", "In degrees and decimals of a degree, + is North"))
         ->addField(new FieldHelper("long", "Longitude", "In degrees, + is East, - is West."))
     ;
     $z = (new FSCpt("post", null, null, []))
+	->setClass("FamilySite\FSPost")
         ->addField(new DateHelper("actual_date", "Actual date", "Date that the picture was actually taken"))
         ->addField(new CPTSelectHelper("event", "Event", "", ["posttype"=>"fs_event"]))
     ;
