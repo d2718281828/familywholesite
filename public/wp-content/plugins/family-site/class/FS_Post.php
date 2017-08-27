@@ -14,6 +14,7 @@ class FSPost extends CPost {
   }
 
   protected function xtagsFor($tax){
+    error_log("getting post terms for ".$this->postid." and tax ".$tax);
     $tms = wp_get_post_terms($this->postid, $tax);
     // transform into posts ??? Maybe into CPost objects :)
     return $tms;

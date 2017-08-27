@@ -39,8 +39,9 @@ function twentyseventeen_entry_footer() {
 			}
       if ($obj){
         $xtags = $obj->xtags();
+	if (count($xtags)==0) echo "No tags";
         foreach($xtags as $xtag){
-          echo " ".$xtag->Name." ";
+          echo " tag=".$xtag->name." ";
         }
       } else echo "NO OBJ";
 
