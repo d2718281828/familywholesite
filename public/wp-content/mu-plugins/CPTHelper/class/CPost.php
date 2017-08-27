@@ -13,18 +13,92 @@ class CPost {
     public $postid;
     protected $type = null;
     public $post = null;
-    protected $cpthelper;
+    protected $cpthelper = null;
+    protected $is_error = false;        // true if this object is in error and cannot be used
+    protected $error_message = null;      // message to explain the problem.
+    protected $post_properties = null;
+    protected $props = [];              // cache requested properties
 
     /**
      * CPost constructor.
      * @param $p int/WP_Post/numeric string Either a post object, or a post id.
      */
     public function __construct($p){
-
+        if (is_object($p)) {
+            $this->post = $p;
+            $this->postid = $p->ID;
+            $this->setType($p->post_type);
+        } elseif (is_numeric($p)){
+            $this->postid = (int)$p;
+        } else {
+            $this->is_error = true;
+            $this->error_message = "Object constructed with invalid argument";
+        }
+        $this->post_properties = ["poat_title","post_content","post_author","post_name","post_title","post_date","post_date_gmt","post_excerpt","post_status",
+            "comment_status","post_parent","post_modified","post_modified_gmt","comment_count","menu_order",];
     }
 
-    public function get($property){
+    /**
+     * set the type and look up the helper for that type
+     * @param $type
+     */
+    protected function setType($type){
+        $this->type = $type;
+        $this->cpthelper = CptHelper::get($type);
+    }
 
+    /**
+     * Client should test with this before use
+     * @return bool
+     */
+    public function is_bad(){
+        return $this->is_error;
+    }
+
+    /**
+     * Get post property.
+     * Dont use it for ID, type etc.
+     * In keeping with the lazy loading, if this isnt a post property we will just use get_postmeta
+     * @param $property
+     */
+    public function get($property){
+        if ($this->is_error) return null;
+
+        if (isset($this->props[$property])) return $this->props[$property];
+
+        if (in_array($property,$this->post_properties)){
+            if ($this->post===null) {
+                $this->post = get_post($this->postid);
+                if ($this->post===null){
+                    $this->is_error = true;
+                    $this->error_message = "There is no post number ".$this->postid;
+                    return null;
+                }
+                $this->setType($this->post->post_type);
+            }
+            return $this->post->$property;
+        }
+        $cph = $this->getCPH();
+
+        $val = get_post_meta($this->postid, $property, true);
+        // todo transform it
+        $this->props[$property] = $val;
+        return $val;
+    }
+
+    public function getCPH(){
+        if ($this->is_error) return null;
+        if ($this->cpthelper) return $this->cpthelper;
+
+        if ($this->type===null) $this->type = get_post_type($this->postid);
+
+        if ($this->type===null) {
+            $this->is_error = true;
+            $this->error_message = "Post ".$this->postid." has no type";
+            return null;
+        }
+        $this->setType($this->type);
+        return $this->cpthelper;
     }
 }
 
