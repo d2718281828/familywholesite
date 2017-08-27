@@ -1,5 +1,6 @@
 <?php
 namespace CPTHelper;
+// WARNING DO NOT MERGE THE FLIPSIDE CPTHELPER WITHOUT CARE
 /**
  * Class CptHelper - represents a custom post type.
  * You can also add custom fields for the post type, using addField(new FieldHelper()) and related classes.
@@ -135,16 +136,24 @@ class CptHelper {
         if ($this->metaFields){
             add_action( 'add_meta_boxes', [$this, 'addMetaBox'] );
 
-            //add_action('save_post',[$this, 'saveMetaBox'], 1,2);
             add_action('pre_post_update',[$this, 'saveMetaBox'], 1,2);
 
             add_action( 'admin_enqueue_scripts', [$this,'enqueueStyle'] );
             add_action( 'admin_init', [$this,'admin_init'] );
 
         }
+        if (method_exists($this,"on_save")){
+          add_action('save_post',[$this, 'save_post'], 1,2);
+        }
     }
     public function admin_init(){
         foreach($this->metaFields as $field) $field->admin_init();
+    }
+    public function save_post($post_id,$post){
+      if (WP_DEBUG) error_log("in save_post hook id=".$post_id.", type=".$post->post_type);
+      if ( wp_is_post_revision( $post_id ) ) return;
+      if ($post->post_type != $this->posttype()) return;
+      $this->on_save($post_id,$post);
     }
     protected function globaldefault(){
         return [

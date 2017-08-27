@@ -14,7 +14,6 @@ class FSCpt extends CptHelper {
     return $this;
   }
   protected function on_save($post_id, $post){
-//die("Got to onsave");
     if (WP_DEBUG) error_log("in FamilySite::on_save method");
     $name = $post->post_name;
     // do we have a matching tag?
