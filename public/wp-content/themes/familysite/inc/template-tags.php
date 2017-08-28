@@ -19,7 +19,7 @@ function twentyseventeen_entry_footer() {
 	if ( ( ( twentyseventeen_categorized_blog() && $categories_list ) || $tags_list ) || get_edit_post_link() ) {
 
 		echo '<footer class="entry-footer">';
-
+      echo '<div class="standard-cats">';
 			if ( 'post' === get_post_type() ) {
 				if ( ( $categories_list && twentyseventeen_categorized_blog() ) || $tags_list ) {
 					echo '<span class="cat-tags-links">';
@@ -36,14 +36,17 @@ function twentyseventeen_entry_footer() {
 					echo '</span>';
 				}
 			}
+
+      twentyseventeen_edit_link();
+      echo '</div>';
+
       if ($cpost){
         $xtags = $cpost->xtags();
-	      if (count($xtags)==0) echo "No tags";
-        else {
+	      if (count($xtags)>0) {
           echo "<div class='tagsets'>";
           foreach($xtags as $xtag){
             echo "<div class='tagset tagset-".$xtag["tax"]."'>";
-            echo "<div class='title'>".$xtag["title"]."</div>";
+              echo "<div class='title'>".$xtag["title"]."</div>";
             foreach ($xtag["list"] as $tag){
               echo $tag ? $tag->get_template_part("link-small").", " : "Null-tag ";
             }
@@ -52,8 +55,6 @@ function twentyseventeen_entry_footer() {
           echo "</div>";
         }
       } else echo "No CPost";
-
-			twentyseventeen_edit_link();
 
 		echo '</footer> <!-- .entry-footer -->';
 	}
