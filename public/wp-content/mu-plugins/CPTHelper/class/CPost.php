@@ -100,6 +100,10 @@ class CPost {
         $this->setType($this->type);
         return $this->cpthelper;
     }
+
+    public function show(){
+      return "CPost:".$this->postid."(".$this->type.")";
+    }
 }
 
 
