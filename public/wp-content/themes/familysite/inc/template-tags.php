@@ -39,8 +39,17 @@ function twentyseventeen_entry_footer() {
       if ($cpost){
         $xtags = $cpost->xtags();
 	      if (count($xtags)==0) echo "No tags";
-        foreach($xtags as $xtag){
-          echo " tag=".$xtag->name." ";
+        else {
+          echo "<div class='tagsets'>";
+          foreach($xtags as $xtag){
+            echo "<div class='tagset tagset-".$xtag["tax"]."'>";
+            echo "<div class='title'>".$xtag["title"]."</div>";
+            foreach ($xtag["list"] as $tag){
+              echo $tag->show().", ";
+            }
+            echo "</div>";
+          }
+          echo "</div>";
         }
       } else echo "No CPost";
 

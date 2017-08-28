@@ -38,6 +38,14 @@ class FSCpt extends CptHelper {
       if (WP_DEBUG) error_log("saving term id ".$rc["term_id"]." for ".$post->post_title);
     }
   }
+  // TODO adapt to work with set of ids and return set of cposts.
+  static function makeFromTagid($tagid){
+    global $wpdb;
+    $s = "select post_id from ".$wpdb->postmeta." where meta_key='fs_matching_tag_id' and meta_value=%s";
+    $res = $wpdb->get_results($wpdb->prepare($s,$tagid));
+    if (count($res)==0) return null;
+    return self::make($res[0]["post_id"]);
+  }
 
 }
 
