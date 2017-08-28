@@ -42,7 +42,8 @@ class FSCpt extends CptHelper {
   static function makeFromTagid($tagid){
     global $wpdb;
     $s = "select post_id from ".$wpdb->postmeta." where meta_key='fs_matching_tag_id' and meta_value=%s";
-    $res = $wpdb->get_results($wpdb->prepare($s,$tagid));
+    $res = $wpdb->get_results($wpdb->prepare($s,$tagid),ARRAY_A);
+	error_log("Got ".count($res)." rows from ".$wpdb->prepare($s,$tagid));
     if (count($res)==0) return null;
     return self::make($res[0]["post_id"]);
   }

@@ -42,7 +42,7 @@ class CPost {
      * set the type and look up the helper for that type
      * @param $type
      */
-    protected function setType($type){
+    public function setType($type){
         $this->type = $type;
         $this->cpthelper = CptHelper::get($type);
     }

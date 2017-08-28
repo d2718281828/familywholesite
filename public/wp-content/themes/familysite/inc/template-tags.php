@@ -45,7 +45,7 @@ function twentyseventeen_entry_footer() {
             echo "<div class='tagset tagset-".$xtag["tax"]."'>";
             echo "<div class='title'>".$xtag["title"]."</div>";
             foreach ($xtag["list"] as $tag){
-              echo $tag->show().", ";
+              echo $tag ? $tag->show().", " : "Null-tag ";
             }
             echo "</div>";
           }
