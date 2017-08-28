@@ -11,7 +11,7 @@ class FSPost extends CPost {
     $m = [];
     foreach($this->taxes as $tax) {
         $z = $this->xtagsFor($tax[0]);
-        $m[] = ["title"=>$tax[1], "tax"=>$tax[0], "list"=>$z ];
+        if ($z) $m[] = ["title"=>$tax[1], "tax"=>$tax[0], "list"=>$z ];
     }
     return $m;
   }

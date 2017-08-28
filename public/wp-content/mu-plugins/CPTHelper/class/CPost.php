@@ -100,10 +100,27 @@ class CPost {
         $this->setType($this->type);
         return $this->cpthelper;
     }
-
+    public function permalink(){
+      return get_permalink($this->postid);
+    }
+    /**
+    * call get_template_part with the appropriate type. Also set a context of cpost
+    */
+    public function get_template_part($name = null){
+      global $cpost;
+      $savecpost = $cpost;
+      $cpost = $this;
+      get_template_part( 'template-parts/'.$this->type.'/content', $name );
+      $cpost = $savecpost;
+    }
+    /**
+    * Just give a quick summary of the Cpost, mainly for debugging
+    */
     public function show(){
       return "CPost:".$this->postid."(".$this->type.")";
     }
+
+
 }
 
 
