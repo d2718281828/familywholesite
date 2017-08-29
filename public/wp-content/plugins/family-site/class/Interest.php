@@ -4,7 +4,7 @@ namespace FamilySite;
 // represents an item of interest - an ordinary post, most likely a picture
 class Interest extends FSPost {
 
-  protected $taxes = [];
+  protected $taxes = [["person_tax","People"], ["event_tax","Events"], ["place_tax","Places"]];
 
   /**
   * Do we have an infobox?

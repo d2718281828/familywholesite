@@ -5,7 +5,7 @@ use CPTHelper\CPost;
 // return the tax urls or the post urls they are associated with??
 class FSPost extends CPost {
 
-  protected $taxes = [["person_tax","People"], ["event_tax","Events"], ["place_tax","Places"]];
+  protected $taxes = [];
 
   public function xtags(){
     $m = [];
