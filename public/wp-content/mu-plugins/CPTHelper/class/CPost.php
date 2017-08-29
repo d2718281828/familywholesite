@@ -114,6 +114,12 @@ class CPost {
       $cpost = $savecpost;
     }
     /**
+    * Do we have an infobox?
+    */
+    public function hasInfoBox(){
+      return true;
+    }
+    /**
     * A display box of the extra custom fieelds for this type.
     */
     public function infoBox(){

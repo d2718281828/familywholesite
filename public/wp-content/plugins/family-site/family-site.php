@@ -9,10 +9,13 @@ Author URI:
 */
 /* TODO
 person pics link
-person author custom fields
 people, places etc shortcodes
+timeline - pictures, events and implicit events (births, deaths)
+how to model marriages/spouses. Possibly use wedding event. In the album just a simple spouse field.
 set up test env
+EntLoader pictures
 test duplicate person
+siblings list - full and half
 */
 namespace FamilySite;
 use CPTHelper\CptHelper;
@@ -27,6 +30,7 @@ require_once("class/FS_Post.php");
 require_once("class/Person.php");
 require_once("class/Event.php");
 require_once("class/Place.php");
+require_once("class/Interest.php");
 
 class FamilySite {
 
@@ -82,7 +86,7 @@ class FamilySite {
         ->addField(new FieldHelper("long", "Longitude", "In degrees, + is East, - is West."))
     ;
     $z = (new FSCpt("post", null, null, []))
-	->setClass("FamilySite\FSPost")
+	      ->setClass("FamilySite\Interest")
         ->addField(new DateHelper("actual_date", "Actual date", "Date that the picture was actually taken"))
         ->addField(new CPTSelectHelper("event", "Event", "", ["posttype"=>"fs_event"]))
     ;

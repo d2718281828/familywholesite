@@ -27,4 +27,16 @@ class Event extends FSPost {
     return $m;
   }
 
+  /**
+  * Do we have an index section?
+  */
+  public function hasIndexSection(){
+    return true;
+  }
+  /**
+  * The index section - this is the timeline for people and events. Could be linked posts for Interest
+  */
+  public function indexSection(){
+    return "pictures";
+  }
 }

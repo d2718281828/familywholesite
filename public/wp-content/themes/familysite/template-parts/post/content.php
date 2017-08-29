@@ -1,6 +1,6 @@
 <?php
 /**
- * Template part for displaying posts - but only in detail, with is_single.
+ * Template part for displaying posts
  *
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
@@ -51,7 +51,7 @@ global $cpost;
 		</div><!-- .post-thumbnail -->
 	<?php endif; ?>
 
-	<?php if (is_single()){ 
+	<?php if (is_single() && $cpost->hasInfoBox()){
 	  echo '<div class="info-box">';
 	  echo $cpost->infoBox();
 	  echo '</div>';
@@ -83,5 +83,11 @@ global $cpost;
 		twentyseventeen_entry_footer();
 	}
 	?>
+	<?php if (is_single() && $cpost->hasIndexSection()){
+	  echo '<div class="index-section">';
+	  echo $cpost->indexSection();
+	  echo '</div>';
+	} ?>
+
 
 </article><!-- #post-## -->

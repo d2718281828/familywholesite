@@ -52,7 +52,16 @@ class FSPost extends CPost {
     if (!$this->post) $this->post = get_post($this->postid);
     return $this->post->post_author;
   }
-  public function infoBox(){
+  /**
+  * Do we have an index section?
+  */
+  public function hasIndexSection(){
+    return false;
+  }
+  /**
+  * The index section - this is the timeline for people and events. Could be linked posts for Interest
+  */
+  public function indexSection(){
     return "";
   }
 
