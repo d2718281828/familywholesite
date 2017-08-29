@@ -24,14 +24,15 @@ Text Domain: familysite
   width: 100%;
 }
 .info-bit:nth-child(even) {
-  background-color: #ddd;
+  background-color: #e7e7e7;
 }
 .info-bit .info-head {
   display: inline-block;
   width: 30%;
   font-weight: bold;
+  padding-left: 8px;
 }
-.info-bit .info-head {
+.info-bit .info-body {
   display: inline-block;
   width: 70%;
 }
