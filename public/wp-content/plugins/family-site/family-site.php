@@ -7,6 +7,14 @@ Author: Derek Storkey
 Version: 0.1
 Author URI:
 */
+/* TODO
+place and event infoboxes
+peerson pics link
+person author custom fields
+people, places etc shortcodes
+set up test env
+test duplicate person
+*/
 namespace FamilySite;
 use CPTHelper\CptHelper;
 use CPTHelper\FieldHelper;
