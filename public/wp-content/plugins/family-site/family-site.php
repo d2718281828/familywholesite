@@ -8,8 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODO
-place and event infoboxes
-peerson pics link
+person pics link
 person author custom fields
 people, places etc shortcodes
 set up test env
@@ -66,6 +65,7 @@ class FamilySite {
             ->addOption("F","Female")
         )
         ->addField(new FieldHelper("birthname", "Birth Name", "Full name at birth (maiden name for ladies)"))
+        ->addField(new UseridSelector("userid", "Login id", "Link to the person's login id, if they have one"))
     ;
     $z = (new FSCpt("event", "Event", "Events", []))
         ->set_taxonomy("event_tax")
