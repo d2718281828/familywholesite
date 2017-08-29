@@ -15,6 +15,27 @@ Text Domain: familysite
 .posted-info {
   font-size: 12px;
 }
+/* INFO BOX ***************************************** */
+.info-box {
+  border: solid 1px #555;
+  margin-bottom: 15px;
+}
+.info-bit {
+  width: 100%;
+}
+.info-bit:nth-child(even) {
+  background-color: #ddd;
+}
+.info-bit .info-head {
+  display: inline-block;
+  width: 30%;
+  font-weight: bold;
+}
+.info-bit .info-head {
+  display: inline-block;
+  width: 70%;
+}
+
 /* ENTRY FOOTER ===================================== */
 .entry-footer .tagsets {
   width: 100%;
