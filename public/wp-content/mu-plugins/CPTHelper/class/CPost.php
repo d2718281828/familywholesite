@@ -113,9 +113,24 @@ class CPost {
       get_template_part( 'template-parts/'.$this->type.'/content', $name );
       $cpost = $savecpost;
     }
-
+    /**
+    * A display box of the extra custom fieelds for this type.
+    */
     public function infoBox(){
       return "Info";
+    }
+    /**
+    * Component of the info box.
+    */
+    protected function infoBit($head,$text){
+      return '<div class="info-bit"><div class="info-head">'.$head.'</div><div class="info-body">'.$text.'</div></div>';
+    }
+    /**
+    * Return a simple a tag linked to the permalink, with text which is the post title.
+    */
+    public function simpleLink(){
+      $url = get_permmalink($this->postid);
+      return '<a href="'.$url.'">'.$this->get("post_title").'</a>';
     }
     /**
     * Just give a quick summary of the Cpost, mainly for debugging

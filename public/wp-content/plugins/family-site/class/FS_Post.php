@@ -37,7 +37,7 @@ class FSPost extends CPost {
       $ev = new Event($event);
       return $ev->actualDate();
     }
-    return 'Undated';
+    return '';
   }
 
   public function posted(){
@@ -51,6 +51,9 @@ class FSPost extends CPost {
   public function authorId(){
     if (!$this->post) $this->post = get_post($this->postid);
     return $this->post->post_author;
+  }
+  public function infoBox(){
+    return "";
   }
 
 }
