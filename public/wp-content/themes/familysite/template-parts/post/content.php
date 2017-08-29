@@ -22,10 +22,8 @@ global $cpost;
 		<?php
 		if ( 'post' === get_post_type() ) {
 			echo '<div class="entry-meta">';
-				if ( is_single() ) {
-					echo $cpost->actualDate();
-				} else {
-					echo twentyseventeen_time_link();
+				echo $cpost->actualDate();
+				if (! is_single() ) {
 					twentyseventeen_edit_link();
 				};
 			echo '</div><!-- .entry-meta -->';
@@ -56,10 +54,14 @@ global $cpost;
 	<div class="entry-content">
 		<?php
 		/* translators: %s: Name of current post */
-		the_content( sprintf(
-			__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'twentyseventeen' ),
-			get_the_title()
-		) );
+		if (is_single()){
+			the_content( sprintf(
+				__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'twentyseventeen' ),
+				get_the_title()
+				) );
+			} else {
+				the_excerpt();
+			}
 
 		wp_link_pages( array(
 			'before'      => '<div class="page-links">' . __( 'Pages:', 'twentyseventeen' ),
