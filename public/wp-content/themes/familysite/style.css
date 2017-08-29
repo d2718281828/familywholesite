@@ -30,15 +30,15 @@ Text Domain: familysite
   font-family: "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
   }
 }
-.entry-footer .tagsets .tagset .link-small-fs_person {
+.entry-footer .tagsets .tagset .link-small.fs_person {
   color: white;
   background-color: #525;
 }
-.entry-footer .tagsets .tagset .link-small-fs_place {
+.entry-footer .tagsets .tagset .link-small.fs_place {
   color: white;
   background-color: #543;
 }
-.entry-footer .tagsets .tagset .link-small-fs_event {
+.entry-footer .tagsets .tagset .link-small.fs_event {
   color: white;
   background-color: #351;
 }

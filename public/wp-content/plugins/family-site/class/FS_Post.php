@@ -27,6 +27,23 @@ class FSPost extends CPost {
     return $result;
   }
 
+  public function actualDate(){
+    $actdate = $this->get("actual_date");
+    $event = $this->get("event");
+    return $actdate;
+  }
+
+  public function posted(){
+    $m =  get_the_date();
+    $auth = $this->authorId();
+    $m.= ' by '.get_the_author_meta('display_name',$auth);
+  }
+
+  public function authorId(){
+    if (!$this->post) $this->post = get_post($this->postid);
+    return $this->post->post_author;
+  }
+
 }
 
 

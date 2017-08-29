@@ -3,6 +3,6 @@ global $cpost;
 ?>
 <a href='<?php echo $cpost->permalink(); ?>'>
 <div class='link-small fs_person'>
-Event<?php echo $cpost->get("post_title"); ?>
+<?php echo $cpost->get("post_title"); ?>
 </div>
 </a>
