@@ -20,6 +20,7 @@ use CPTHelper\FieldHelper;
 use CPTHelper\DateHelper;
 use CPTHelper\CPTSelectHelper;
 use CPTHelper\SelectHelper;
+use CPTHelper\UseridSelector;
 
 require_once("class/FSCpt.php");
 require_once("class/FS_Post.php");

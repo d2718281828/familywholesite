@@ -15,7 +15,7 @@ class UseridSelector extends SelectHelper {
     public function setupOptions(){
         global $wpdb;
 
-        $s = "select userid, user_name from ".$wpdb->users." order by user_name;";
+        $s = "select ID, user_nicename from ".$wpdb->users." order by user_nicename;";
 
         $this->selOptions = $wpdb->get_results($s, ARRAY_N);
 
