@@ -41,9 +41,11 @@ class FSPost extends CPost {
   }
 
   public function posted(){
-    $m =  get_the_date();
+    if (!$this->post) $this->post = get_post($this->postid);
+    $m =  $this->post->post_date_gmt;
     $auth = $this->authorId();
     $m.= ' by '.get_the_author_meta('display_name',$auth);
+    return $m;
   }
 
   public function authorId(){
