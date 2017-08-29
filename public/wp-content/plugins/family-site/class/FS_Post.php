@@ -29,8 +29,15 @@ class FSPost extends CPost {
 
   public function actualDate(){
     $actdate = $this->get("actual_date");
+    if ($actdate){
+      return $actdate;
+    }
     $event = $this->get("event");
-    return $actdate;
+    if ($event){
+      $ev = new Event($event);
+      return $ev->actualDate();
+    }
+    return 'Undated';
   }
 
   public function posted(){
