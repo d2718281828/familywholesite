@@ -12,6 +12,9 @@ use CPTHelper\SelectHelper;
 */
 class UseridSelector extends SelectHelper {
 
+    public function user_can_update(){
+      return current_user_can("promote_users"); // sample admin capability
+    }
     public function setupOptions(){
         global $wpdb;
 

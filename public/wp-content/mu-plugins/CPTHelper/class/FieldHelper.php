@@ -26,12 +26,16 @@ class FieldHelper {
      */
     public function admin_init(){
     }
+    public function user_can_update(){
+      return true;
+    }
     /**
      * If you want the label after the field, just override this function.
      * @return string
      */
     // parametrise this - make it data???
     public function html(){
+        if (!$this->user_can_update()) return '';
         return '<div class="metabox-field">'.
           '<div class="metabox-label">'.$this->labelDiv().'</div>'.$this->descDiv().
           '<div class="metabox-value">'.$this->fieldDiv().'</div>'.
@@ -61,6 +65,7 @@ class FieldHelper {
     }
     public function update($post_id)
     {
+        if (!$this->user_can_update()) return;
         if (TRACEIT) traceit("FIELD UPDATE for post=".$post_id);
         if ($post_id){
             update_post_meta($post_id, $this->id, $this->setValue($this->rqValue()));
