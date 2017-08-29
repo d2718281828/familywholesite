@@ -51,6 +51,12 @@ global $cpost;
 		</div><!-- .post-thumbnail -->
 	<?php endif; ?>
 
+	<?php if (is_single()){ 
+	  echo '<div class="info-box">';
+	  echo $cpost->infoBox();
+	  echo '</div>';
+	} ?>
+
 	<div class="entry-content">
 		<?php
 		/* translators: %s: Name of current post */

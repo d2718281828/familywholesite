@@ -27,12 +27,11 @@ Text Domain: familysite
 .entry-footer .tagsets .tagset .link-small {
   display: inline-block;
   margin-right: 15px;
-  padding: 15px;
+  padding: 5px;
   border-radius: 4px;
   text-transform: uppercase;
   font-size: 11px;
   font-family: "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
-  }
 }
 .entry-footer .tagsets .tagset .link-small.fs_person {
   color: white;

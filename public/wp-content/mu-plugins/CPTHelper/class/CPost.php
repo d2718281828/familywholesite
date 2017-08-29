@@ -113,6 +113,10 @@ class CPost {
       get_template_part( 'template-parts/'.$this->type.'/content', $name );
       $cpost = $savecpost;
     }
+
+    public function infoBox(){
+      return "Info";
+    }
     /**
     * Just give a quick summary of the Cpost, mainly for debugging
     */

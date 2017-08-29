@@ -14,6 +14,7 @@
  * @since 1.0
  * @version 1.0
  */
+use CPTHelper\CptHelper;
 
 get_header();
 global $cpost, $post;
