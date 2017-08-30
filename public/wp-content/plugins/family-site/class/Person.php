@@ -43,7 +43,9 @@ class Person extends FSPost {
   * The index section - this is the timeline for people and events. Could be linked posts for Interest
   */
   public function indexSection(){
-    return "pictures";
+    require_once("TimeeLine.php");
+    $tl = new TimeLine($this);
+    return $tl->html();
   }
 
 }

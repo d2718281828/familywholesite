@@ -8,7 +8,6 @@ Version: 0.1
 Author URI:
 */
 /* TODO
-Interest has lost the tagging
 person pics link
 people, places etc shortcodes
 timeline - pictures, events and implicit events (births, deaths)
