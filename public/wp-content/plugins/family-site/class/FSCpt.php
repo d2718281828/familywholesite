@@ -34,7 +34,7 @@ class FSCpt extends CptHelper {
     if (is_wp_error($rc)){
       error_log("ERROR inserting taxonomy term for ".$post->post_title.", tax=".$this->related_tax.": ".$rc->get_error_message());
     } else {
-      update_post_meta($post_id, "fs_matching_tag_id", $rc["term_id"]);
+      update_post_meta($post_id, "fs_matching_tag_id", $rc["term_taxonomy_id"]);
       if (WP_DEBUG) error_log("saving term id ".$rc["term_id"]." for ".$post->post_title);
     }
   }
