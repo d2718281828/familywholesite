@@ -15,15 +15,19 @@ class TimeLine {
     $res = $wpdb->get_results($sql, ARRAY_A);
 
     $m = "";
-    foreach($res as $post) $m.= " ".$post["ID"];
+    foreach($res as $post) {
+      $cp = \CPTHelper\CPTHelper::make($post["ID"],$post["post_type"]);
+      $m.='<div class="timeline-link"><div class="timeline-date">'.$post["actual_date"].'</div>';
+      $m.='<div class="timeline-link">'.$cp->link().'</div></div>';
+    }
     return $m;
   }
   protected function makeSQL(){
     global $wpdb;
 
-    $select = ["P.ID"];
+    $select = ["P.ID","P.post_type"];
     $from = [$wpdb->posts." P "];
-    $where = [];
+    $where = ["P.post_status = 'publish'"];
     $order = [];
 
     if ($this->focus){

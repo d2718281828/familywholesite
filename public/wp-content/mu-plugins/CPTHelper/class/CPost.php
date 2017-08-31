@@ -105,6 +105,7 @@ class CPost {
     }
     /**
     * call get_template_part with the appropriate type. Also set a context of cpost
+    * The output is echoed, of course
     */
     public function get_template_part($name = null){
       global $cpost;
@@ -135,8 +136,16 @@ class CPost {
     * Return a simple a tag linked to the permalink, with text which is the post title.
     */
     public function simpleLink(){
-      $url = get_permmalink($this->postid);
+      $url = get_permalink($this->postid);
       return '<a href="'.$url.'">'.$this->get("post_title").'</a>';
+    }
+    public function link(){
+      $url = get_permalink($this->postid);
+      $m = '<div class="title">'.$this->get("post_title").'</div>';
+      $img = get_the_post_thumbnail($this->postid);
+      $m.= '<div class="thumb">'.$img.'</div>';
+      $m = '<a href="'.$url.'">'.$m.'</div>';
+      return $m;
     }
     /**
     * Just give a quick summary of the Cpost, mainly for debugging
