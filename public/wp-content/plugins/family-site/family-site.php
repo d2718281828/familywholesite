@@ -56,22 +56,8 @@ class FamilySite {
   }
   protected function setupCPTs(){
 
-    $z = (new FSCpt("person", "Person", "People", []))
-        ->set_taxonomy("person_tax")
-        ->setClass("FamilySite\Person")
-        ->addField(new DateHelper("date_birth", "Date of Birth", "Date the person was born, yyyy/mm/dd"))
-        ->addField(new CPTSelectHelper("place_birth", "Place of Birth", "Place the person was living in immediately after birth", ["posttype"=>"fs_place"]))
-        ->addField(new DateHelper("date_death", "Date of Death", "Date the person was born, yyyy/mm/dd"))
-        ->addField(new CPTSelectHelper("place_death", "Place of Death", "Place the person was living when they died", ["posttype"=>"fs_place"]))
-        ->addField(new CPTSelectHelper("father", "Father", "", ["posttype"=>"fs_person"]))
-        ->addField(new CPTSelectHelper("mother", "Mother", "", ["posttype"=>"fs_person"]))
-        ->addField((new SelectHelper("gender", "Gender", "", ["posttype"=>"fs_person"]))
-            ->addOption("M","Male")
-            ->addOption("F","Female")
-        )
-        ->addField(new FieldHelper("birthname", "Birth Name", "Full name at birth (maiden name for ladies)"))
-        ->addField(new UseridSelector("userid", "Login id", "Link to the person's login id, if they have one"))
-    ;
+    $z = new PersonCPT("person", "Person", "People", []);
+	
     $z = (new FSCpt("event", "Event", "Events", []))
         ->set_taxonomy("event_tax")
         ->setClass("FamilySite\Event")
