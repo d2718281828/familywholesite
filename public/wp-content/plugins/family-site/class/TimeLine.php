@@ -18,7 +18,7 @@ class TimeLine {
     foreach($res as $post) {
       $cp = \CPTHelper\CPTHelper::make($post["ID"],$post["post_type"]);
       $m.='<div class="timeline-link"><div class="timeline-date">'.$post["actual_date"].'</div>';
-      $m.='<div class="timeline-link">'.$cp->link().'</div></div>';
+      $m.='<div class="timeline-pic">'.$cp->link().'</div></div>';
     }
     return $m;
   }
