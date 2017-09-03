@@ -31,6 +31,7 @@ require_once("class/Person.php");
 require_once("class/Event.php");
 require_once("class/Place.php");
 require_once("class/Interest.php");
+require_once("class/PersonCPT.php");
 
 class FamilySite {
 

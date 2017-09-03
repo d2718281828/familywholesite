@@ -1,5 +1,11 @@
 <?php
 namespace FamilySite;
+use CPTHelper\CptHelper;
+use CPTHelper\FieldHelper;
+use CPTHelper\DateHelper;
+use CPTHelper\CPTSelectHelper;
+use CPTHelper\SelectHelper;
+use CPTHelper\UseridSelector;
 
 class PersonCPT extends FSCpt {
 
@@ -17,7 +23,7 @@ class PersonCPT extends FSCpt {
         ->addField(new CPTSelectHelper("spouse", "Spouse", "Spouse, of current marriage", ["posttype"=>"fs_person"]))
         ->addField(new CPTSelectHelper("place_marriage", "Place of Marriage", "Place of the wedding to current spouse", ["posttype"=>"fs_place"]))
         ->addField(new DateHelper("date_marriage", "Date of marriage", "Date of current or only marriage"))
-        ->addField((new SelectHelper("gender", "Gender", "", [))
+        ->addField((new SelectHelper("gender", "Gender", "" ))
             ->addOption("M","Male")
             ->addOption("F","Female")
         )
