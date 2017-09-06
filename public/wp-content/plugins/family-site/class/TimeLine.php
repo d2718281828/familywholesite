@@ -47,5 +47,24 @@ class TimeLine {
     $s.= " WHERE (".implode(") and (", $where). ") ORDER BY ".implode(",",$order);
     return $s;
   }
+  static function activate(){
+	  error_log("Timeline::activate called");
+	  global $wpdb;
+	  $tname = $wpdb->prefix."timeline";
+	  $create = "CREATE TABLE IF NOT EXISTS $tname (
+		ID  bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+		event_date DATE NOT NULL,
+		source bigint(20)  NOT NULL,
+		source_type varchar(30) NOT NULL,
+		event char(10) NOT NULL,
+		object2 bigint(20) ,
+		object2_type VARCHAR(30),
+		PRIMARY KEY (ID),
+		KEY sourceindex(source),
+		KEY dateindex (event_date),
+		KEY object2index (object2)
+		
+	  )  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+  }
 }
  ?>

@@ -41,7 +41,10 @@ class FamilySite {
 
     add_action("init", [$this, "init"]);
     add_action("wp_head", [$this, "wp_head"]);
-
+	register_activation_hook(__FILE__, [$this,"on_activation"]);
+  }
+  public function on_activation(){
+	  TimeLine::activate();
   }
   public function init(){
     $this->setupTaxes();
