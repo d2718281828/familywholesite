@@ -32,6 +32,7 @@ require_once("class/Event.php");
 require_once("class/Place.php");
 require_once("class/Interest.php");
 require_once("class/PersonCPT.php");
+require_once("class/TimeLine.php");
 
 class FamilySite {
 

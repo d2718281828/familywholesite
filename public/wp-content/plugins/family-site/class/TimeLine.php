@@ -65,6 +65,7 @@ class TimeLine {
 		KEY object2index (object2)
 		
 	  )  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+	  $wpdb->query($create);
   }
 }
  ?>
