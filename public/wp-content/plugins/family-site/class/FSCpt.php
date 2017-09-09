@@ -16,6 +16,9 @@ class FSCpt extends CptHelper {
   protected function on_save($post_id, $post){
     if (WP_DEBUG) error_log("in FamilySite::FSCpt::on_save method");
     $name = $post->post_name;
+	
+	if (!$this->related_tax) return;	// if there isnt a related taxonomy then we dont need to create an entry
+	
     // do we have a matching tag?
     $matchingtag = get_post_meta($post_id, "fs_matching_tag_id", true);
     if ($matchingtag) return;
