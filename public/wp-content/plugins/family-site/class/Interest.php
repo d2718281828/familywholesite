@@ -32,7 +32,7 @@ class Interest extends FSPost {
 	  $sql = $wpdb->prepare($s,$tax);
 	  if (WP_DEBUG) error_log("Getting post linkes for ".$this->post_id." with SQL ".$sql);
 	  $res = $wpdb->get_col($sql);
-	  if (WP_DEBUG) error_log("resulting links  ".implode(",",$res);
+	  if (WP_DEBUG) error_log("resulting links  ".implode(",",$res));
 	  return $res;
   }
 
