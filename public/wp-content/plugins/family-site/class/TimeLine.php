@@ -74,8 +74,10 @@ class TimeLine {
 		event char(10) NOT NULL,
 		object bigint(20) not null ,
 		object_type  varchar(20) COLLATE utf8mb4_unicode_ci not null,
-		object2 bigint(20) ,
-		object2_type  varchar(20) COLLATE utf8mb4_unicode_ci ,
+		object2 bigint(20) not null default(0) ,
+		object2_type  varchar(20) COLLATE utf8mb4_unicode_ci not null default('') ,
+		place bigint(20)  not null default(0),
+		event bigint(20)  not null default(0),
 		PRIMARY KEY (ID),
 		KEY sourceindex(source),
 		KEY dateindex (event_date),
@@ -90,17 +92,27 @@ class TimeLine {
 	$del = "delete from $timeline where source=%d";
 	$rc = $wpdb->query($wpdb->prepare($del,$id));
   }
-  static function addEntry($event_date, $sid, $stype, $ev, $oid, $otype, $o2=null, $o2type=null ){
+  static function addEntry($event_date, $sid, $stype, $ev, $oid, $otype, $place, $event, $o2=null, $o2type=null ){
 	global $wpdb;
 	$timeline = $wpdb->prefix . "timeline";
-	$ins = "insert into  $timeline(event_date, source, source_type,event, object, object_type, object2, object2_type) values(%s,%d,%s,%s,%d,%s,%d,%s);";
-	$ins2 = "insert into  $timeline(event_date, source, source_type,event, object, object_type) values(%s, %d,%s,%s,%d,%s);";
+	$ins = "insert into  $timeline(event_date, source, source_type,event, object, object_type, $event, $place, object2, object2_type) values(%s,%d,%s,%s,%d,%s,%d,%d,%d,%s);";
+	$ins2 = "insert into  $timeline(event_date, source, source_type,event, object, object_type,$event, $place) values(%s, %d,%s,%s,%d,%s,%d,%d);";
 	
-	if ($o2===null) $sql = $wpdb->prepare($ins2,$event_date,$sid, $stype,$ev,$oid, $otype);
-	else $sql = $wpdb->prepare($ins,$event_date,$sid, $stype,$ev, $oid, $otype, $o2, $o2type);
+	if ($o2===null) $sql = $wpdb->prepare($ins2,$event_date,$sid, $stype,$ev,$oid, $otype, $place, $event);
+	else $sql = $wpdb->prepare($ins,$event_date,$sid, $stype,$ev, $oid, $otype, $place, $event, $o2, $o2type);
 	
 	$rc = $wpdb->query($sql);
 	  
+  }
+  /** Birth or death of a single person, evtype is BORN or DIED
+  */
+  static function add1($event_date, $sid, $evtype, $place, $event){
+	  self::addEntry($event_date, $sid, "fs_person", $evtype, $sid, "fs_person", $place, $event);
+  }
+  /** Marriage of a to b
+  */
+  static function addMarriage($event_date, $sid, $a, $b, $place, $event){
+	  self::addEntry($event_date, $sid, "fs_person", "MARRIAGE", $a, "fs_person", $place, $event, $b, "fs_person");
   }
 }
  ?>

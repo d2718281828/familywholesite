@@ -35,14 +35,25 @@ class PersonCPT extends FSCpt {
     if (WP_DEBUG) error_log("in FamilySite::PersonCPT::on_save method");
 	parent::on_save($post_id, $post);
 
-	error_log(">>>>>".print_r($_REQUEST,true));	
 	// refresh timeline info
 	TimeLine::clearSource($post_id);
 	$source = new Person($post);
 	
 	if (isset($_REQUEST["date_birth"])){
-		if (WP_DEBUG) error_log("Adding timeline entry for birthi of ".$post_id);
-		TimeLine::addEntry($_REQUEST["date_birth"], $post_id, "fs_person", "BORN", $post_id, "fs_person");
+		$place = $_REQUEST["place_birth"] ?: 0;
+		TimeLine::add1($_REQUEST["date_birth"], $post_id, "BORN", $place, 0);
+	}
+	if (isset($_REQUEST["date_death"])){
+		$place = $_REQUEST["place_death"] ?: 0;
+		TimeLine::add1($_REQUEST["date_death"], $post_id, "DIED", $place,0 );
+	}
+	if (isset($_REQUEST["date_marriage"])){
+		$place = $_REQUEST["place_marriage"] ?: 0;
+		$spouse = $_REQUEST["spouse"] ?: 0;		// so you can record that someone married without saying who to!
+		TimeLine::addMarriage($_REQUEST["date_marriage"], $post_id, $post_id, $spouse,$place,0);
+		if ($spouse){
+			TimeLine::addMarriage($_REQUEST["date_marriage"], $post_id, $spouse, $post_id,$place,0);
+		}
 	}
   }
 }
