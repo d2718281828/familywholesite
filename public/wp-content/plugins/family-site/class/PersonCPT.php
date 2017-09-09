@@ -37,7 +37,6 @@ class PersonCPT extends FSCpt {
 
 	// refresh timeline info
 	TimeLine::clearSource($post_id);
-	$source = new Person($post);
 	
 	if (isset($_REQUEST["date_birth"]) && $_REQUEST["date_birth"]){
 		$place = $_REQUEST["place_birth"] ?: 0;

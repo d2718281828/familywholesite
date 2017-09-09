@@ -32,6 +32,9 @@ require_once("class/Event.php");
 require_once("class/Place.php");
 require_once("class/Interest.php");
 require_once("class/PersonCPT.php");
+require_once("class/PlaceCPT.php");
+require_once("class/EventCPT.php");
+require_once("class/InterestCPT.php");
 require_once("class/TimeLine.php");
 
 class FamilySite {
@@ -62,25 +65,9 @@ class FamilySite {
   protected function setupCPTs(){
 
     $z = new PersonCPT("person", "Person", "People", []);
-	
-    $z = (new FSCpt("event", "Event", "Events", []))
-        ->set_taxonomy("event_tax")
-        ->setClass("FamilySite\Event")
-        ->addField(new DateHelper("actual_date", "Actual date", "Date event started"))
-        ->addField(new FieldHelper("duration", "Duration", "The length of the event in days"))
-        ->addField(new CPTSelectHelper("event_place", "Place of the event", "Place where the event occurred", ["posttype"=>"fs_place"]))
-    ;
-    $z = (new FSCpt("place", "Place", "Places", []))
-        ->set_taxonomy("place_tax")
-        ->setClass("FamilySite\Place")
-        ->addField(new FieldHelper("lat", "Latitude", "In degrees and decimals of a degree, + is North"))
-        ->addField(new FieldHelper("long", "Longitude", "In degrees, + is East, - is West."))
-    ;
-    $z = (new FSCpt("post", null, null, []))
-	      ->setClass("FamilySite\Interest")
-        ->addField(new DateHelper("actual_date", "Actual date", "Date that the picture was actually taken"))
-        ->addField(new CPTSelectHelper("event", "Event", "", ["posttype"=>"fs_event"]))
-    ;
+    $z = new FSCpt("event", "Event", "Events", []);
+    $z = new PlaceCPT("place", "Place", "Places", []);
+    $z = new InterestCPT("post", null, null, []);
   }
 
   protected function setupTaxes(){

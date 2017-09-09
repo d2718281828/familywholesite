@@ -22,6 +22,7 @@ class TimeLine {
     }
     return $m;
   }
+  // redundant
   protected function makeSQL(){
     global $wpdb;
 
@@ -84,7 +85,6 @@ class TimeLine {
 		KEY object2index (object2)
 		
 	  )  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
-error_log("creating ".$create);
 	  $wpdb->query($create);
   }
   static function clearSource($id){
@@ -114,6 +114,11 @@ error_log("creating ".$create);
   */
   static function addMarriage($event_date, $sid, $a, $b, $place, $event){
 	  self::addEntry($event_date, $sid, "fs_person", "MARRIAGE", $a, "fs_person", $place, $event, $b, "fs_person");
+  }
+  /** Interest item, containing $x
+  */
+  static function addInterest($event_date, $sid, $stype, $x, $xtype){
+	  self::addEntry($event_date, $sid, $stype, "INTEREST", $x, $xtype, 0, 0);
   }
 }
  ?>
