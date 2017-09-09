@@ -71,19 +71,20 @@ class TimeLine {
 		event_date DATE NOT NULL,
 		source bigint(20)  NOT NULL,
 		source_type  varchar(20) COLLATE utf8mb4_unicode_ci  NOT NULL,
-		event char(10) NOT NULL,
+		event_type char(10) NOT NULL,
 		object bigint(20) not null ,
 		object_type  varchar(20) COLLATE utf8mb4_unicode_ci not null,
-		object2 bigint(20) not null default(0) ,
-		object2_type  varchar(20) COLLATE utf8mb4_unicode_ci not null default('') ,
-		place bigint(20)  not null default(0),
-		event bigint(20)  not null default(0),
+		object2 bigint(20) not null default 0 ,
+		object2_type  varchar(20) COLLATE utf8mb4_unicode_ci not null default '' ,
+		place bigint(20)  not null default 0,
+		event bigint(20)  not null default 0,
 		PRIMARY KEY (ID),
 		KEY sourceindex(source),
 		KEY dateindex (event_date),
 		KEY object2index (object2)
 		
 	  )  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+error_log("creating ".$create);
 	  $wpdb->query($create);
   }
   static function clearSource($id){
@@ -95,8 +96,8 @@ class TimeLine {
   static function addEntry($event_date, $sid, $stype, $ev, $oid, $otype, $place, $event, $o2=null, $o2type=null ){
 	global $wpdb;
 	$timeline = $wpdb->prefix . "timeline";
-	$ins = "insert into  $timeline(event_date, source, source_type,event, object, object_type, $event, $place, object2, object2_type) values(%s,%d,%s,%s,%d,%s,%d,%d,%d,%s);";
-	$ins2 = "insert into  $timeline(event_date, source, source_type,event, object, object_type,$event, $place) values(%s, %d,%s,%s,%d,%s,%d,%d);";
+	$ins = "insert into  $timeline(event_date, source, source_type,event_type, object, object_type, event, place, object2, object2_type) values(%s,%d,%s,%s,%d,%s,%d,%d,%d,%s);";
+	$ins2 = "insert into  $timeline(event_date, source, source_type,event_type, object, object_type,event, place) values(%s, %d,%s,%s,%d,%s,%d,%d);";
 	
 	if ($o2===null) $sql = $wpdb->prepare($ins2,$event_date,$sid, $stype,$ev,$oid, $otype, $place, $event);
 	else $sql = $wpdb->prepare($ins,$event_date,$sid, $stype,$ev, $oid, $otype, $place, $event, $o2, $o2type);
