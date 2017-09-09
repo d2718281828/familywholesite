@@ -47,6 +47,21 @@ class TimeLine {
     $s.= " WHERE (".implode(") and (", $where). ") ORDER BY ".implode(",",$order);
     return $s;
   }
+  /* timeline types
+  source is the post that writes these when being saved
+  object is the filter for a particular timeline
+  
+  source		object	object2
+  person  BORN  samepers place
+  person  SON   parent
+  person  DIED	samepers place
+  person  MARRIED samepers spouse place
+  picture PIC   tagged-pers
+  picture PIC   tagged-event
+  picture PIC   tagged-place
+  event   EVENT  tagged-place
+  event   EVENT  tagged-person (wedding)
+  */
   static function activate(){
 	  error_log("Timeline::activate called");
 	  global $wpdb;
@@ -57,6 +72,8 @@ class TimeLine {
 		source bigint(20)  NOT NULL,
 		source_type varchar(30) NOT NULL,
 		event char(10) NOT NULL,
+		object bigint(20) ,
+		object_type VARCHAR(30),
 		object2 bigint(20) ,
 		object2_type VARCHAR(30),
 		PRIMARY KEY (ID),
@@ -66,6 +83,24 @@ class TimeLine {
 		
 	  )  ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
 	  $wpdb->query($create);
+  }
+  static function clearSource($id){
+	global $wpdb;
+	$timeline = $wpdb->prefix . "timeline";
+	$del = "delete from $timeline where source=%d";
+	$rc = $wpdb->query($wpdb->prepare($del,$id));
+  }
+  static function addEntry($event_date, $sid, $stype, $ev, $oid, $otype, $o2=null, $o2type=null ){
+	global $wpdb;
+	$timeline = $wpdb->prefix . "timeline";
+	$ins = "insert into  $timeline(source, source_type,event, object, object_type, object2, object2_type) values(%d,%s,%s,%d,%s,%d,%s);";
+	$ins2 = "insert into  $timeline(source, source_type,event, object, object_type) values(%d,%s,%s,%d,%s);";
+	
+	if ($o2===null) $sql = $wpdb->prepare($ins2,$sid, $stype,$ev,$oid, $otype);
+	else $sql = $wpdb->prepare($ins,$sid, $stype,$ev, $oid, $otype, $o2, $o2type);
+	
+	$rc = $wpdb->query($sql);
+	  
   }
 }
  ?>

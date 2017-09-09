@@ -31,5 +31,17 @@ class PersonCPT extends FSCpt {
         ->addField(new UseridSelector("userid", "Login id", "Link to the person's login id, if they have one"))
     ;
   }
+  protected function on_save($post_id, $post){
+    if (WP_DEBUG) error_log("in FamilySite::PersonCPT::on_save method");
+	parent:on_save($post_id, $post);
+	
+	// refresh timeline info
+	TimeLine::clearSource($post_id);
+	$source = new Person($post);
+	
+	if (isset($POST["date_birth"]){
+		TimeLine::addEntry($POST["date_birth"], $post_id, "fs_person", "BORN", $post_id, "fs_person");
+	}
+  }
 }
  ?>
