@@ -93,11 +93,11 @@ class TimeLine {
   static function addEntry($event_date, $sid, $stype, $ev, $oid, $otype, $o2=null, $o2type=null ){
 	global $wpdb;
 	$timeline = $wpdb->prefix . "timeline";
-	$ins = "insert into  $timeline(source, source_type,event, object, object_type, object2, object2_type) values(%d,%s,%s,%d,%s,%d,%s);";
-	$ins2 = "insert into  $timeline(source, source_type,event, object, object_type) values(%d,%s,%s,%d,%s);";
+	$ins = "insert into  $timeline(event_date, source, source_type,event, object, object_type, object2, object2_type) values(%s,%d,%s,%s,%d,%s,%d,%s);";
+	$ins2 = "insert into  $timeline(event_date, source, source_type,event, object, object_type) values(%s, %d,%s,%s,%d,%s);";
 	
-	if ($o2===null) $sql = $wpdb->prepare($ins2,$sid, $stype,$ev,$oid, $otype);
-	else $sql = $wpdb->prepare($ins,$sid, $stype,$ev, $oid, $otype, $o2, $o2type);
+	if ($o2===null) $sql = $wpdb->prepare($ins2,$event_date,$sid, $stype,$ev,$oid, $otype);
+	else $sql = $wpdb->prepare($ins,$event_date,$sid, $stype,$ev, $oid, $otype, $o2, $o2type);
 	
 	$rc = $wpdb->query($sql);
 	  

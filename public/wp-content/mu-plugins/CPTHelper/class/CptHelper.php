@@ -214,6 +214,7 @@ class CptHelper {
     public function saveMetaBox($post_id)
     {
         if (TRACEIT) traceit("=================== Save MetaBox has been triggered post=".$post_id);
+	if (!isset($_REQUEST[$this->noncefield()])) return;
         if (!wp_verify_nonce( $_REQUEST[$this->noncefield()], plugin_basename( __FILE__ ))) return;
 
         if (TRACEIT) traceit("=================== nonce is good");

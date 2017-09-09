@@ -33,14 +33,16 @@ class PersonCPT extends FSCpt {
   }
   protected function on_save($post_id, $post){
     if (WP_DEBUG) error_log("in FamilySite::PersonCPT::on_save method");
-	parent:on_save($post_id, $post);
-	
+	parent::on_save($post_id, $post);
+
+	error_log(">>>>>".print_r($_REQUEST,true));	
 	// refresh timeline info
 	TimeLine::clearSource($post_id);
 	$source = new Person($post);
 	
-	if (isset($POST["date_birth"]){
-		TimeLine::addEntry($POST["date_birth"], $post_id, "fs_person", "BORN", $post_id, "fs_person");
+	if (isset($_REQUEST["date_birth"])){
+		if (WP_DEBUG) error_log("Adding timeline entry for birthi of ".$post_id);
+		TimeLine::addEntry($_REQUEST["date_birth"], $post_id, "fs_person", "BORN", $post_id, "fs_person");
 	}
   }
 }
