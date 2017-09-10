@@ -65,7 +65,7 @@ class FamilySite {
   protected function setupCPTs(){
 
     $z = new PersonCPT("person", "Person", "People", []);
-    $z = new FSCpt("event", "Event", "Events", []);
+    $z = new EventCPT("event", "Event", "Events", []);
     $z = new PlaceCPT("place", "Place", "Places", []);
     $z = new InterestCPT("post", null, null, []);
   }
