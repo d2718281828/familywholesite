@@ -23,7 +23,7 @@ class Ent  {
 		$this->size = strlen($content);
 	}
 	public function show(){
-		return $this->key.'-'.$this->size;
+		return $this->key.'-'.$this->size.'('.$this->sourcedir.')';
 	}
 
 
