@@ -65,6 +65,7 @@ class EntLoader {
 	  }
 	  $m.="</ul>";
 	  // we dont need the full list right now.
+	  $this->get("violet")->setMale(false);
 	  $this->setScope("violet");
 	  $m = $this->listWanted();
 	  
@@ -72,6 +73,9 @@ class EntLoader {
 	  
 	  
 	  return $m;
+  }
+  public function get($who){
+      return isset($this->set[$who]) ? $this->set[$who] : null;
   }
   protected function listWanted(){
 	  $m="<ul>";
@@ -83,24 +87,27 @@ class EntLoader {
 	  $this->setDescs($who,5);
   }
   protected function setDescs($who,$depth){
+	  $anc = $this->get($who);
 	  foreach($this->set as $id=>$obj) {
 		  $mum = $obj->get("mother");
 		  $dad = $obj->get("father");
 		  if ($who==$mum) {
 			  $obj->setWanted();
-			  if ($depth>0) $this->setDescs($mum,$depth-1)
+			  $anc->setMale(false);
+			  if ($depth>0) $this->setDescs($id,$depth-1);
 		  }
 		  if ($who==$dad) {
 			  $obj->setWanted();
-			  if ($depth>0) $this->setDescs($dad,$depth-1)
+			  $anc->setMale(true);
+			  if ($depth>0) $this->setDescs($id,$depth-1);
 		  }
 	  }
   }
   protected function setAncs($who){
-	  $person = $this->set[$who];
+	  $person = $this->get($who);
 	  $person->setWanted();
-	  if ($mum=$person->get("mother")) $this->setAncs($mum);
-	  if ($dad=$person->get("father")) $this->setAncs($dad);
+	  if ($mum=$person->get("mother")) {$this->get($mum)->setMale(false); $this->setAncs($mum);}
+	  if ($dad=$person->get("father")) {$this->get($mum)->setMale(true); $this->setAncs($dad);}
 	  if ($spo=$person->get("spouse")) $this->setAncs($spo);
   }
 

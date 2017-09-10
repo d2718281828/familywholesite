@@ -12,6 +12,7 @@ class Ent  {
 	protected $numlines = 0;
 	public $props = [];
 	protected $wanted = false;
+	protected $gender=null;  // only applicable to people. Set during the ancestor process
 	
 	public function __construct($filename, $reldir, $fulldir){
 		$this->reldir = $reldir;
@@ -52,17 +53,21 @@ class Ent  {
 			}
 		}
 	}
+	public function setMale($ismale){
+		$this->gender = $ismale ? "M" : "F";
+	}
 	public function get($prop){
 		return isset($this->props[$prop]) ? $this->props[$prop] : null;
 	}
 	public function show(){
-		return $this->key.'-'.$this->size.'-'.$this->numlines.'('.$this->get("title").')';
+		return $this->key.'-'.$this->size.'-'.$this->numlines.'('.$this->get("title").')'.$this->gender;
 	}
 	public function showAll(){
 		$m = "";
 		foreach($this->props as $prop=>$val){
 			$m.='<p><strong>'.$prop.'</strong> '.htmlentities($val).'</p>';
 		}
+		if ($this->gender) $m.='<p><strong>Gender</strong> '.$this->gender.'</p>';
 		return $m;
 	}
 
