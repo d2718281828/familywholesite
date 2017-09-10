@@ -31,7 +31,7 @@ class InterestCPT extends FSCpt {
 	else {
 		if (isset($_REQUEST["event"]) && $_REQUEST["event"]) {
 			$event = (int)$_REQUEST["event"];
-			$actual_date = get_postmeta($event, "actual_date", true);
+			$actual_date = get_post_meta($event, "actual_date", true);
 		}
 	}
 	$interest = new Interest($post);
