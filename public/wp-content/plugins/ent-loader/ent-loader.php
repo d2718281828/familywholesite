@@ -64,7 +64,7 @@ class EntLoader {
 		  }
 	  }
 	  $m.="</ul>";
-	  $m.=$this->set["violet"]->showAll();
+	  $m =$this->set["violet"]->showAll();
 	  return $m;
   }
 

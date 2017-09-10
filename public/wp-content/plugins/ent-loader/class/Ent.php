@@ -33,10 +33,10 @@ class Ent  {
 		$lastprop = "";
 		foreach($lines as $line){
 			$l = rtrim($line);		// remove any residual line end crap
-			if (substr($l,1,1)=='<'){
+			if (substr($l,0,1)=='<'){
 				$etag = strpos($l,'>');
 				if ($etag!==false){
-					$prop = strtolower(substr($l,1,$etag-2));
+					$prop = strtolower(substr($l,1,$etag-1));
 					$lastprop = $prop;
 					$this->props[$lastprop]=substr($l,$etag+1);
 				}
@@ -51,7 +51,7 @@ class Ent  {
 	public function showAll(){
 		$m = "";
 		foreach($this->props as $prop=>$val){
-			$m.='<p><strong>'.$prop.'</strong>'.htmlentities($val).'</p>';
+			$m.='<p><strong>'.$prop.'</strong> '.htmlentities($val).'</p>';
 		}
 		return $m;
 	}
