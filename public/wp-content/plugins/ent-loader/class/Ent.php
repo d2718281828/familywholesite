@@ -11,6 +11,7 @@ class Ent  {
 	protected $firstline;
 	protected $numlines = 0;
 	public $props = [];
+	protected $wanted = false;
 	
 	public function __construct($filename, $reldir, $fulldir){
 		$this->reldir = $reldir;
@@ -20,6 +21,12 @@ class Ent  {
 	}
 	public function key(){
 		return $this->key;
+	}
+	public function setWanted(){
+		$this->wanted = true;
+	}
+	public function isWanted(){
+		return $this->wanted;
 	}
 	protected function getit($fname){
 		$content = file_get_contents($this->sourcedir.$fname);
@@ -44,6 +51,9 @@ class Ent  {
 				$this->props[$lastprop].="\n".$l;
 			}
 		}
+	}
+	public function get($prop){
+		return isset($this->props[$prop]) ? $this->props[$prop] : null;
 	}
 	public function show(){
 		return $this->key.'-'.$this->size.'-'.$this->numlines.'('.htmlentities(trim($this->firstline)).')';

@@ -64,8 +64,25 @@ class EntLoader {
 		  }
 	  }
 	  $m.="</ul>";
+	  // we dont need the full list right now.
+	  $this->setScope("violet");
+	  $m = $this->listWanted();
+	  
 	  $m =$this->set["violet"]->showAll();
+	  
+	  
 	  return $m;
+  }
+  protected function listWanted(){
+	  $m="<ul>";
+	  foreach($this->set as $id=>$obj) if ($obj->isWanted()) $m.='<li>'.$obj->show().'</li>';
+	  return $m.'</ul>';
+  }
+  protected function setScope($who){
+	  $person = $this->set[$who];
+	  $person->setWanted();
+	  if ($mum=$person->get("mother")) $this->setScope($mum);
+	  if ($dad=$person->get("father")) $this->setScope($dad);
   }
 
 }
