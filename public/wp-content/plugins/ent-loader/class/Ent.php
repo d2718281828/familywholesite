@@ -56,7 +56,7 @@ class Ent  {
 		return isset($this->props[$prop]) ? $this->props[$prop] : null;
 	}
 	public function show(){
-		return $this->key.'-'.$this->size.'-'.$this->numlines.'('.htmlentities(trim($this->firstline)).')';
+		return $this->key.'-'.$this->size.'-'.$this->numlines.'('.$this->get("title").')';
 	}
 	public function showAll(){
 		$m = "";

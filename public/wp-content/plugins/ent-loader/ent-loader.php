@@ -79,10 +79,29 @@ class EntLoader {
 	  return $m.'</ul>';
   }
   protected function setScope($who){
+	  $this->setAncs($who);
+	  $this->setDescs($who,5);
+  }
+  protected function setDescs($who,$depth){
+	  foreach($this->set as $id=>$obj) {
+		  $mum = $obj->get("mother");
+		  $dad = $obj->get("father");
+		  if ($who==$mum) {
+			  $obj->setWanted();
+			  if ($depth>0) $this->setDescs($mum,$depth-1)
+		  }
+		  if ($who==$dad) {
+			  $obj->setWanted();
+			  if ($depth>0) $this->setDescs($dad,$depth-1)
+		  }
+	  }
+  }
+  protected function setAncs($who){
 	  $person = $this->set[$who];
 	  $person->setWanted();
-	  if ($mum=$person->get("mother")) $this->setScope($mum);
-	  if ($dad=$person->get("father")) $this->setScope($dad);
+	  if ($mum=$person->get("mother")) $this->setAncs($mum);
+	  if ($dad=$person->get("father")) $this->setAncs($dad);
+	  if ($spo=$person->get("spouse")) $this->setAncs($spo);
   }
 
 }
