@@ -68,7 +68,7 @@ class EntLoader {
 	  $this->setScope("violet");
 	  $m = $this->listWanted();
 	  
-	  $m =$this->set["violet"]->showAll();
+	  $m.=$this->set["violet"]->showAll();
 	  
 	  
 	  return $m;
