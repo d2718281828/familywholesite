@@ -12,7 +12,7 @@ class TimeLine {
   public function html(){
     global $wpdb;
 
-    $sql = "select * from ";$wpdb->prefix."_timeline";
+    $sql = "select * from ".$wpdb->prefix."timeline";
 	if ($this->focus) $sql.=" where object=".$this->focus->postid;
 	$sql.= " order by event_date desc;";
     $res = $wpdb->get_results($sql, ARRAY_A);
@@ -20,7 +20,8 @@ class TimeLine {
     $m = "";
     foreach($res as $event) {
       $source = \CPTHelper\CPTHelper::make($event["source"],$event["source_type"]);
-      $m.= '<div class="timeline-link"><div class="timeline-date">'.$post["actual_date"].'</div>';
+      $evdate = new \DateTime($event["event_date"]);
+      $m.= '<div class="timeline-link"><div class="timeline-date">'.$evdate->format("Y, jS F").'</div>';
 	  switch($event["event_type"]){
 		case "BORN":
 		$m.= '<div class="timeline-body">Born</div>';
@@ -35,7 +36,7 @@ class TimeLine {
 		}
 		break;
 		default:
-		$m.= '<div class="timeline-pic">'.$source->link().'</div>'
+		$m.= '<div class="timeline-pic">'.$source->link().'</div>';
 	  }
 	  $m.= '</div>';
     }
