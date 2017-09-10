@@ -64,6 +64,28 @@ class FSPost extends CPost {
   public function indexSection(){
     return "";
   }
+  // TODO the linking process via tags should be moved into base CPost/CptHelper, but not now
+  protected function getLinksViaTax($tax,$type){
+	  global $wpdb;
+	  $id = (int)$this->postid;
+	  
+	  $s = "select P.ID 
+	  from ".$wpdb->term_relationships." TR, ".$wpdb->term_taxonomy." TT, ".$wpdb->postmeta." PM, ".$wpdb->posts." P
+	  where TR.object_id = $id and 
+	  TR.term_taxonomy_id = TT.term_taxonomy_id and TT.taxonomy=%s and
+	  PM.meta_key = 'fs_matching_tag_id' and PM.meta_value = TR.term_taxonomy_id 
+	  and P.ID = PM.post_id and P.post_status = 'publish' ;"
+	  ;
+	  $sql = $wpdb->prepare($s,$tax);
+	  if (WP_DEBUG) error_log("Getting post linkes for ".$this->postid." with SQL ".$sql);
+	  $res = $wpdb->get_col($sql);
+	  $cposts = [];
+	  foreach($res as $id) $cposts[] = FSPost::make($id,$type);
+	  if (WP_DEBUG) {
+		  foreach ($cposts as $cp) error_log("--- found   ".$cp->show());
+	  }
+	  return $cposts;
+  }
 
 }
 

@@ -39,4 +39,7 @@ class Event extends FSPost {
   public function indexSection(){
     return "pictures";
   }
+  public function getLinks(){
+	  return [];
+  }
 }

@@ -15,25 +15,11 @@ class Interest extends FSPost {
   public function infoBox() {
     return "";
   }
-  public function getPeople(){
-	  return $this->getLinks("person_tax","Person");
-  }
-  protected function getLinks($tax,$classname = null){
-	  global $wpdb;
-	  $id = (int)$this->postid;
-	  
-	  $s = "select P.ID 
-	  from ".$wpdb->term_relationships." TR, ".$wpdb->term_taxonomy." TT, ".$wpdb->postmeta." PM, ".$wpdb->posts." P
-	  where TR.object_id = $id and 
-	  TR.term_taxonomy_id = TT.term_taxonomy_id and TT.taxonomy=%s and
-	  PM.meta_key = 'fs_matching_tag_id' and PM.meta_value = TR.term_taxonomy_id 
-	  and P.ID = PM.post_id and P.post_status = 'publish' ;"
-	  ;
-	  $sql = $wpdb->prepare($s,$tax);
-	  if (WP_DEBUG) error_log("Getting post linkes for ".$this->postid." with SQL ".$sql);
-	  $res = $wpdb->get_col($sql);
-	  if (WP_DEBUG) error_log("resulting links  ".implode(",",$res));
-	  return $res;
+  public function getLinks(){
+	  $x = $this->getLinksViaTax("person_tax","fs_person");
+	  $y = $this->getLinksViaTax("event_tax","fs_event");
+	  $z = $this->getLinksViaTax("place_tax","fs_place");
+	  return array_merge($x,$y,$z);
   }
 
 }

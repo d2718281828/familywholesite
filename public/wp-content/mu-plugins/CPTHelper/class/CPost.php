@@ -46,6 +46,9 @@ class CPost {
         $this->type = $type;
         $this->cpthelper = CptHelper::get($type);
     }
+    public function getType(){
+        return $this->type;
+    }
 
     /**
      * Client should test with this before use

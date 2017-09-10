@@ -39,16 +39,13 @@ class InterestCPT extends FSCpt {
 	
 	if ($actual_date){
 		$interest = new Interest($post);
-		$this->addTimeLineForTax($post_id, $post->post_type, $actual_date, $interest->getPeople(), "fs_person" );
-		//$this->addTimeLineForTax($post_id, $actual_date, "place_tax", "fs_place" );
-		//$this->addTimeLineForTax($post_id, $actual_date, "event_tax", "fs_event" );
+		$links = $interest->getLinks();
+		foreach($links as $link){
+			TimeLine::addInterest($actual_date, $sid, $stype, $link->postid, $link->getType());
+		}
+		$this->addTimeLineLinks($post_id, $post->post_type, $actual_date, $interest->getPeople(), "fs_person" );
 	}
 	
-  }
-  protected function addTimeLineForTax($sid, $stype, $actual_date, $list, $otype){
-	  foreach($list as $linked){
-		  TimeLine::addInterest($actual_date, $sid, $stype, $linked, $otype);
-	  }
   }
 }
  ?>

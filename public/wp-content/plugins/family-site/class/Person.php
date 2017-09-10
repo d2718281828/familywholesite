@@ -47,5 +47,8 @@ class Person extends FSPost {
     $tl = new TimeLine($this);
     return $tl->html();
   }
+  public function getLinks(){
+	  return [];
+  }
 
 }
