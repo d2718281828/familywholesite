@@ -14,12 +14,14 @@ use CPTHelper\FieldHelper;
 use CPTHelper\DateHelper;
 use CPTHelper\CPTSelectHelper;
 use CPTHelper\SelectHelper;
+require_once("class/Ent.php");
 
 
 class EntLoader {
 	
 	protected $input;
 	protected $numfiles = 0;
+	protected $set = [];
 
   public function __construct(){
 	  add_action("init", [$this,"init"]);
@@ -34,26 +36,31 @@ class EntLoader {
 	  $admin = new EntLoadHelp($this);
   }
   protected function loadStart(){
-	  $this->numfiles = 0;	  
+	  $this->numfiles = 0;	 
+	  $this->set = [];
   }
   public function load($dir = null){
 	  if ($dir){
 		  $ddir = $dir;
 	  } else {
-		  $ddir = $this->input;
+		  $ddir = "";
 		  $this->loadStart();
 	  }
 	  $m = "<ul>";
 	  
-	  if (WP_DEBUG) error_log("Loading Ents from ".$ddir);
-	  $list = scandir($ddir);
+	  $adir = $this->input.'/'.$ddir;
+	  
+	  if (WP_DEBUG) error_log("Loading Ents from ".$adir);
+	  $list = scandir($adir);
 	  foreach ($list as $fil){
 		  if ($fil=='.' || $fil=='..') continue;
-		  $full = $ddir.'/'.$fil;
+		  $full = $adir.'/'.$fil;
 		  if (is_dir($full)){
 			  $m.=$this->load($full);
 		  } else {
-			  $m.= "<li>".$fil."</li>";
+			  $z = new Ent($fil, $ddir, $adir);
+			  $this->set[$z->key()] = $z;
+			  $m.= "<li>".$z->show()."</li>";
 		  }
 	  }
 	  return $m."</ul>";
