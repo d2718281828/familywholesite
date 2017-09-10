@@ -66,7 +66,8 @@ class EntLoader {
 	  $m.="</ul>";
 	  // we dont need the full list right now.
 	  $this->get("violet")->setMale(false);
-	  $this->setScope("violet");
+	  $this->setAncs("paulinst");
+	  $this->setDescs("violet",5);
 	  $m = $this->listWanted();
 	  
 	  $m.=$this->set["violet"]->showAll();
@@ -82,12 +83,11 @@ class EntLoader {
 	  foreach($this->set as $id=>$obj) if ($obj->isWanted()) $m.='<li>'.$obj->show().'</li>';
 	  return $m.'</ul>';
   }
-  protected function setScope($who){
-	  $this->setAncs($who);
-	  $this->setDescs($who,5);
-  }
   protected function setDescs($who,$depth){
 	  $anc = $this->get($who);
+	  if ($spo=$this->spouseOf($anc)){
+		  $spo->setWanted();
+	  }
 	  foreach($this->set as $id=>$obj) {
 		  $mum = $obj->get("mother");
 		  $dad = $obj->get("father");
@@ -102,6 +102,12 @@ class EntLoader {
 			  if ($depth>0) $this->setDescs($id,$depth-1);
 		  }
 	  }
+  }
+  public function spouseOf($pers){
+	  if ($spo=$pers->get("spouse")) return $spo;
+	  $persid = $pers->key();
+	  foreach($this->set as $id=>$obj) if ($obj->get("spouse")==$persid) return $id;
+	  return null;
   }
   protected function setAncs($who){
 	  $person = $this->get($who);
