@@ -1,6 +1,7 @@
 <?php
 namespace FamilySite;
 use CPTHelper\CPost;
+use CPTHelper\CptHelper;
 
 // return the tax urls or the post urls they are associated with??
 class FSPost extends CPost {
@@ -80,7 +81,7 @@ class FSPost extends CPost {
 	  if (WP_DEBUG) error_log("Getting post linkes for ".$this->postid." with SQL ".$sql);
 	  $res = $wpdb->get_col($sql);
 	  $cposts = [];
-	  foreach($res as $id) $cposts[] = FSPost::make($id,$type);
+	  foreach($res as $id) $cposts[] = CptHelper::make($id,$type);
 	  if (WP_DEBUG) {
 		  foreach ($cposts as $cp) error_log("--- found   ".$cp->show());
 	  }

@@ -34,16 +34,14 @@ class InterestCPT extends FSCpt {
 			$actual_date = get_post_meta($event, "actual_date", true);
 		}
 	}
-	$interest = new Interest($post);
     if (WP_DEBUG) error_log("Interest $post_id has date $actual_date");
 	
 	if ($actual_date){
 		$interest = new Interest($post);
 		$links = $interest->getLinks();
 		foreach($links as $link){
-			TimeLine::addInterest($actual_date, $sid, $stype, $link->postid, $link->getType());
+			TimeLine::addInterest($actual_date, $post_id,  $post->post_type, $link->postid, $link->getType());
 		}
-		$this->addTimeLineLinks($post_id, $post->post_type, $actual_date, $interest->getPeople(), "fs_person" );
 	}
 	
   }
