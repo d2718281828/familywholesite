@@ -18,7 +18,7 @@ class EntLoadHelp extends BaseAdmin {
   }
   
   public function thisloader(){
-	  return "loaded";
+	  return $this->parent->load();
   }
 
 }
