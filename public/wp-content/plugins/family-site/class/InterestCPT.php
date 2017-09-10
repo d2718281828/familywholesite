@@ -34,9 +34,10 @@ class InterestCPT extends FSCpt {
 			$actual_date = get_postmeta($event, "actual_date", true);
 		}
 	}
-	$interest = new Interest($post);
+    if (WP_DEBUG) error_log("Interest $post_id has date $actual_date");
 	
 	if ($actual_date){
+		$interest = new Interest($post);
 		$this->addTimeLineForTax($post_id, $post->post_type, $actual_date, $interest->getPeople(), "fs_person" );
 		//$this->addTimeLineForTax($post_id, $actual_date, "place_tax", "fs_place" );
 		//$this->addTimeLineForTax($post_id, $actual_date, "event_tax", "fs_event" );
