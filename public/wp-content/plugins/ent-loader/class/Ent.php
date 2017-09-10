@@ -18,8 +18,8 @@ class Ent  {
 	public function key(){
 		return $this->key;
 	}
-	protected function getit(){
-		$content = file_get_contents($this->sourcedir);
+	protected function getit($fname){
+		$content = file_get_contents($this->sourcedir.$fname);
 		$this->size = strlen($content);
 	}
 	public function show(){
