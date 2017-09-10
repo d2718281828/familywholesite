@@ -142,6 +142,9 @@ class CPost {
       $url = get_permalink($this->postid);
       return '<a href="'.$url.'">'.$this->get("post_title").'</a>';
     }
+	/**
+	* Return title plus image, linked.
+	*/
     public function link(){
       $url = get_permalink($this->postid);
       $m = '<div class="title">'.$this->get("post_title").'</div>';

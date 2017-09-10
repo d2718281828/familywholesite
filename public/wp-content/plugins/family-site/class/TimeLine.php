@@ -8,22 +8,41 @@ class TimeLine {
   public function __construct($focus = null){
     $this->focus = $focus;
   }
+  // next job - rework this with different timeline event types
   public function html(){
     global $wpdb;
 
-    $sql = $this->makeSQL();
+    $sql = "select * from ";$wpdb->prefix."_timeline";
+	if ($this->focus) $sql.=" where object=".$this->focus->postid;
+	$sql.= " order by event_date desc;";
     $res = $wpdb->get_results($sql, ARRAY_A);
 
     $m = "";
-    foreach($res as $post) {
-      $cp = \CPTHelper\CPTHelper::make($post["ID"],$post["post_type"]);
-      $m.='<div class="timeline-link"><div class="timeline-date">'.$post["actual_date"].'</div>';
-      $m.='<div class="timeline-pic">'.$cp->link().'</div></div>';
+    foreach($res as $event) {
+      $source = \CPTHelper\CPTHelper::make($event["source"],$event["source_type"]);
+      $m.= '<div class="timeline-link"><div class="timeline-date">'.$post["actual_date"].'</div>';
+	  switch($event["event_type"]){
+		case "BORN":
+		$m.= '<div class="timeline-body">Born</div>';
+		break;
+		case "DIED":
+		$m.= '<div class="timeline-body">Died</div>';
+		break;
+		case "MARRIAGE":
+		if ($event["object2"]){
+			$spouse = \CPTHelper\CPTHelper::make($event["object2"],$event["object2_type"]);
+			$m.= '<div class="timeline-body">Marriage to '.$spouse->simpleLink().'</div>';
+		}
+		break;
+		default:
+		$m.= '<div class="timeline-pic">'.$source->link().'</div>'
+	  }
+	  $m.= '</div>';
     }
     return $m;
   }
   // redundant
-  protected function makeSQL(){
+  protected function makeSQL_obs(){
     global $wpdb;
 
     $select = ["P.ID","P.post_type"];

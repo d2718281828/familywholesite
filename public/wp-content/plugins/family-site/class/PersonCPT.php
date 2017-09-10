@@ -20,7 +20,7 @@ class PersonCPT extends FSCpt {
         ->addField(new CPTSelectHelper("place_death", "Place of Death", "Place the person was living when they died", ["posttype"=>"fs_place"]))
         ->addField(new CPTSelectHelper("father", "Father", "", ["posttype"=>"fs_person"]))
         ->addField(new CPTSelectHelper("mother", "Mother", "", ["posttype"=>"fs_person"]))
-        ->addField(new CPTSelectHelper("spouse", "Spouse", "Spouse, of current marriage", ["posttype"=>"fs_person"]))
+        ->addField(new CPTSelectHelper("spouse", "Spouse", "Spouse, of current marriage. This only has to be specified for one spouse.", ["posttype"=>"fs_person"]))
         ->addField(new CPTSelectHelper("place_marriage", "Place of Marriage", "Place of the wedding to current spouse", ["posttype"=>"fs_place"]))
         ->addField(new DateHelper("date_marriage", "Date of marriage", "Date of current or only marriage"))
         ->addField((new SelectHelper("gender", "Gender", "" ))
