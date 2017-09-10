@@ -59,6 +59,7 @@ class CptHelper {
         // builtin call is for adding a metabox to an existing type.
         $this->slug = $slug;
 
+        $this->setup();
         $this->builtin = ($name===null);
         if (!$this->builtin){
             if (TRACEIT) traceit("NEW CPT ".$slug);
@@ -72,7 +73,6 @@ class CptHelper {
               ];
             $this->options = $optionslist;
             $this->supports = (isset($optionslist["supports"])) ? $optionslist["supports"] : ["title", "editor", "thumbnail", "author"];
-            $this->setup();
 
             if ($pluginfile){
               //if (TRACEIT) traceit("!!!!!!!registering hook for file ".$pluginfile);
