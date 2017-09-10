@@ -24,7 +24,7 @@ class EntLoader {
   public function __construct(){
 	  add_action("init", [$this,"init"]);
 	  $up = wp_upload_dir();
-	  $this->input = $up["path"]."/nodes";
+	  $this->input = $up["basedir"]."/nodes";
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
