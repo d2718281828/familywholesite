@@ -63,7 +63,9 @@ class EntLoader {
 			  $m.= "<li>".$z->show()."</li>";
 		  }
 	  }
-	  return $m."</ul>";
+	  $m.="</ul>";
+	  $m.=$this->set["violet"]->showAll();
+	  return $m;
   }
 
 }
