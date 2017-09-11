@@ -85,7 +85,9 @@ class EntLoader {
   }
   protected function setDescs($who,$depth){
 	  $anc = $this->get($who);
-	  if ($spo=$this->spouseOf($anc)){
+	  $spo=$this->spouseOf($anc);
+	  error_log("Spouse of $who is $spo");
+	  if ($spo){
 		  $spo->setWanted();
 	  }
 	  foreach($this->set as $id=>$obj) {
@@ -123,7 +125,7 @@ class EntLoader {
 		  $this->setAncs($dad);
 	  }
 	  if ($spo=$this->spouseOf($person)) {
-		  error_log("souse of ".$who." is ".$spo);
+		  error_log("spouse of ".$who." is ".$spo);
 		  $this->setAncs($spo);
 	  }
   }
