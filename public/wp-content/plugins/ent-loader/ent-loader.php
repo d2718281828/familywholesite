@@ -88,7 +88,11 @@ class EntLoader {
 	  $spo=$this->spouseOf($anc);
 	  error_log("Spouse of $who is $spo");
 	  if ($spo){
-		  $spo->setWanted();
+		  $spob = $this->get($spo);
+		  $spob->setWanted();
+		  $g = $anc->getGender();
+		  if ($g=="M") $spob->setMale(false);
+		  if ($g=="F") $spob->setMale(true);
 	  }
 	  foreach($this->set as $id=>$obj) {
 		  $mum = $obj->get("mother");
@@ -106,9 +110,9 @@ class EntLoader {
 	  }
   }
   public function spouseOf($pers){
-	  if ($spo=$pers->get("spouse")) return $spo;
+	  if ($spo=$pers->get("married_to")) return $spo;
 	  $persid = $pers->key();
-	  foreach($this->set as $id=>$obj) if ($obj->get("spouse")==$persid) return $id;
+	  foreach($this->set as $id=>$obj) if ($obj->get("married_to")==$persid) return $id;
 	  return null;
   }
   protected function setAncs($who){
@@ -123,10 +127,6 @@ class EntLoader {
 		  error_log("father of ".$who." is ".$dad);
 		  $this->get($dad)->setMale(true); 
 		  $this->setAncs($dad);
-	  }
-	  if ($spo=$this->spouseOf($person)) {
-		  error_log("spouse of ".$who." is ".$spo);
-		  $this->setAncs($spo);
 	  }
   }
 

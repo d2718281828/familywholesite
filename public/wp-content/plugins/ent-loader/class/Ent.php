@@ -56,6 +56,9 @@ class Ent  {
 	public function setMale($ismale){
 		$this->gender = $ismale ? "M" : "F";
 	}
+	public function getGender(){
+		return $this->gender;
+	}
 	public function get($prop){
 		return isset($this->props[$prop]) ? $this->props[$prop] : null;
 	}
