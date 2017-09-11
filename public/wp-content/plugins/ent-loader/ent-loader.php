@@ -70,9 +70,14 @@ class EntLoader {
 	  $this->setDescs("violet",5);
 	  $this->setGenders();
 	  
+	  foreach($this->set as $id=>$obj) $obj->reorg();
+  
 	  $m = $this->listWanted();
+	  $m.= $this->listTypes("event");
+	  $m.= $this->listTypes("place");
 	  
 	  $m.=$this->set["violet"]->showAll();
+	  $m.=$this->set["yvonne"]->showAll();
 	  
 	  
 	  return $m;
@@ -98,6 +103,13 @@ class EntLoader {
 	  $m="<ul>";
 	  foreach($this->set as $id=>$obj) if ($obj->isWanted()) $m.='<li>'.$obj->show().'</li>';
 	  return $m.'</ul>';
+  }
+  protected function listTypes($type){
+	  $m="<ul>";
+	  foreach($this->set as $id=>$obj) {
+		  if ($obj->getType()==$type) $m.='<li>'.$type.": ".$obj->show().'</li>';
+	  }
+	  return $m."</ul>";
   }
   protected function setDescs($who,$depth){
 	  $anc = $this->get($who);

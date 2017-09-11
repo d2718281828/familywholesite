@@ -23,8 +23,8 @@ class Ent  {
 	public function key(){
 		return $this->key;
 	}
-	public function setWanted(){
-		$this->wanted = true;
+	public function setWanted($wanted=true){
+		$this->wanted = $wanted;
 	}
 	public function isWanted(){
 		return $this->wanted;
@@ -65,8 +65,14 @@ class Ent  {
 	public function getGender(){
 		return $this->gender;
 	}
+	public function getType(){
+		return $this->type;
+	}
 	public function get($prop){
 		return isset($this->props[$prop]) ? $this->props[$prop] : null;
+	}
+	public function reorg(){
+		if (isset($this->props["type"])) $this->type = $this->props["type"];
 	}
 	public function show(){
 		return $this->key.'-'.$this->size.'-'.$this->numlines.'('.$this->get("title").')'.$this->gender;
