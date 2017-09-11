@@ -68,12 +68,28 @@ class EntLoader {
 	  $this->get("violet")->setMale(false);
 	  $this->setAncs("paulinst");
 	  $this->setDescs("violet",5);
+	  $this->setGenders();
+	  
 	  $m = $this->listWanted();
 	  
 	  $m.=$this->set["violet"]->showAll();
 	  
 	  
 	  return $m;
+  }
+  protected function setGenders(){
+	  $males=["brianhe","alanmit","alex","benben","calebs","chrismit","danst","davben","edwardt","elijah","ericm","jackn","jakell",
+	  "jamess","jimnay","joelst","johnbus","johnll","johns","johnst","jonathoh","kieran","laurben","markmac","maxn",
+	  "natll","nobu","philtur","tobben","torin","zadok"];
+	  
+	  
+	  $females=["akina","haruna","helens","anna","annies","bethany","charlst","chizuko","chloest","daphneg","doreens","doriss",
+	  "elaines","emma","flis","hazelst","heathst","hollyll","ionamit","joans","karas","karenst","katiet","kerryl","kimst",
+	  "laurapk","maja","marina","mollyn","rhians","yvonne",];
+	  
+	  
+	  foreach ($males as $m) $this->get($m)->setMale(true);
+	  foreach ($females as $f) $this->get($f)->setMale(false);
   }
   public function get($who){
       return isset($this->set[$who]) ? $this->set[$who] : null;
