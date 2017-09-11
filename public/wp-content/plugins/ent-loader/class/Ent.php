@@ -54,7 +54,8 @@ class Ent  {
 					} else $this->props[$lastprop]=$last;
 				}
 			} else {
-				$this->props[$lastprop].="\n".$l;
+				//echo "<br>".$lastprop."=".$l;
+				if ($l && $lastprop!="index") $this->props[$lastprop].="\n".$l;
 			}
 		}
 	}
