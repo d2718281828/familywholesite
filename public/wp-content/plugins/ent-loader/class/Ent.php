@@ -39,14 +39,19 @@ class Ent  {
 	}
 	protected function digest($lines){
 		$lastprop = "";
+		$this->props["index"] = [];
+		
 		foreach($lines as $line){
 			$l = rtrim($line);		// remove any residual line end crap
 			if (substr($l,0,1)=='<'){
 				$etag = strpos($l,'>');
 				if ($etag!==false){
+					$last=substr($l,$etag+1);
 					$prop = strtolower(substr($l,1,$etag-1));
 					$lastprop = $prop;
-					$this->props[$lastprop]=substr($l,$etag+1);
+					if ($prop=="index"){
+						$this->props[$lastprop][] = explode("<x>", $last);
+					} else $this->props[$lastprop]=$last;
 				}
 			} else {
 				$this->props[$lastprop].="\n".$l;
@@ -68,7 +73,11 @@ class Ent  {
 	public function showAll(){
 		$m = "";
 		foreach($this->props as $prop=>$val){
-			$m.='<p><strong>'.$prop.'</strong> '.htmlentities($val).'</p>';
+			if ($prop=="index"){
+				$vv = "";
+				foreach ($val as $entry) $vv.="<br />".implode("-",$entry);
+			} else $vv = htmlentities($val);
+			$m.='<p><strong>'.$prop.'</strong> '.$vv.'</p>';
 		}
 		if ($this->gender) $m.='<p><strong>Gender</strong> '.$this->gender.'</p>';
 		return $m;
