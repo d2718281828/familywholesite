@@ -112,9 +112,20 @@ class EntLoader {
   protected function setAncs($who){
 	  $person = $this->get($who);
 	  $person->setWanted();
-	  if ($mum=$person->get("mother")) {$this->get($mum)->setMale(false); $this->setAncs($mum);}
-	  if ($dad=$person->get("father")) {$this->get($mum)->setMale(true); $this->setAncs($dad);}
-	  if ($spo=$person->get("spouse")) $this->setAncs($spo);
+	  if ($mum=$person->get("mother")) {
+		  error_log("mother of ".$who." is ".$mum);
+		  $this->get($mum)->setMale(false); 
+		  $this->setAncs($mum);
+	  }
+	  if ($dad=$person->get("father")) {
+		  error_log("father of ".$who." is ".$dad);
+		  $this->get($dad)->setMale(true); 
+		  $this->setAncs($dad);
+	  }
+	  if ($spo=$this->spouseOf($person)) {
+		  error_log("souse of ".$who." is ".$spo);
+		  $this->setAncs($spo);
+	  }
   }
 
 }
