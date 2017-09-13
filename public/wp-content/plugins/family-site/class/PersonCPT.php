@@ -28,6 +28,7 @@ class PersonCPT extends FSCpt {
             ->addOption("F","Female")
         )
         ->addField(new FieldHelper("birthname", "Birth Name", "Full name at birth (maiden name for ladies)"))
+        ->addField(new FieldHelper("occupation", "Occupation", "Main occupation"))
         ->addField(new UseridSelector("userid", "Login id", "Link to the person's login id, if they have one"))
     ;
   }

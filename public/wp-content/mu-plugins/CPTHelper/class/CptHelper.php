@@ -290,14 +290,19 @@ class CptHelper {
             $class = $cpt->instanceClass;
             return new $class($p);
         } elseif (is_numeric($p)){
-	    if (!$type) $type = get_post_type($p);
+			if (!$type) $type = get_post_type($p);
             if (!$type) return null;
             $cpt = self::get($type);
             if (!$cpt) return null;
             $class = $cpt->instanceClass;
-	    $z = new $class($p);
-	    $z->setType($type);
-	    return $z;
+			$z = new $class($p);
+			$z->setType($type);
+			return $z;
+        } elseif (is_array($p)){
+            $cpt = self::get($p["post_type"]);
+            if (!$cpt) return null;
+            $class = $cpt->instanceClass;
+            return new $class($p);
         } else {
             return null;
         }

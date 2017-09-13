@@ -10,7 +10,7 @@ namespace CPTHelper;
 // try to make this as lazy as possible. we can get custom fields without ever loading the post object, for example.
 class CPost {
 
-    public $postid;
+    public $postid = -1;		// -1 means it is a CPost that has not been instantiated
     protected $type = null;
     public $post = null;
     protected $cpthelper = null;
@@ -18,6 +18,7 @@ class CPost {
     protected $error_message = null;      // message to explain the problem.
     protected $post_properties = null;
     protected $props = [];              // cache requested properties
+    protected $pends = [];              // Properties of a post which hasnt been created yet. Post fields and custom fields together
 
     /**
      * CPost constructor.
@@ -30,6 +31,9 @@ class CPost {
             $this->setType($p->post_type);
         } elseif (is_numeric($p)){
             $this->postid = (int)$p;
+        } elseif (is_array($p)){
+            $this->pends = $p;
+            $this->setType($p["post_type"]);
         } else {
             $this->is_error = true;
             $this->error_message = "Object constructed with invalid argument";
@@ -130,6 +134,13 @@ class CPost {
       return "Info";
     }
     /**
+    * Create a new post based on the info which was previously supplied
+    */
+    public function create(){
+      if ($this->postid>0) return;	// already exists
+	  if (!$this->pends) return;	// no info so cant.
+    }
+    /**
     * Component of the info box.
     */
     protected function infoBit($head,$text){
@@ -157,7 +168,10 @@ class CPost {
     * Just give a quick summary of the Cpost, mainly for debugging
     */
     public function show(){
-      return "CPost:".$this->postid."(".$this->type.")";
+		$cl = get_class($this);
+		if ($this->is_error) return $cl.":BAD";
+		if ($this->postid<0) return $cl.":NEW:".$this->pends["post_name"]."(".$this->type.")";
+        return $cl.":".$this->postid."(".$this->type.")";
     }
 
 

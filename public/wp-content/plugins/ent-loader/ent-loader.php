@@ -15,13 +15,14 @@ use CPTHelper\DateHelper;
 use CPTHelper\CPTSelectHelper;
 use CPTHelper\SelectHelper;
 require_once("class/Ent.php");
-
+require_once("class/EntCPost.php");
 
 class EntLoader {
 	
 	protected $input;
 	protected $numfiles = 0;
-	protected $set = [];
+	protected $set = [];		// Ent objects read from the node files
+	protected $cposts = [];		// CPost objects, before creation
 
   public function __construct(){
 	  add_action("init", [$this,"init"]);
@@ -39,6 +40,7 @@ class EntLoader {
 	  $this->numfiles = 0;	 
 	  $this->set = [];
   }
+  //phase 1 - from nodes files to CPost pre-entries
   public function load($dir = null){
 	  if ($dir){
 		  $ddir = $dir;
@@ -63,24 +65,48 @@ class EntLoader {
 			  $m.= "<li>".$z->show()."</li>";
 		  }
 	  }
-	  $m.="</ul>";
-	  // we dont need the full list right now.
+	  $m.="</ul>";		// we dont need the full list right now.
+	  
+	  // pre-filtering
 	  $this->get("violet")->setMale(false);
 	  $this->setAncs("paulinst");
 	  $this->setDescs("violet",5);
 	  $this->setGenders();
+	  $this->wantedEvents();
 	  
 	  foreach($this->set as $id=>$obj) $obj->reorg();
+	  
+	  $this->build();
+	  
+	  return $this->report2();
+  }
+  protected function report2(){
+  
+	  $m = "";
+	  foreach($this->cposts as $cpost) $m.="<br />".$cpost->show();
+	  return $m;
+  }
+  protected function report(){
   
 	  $m = $this->listWanted();
-	  $m.= $this->listTypes("event");
-	  $m.= $this->listTypes("place");
+	  //$m.= $this->listTypes("event");
+	  //$m.= $this->listTypes("place");
 	  
 	  $m.=$this->set["violet"]->showAll();
 	  $m.=$this->set["yvonne"]->showAll();
 	  
 	  
 	  return $m;
+  }
+  protected function build(){
+	  
+	  $convert = new EntCPost($this);
+
+	  foreach($this->set as $id=>$obj) {
+		  if (!$obj->isWanted()) continue;
+		  $this->cposts[$id] = $convert->make($obj);
+	  }
+  
   }
   protected function setGenders(){
 	  $males=["brianhe","alanmit","alex","benben","calebs","chrismit","danst","davben","edwardt","elijah","ericm","jackn","jakell",
@@ -95,6 +121,10 @@ class EntLoader {
 	  
 	  foreach ($males as $m) $this->get($m)->setMale(true);
 	  foreach ($females as $f) $this->get($f)->setMale(false);
+  }
+  public function wantedEvents(){
+	  $events = ["slub","vvcaleb","wedpsan","vvwpedor","vvwmarhe","vvwjonpa","vvwaldor",];
+	  foreach ($events as $m) $this->get($m)->setWanted();
   }
   public function get($who){
       return isset($this->set[$who]) ? $this->set[$who] : null;
