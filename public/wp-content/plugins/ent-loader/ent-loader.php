@@ -83,8 +83,13 @@ class EntLoader {
   protected function report2(){
   
 	  $m = "";
-	  foreach($this->cposts as $cpost) $m.="<br />".$cpost->show();
+	  foreach($this->cposts as $id=>$cpost) $m.="<br />".$cpost->show()." - ".$this->end2($this->set[$id]->get("type"));
 	  return $m;
+  }
+  protected function end2($str){
+	$m = ord(substr($str,-2,1));
+	$m.= ".".ord(substr($str,-1,1));
+	return $m;
   }
   protected function report(){
   

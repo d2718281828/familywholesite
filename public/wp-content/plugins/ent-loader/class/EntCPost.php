@@ -1,5 +1,6 @@
 <?php
 namespace EntLoader;
+use CPTHelper\CptHelper;
 
 class EntCPost  {
 	
@@ -52,28 +53,43 @@ class EntCPost  {
 			break;
 		}
 		
-		return CptHelper:make($new);
+		return CptHelper::make($new);
 	}
 	/**
 	* Convert link references - this will be tricky.
 	*/
-	protection function xlateText($txt){
+	protected function xlateType($type){
+		$tpe = rtrim($type);
+		switch($type){
+			case "person": return "fs_person";
+			case "place": return "fs_place";
+			case "event": return "fs_event";
+			default: return "post";
+		}
+		return "post";
+	}
+	/**
+	* Convert link references - this will be tricky.
+	*/
+	protected function xlateText($txt){
 		return $txt;
 	}
 	/**
 	* Make a name from the title, including the dob
 	*/
-	protection function personName($ent){
-		$year = substr($ent["date_birth"],0,4);
+	protected function personName($ent){
+		$year = substr($ent->get("date_birth"),0,4);
 		return $this->itemName($ent)."-".$year;
 	}
 	/**
 	* Make a name from the title
 	*/
-	protection function itemName($ent){
-		$txt = str_replace(" ","-",strtolower($ent["title"]));
+	protected function itemName($ent){
+		$txt = str_replace(" ","-",strtolower($ent->get("title")));
 		$txt = str_replace("(","",$txt);
 		$txt = str_replace(")","",$txt);
+		$txt = str_replace("'","",$txt);
+		$txt = str_replace("\"","",$txt);
 		$txt = str_replace("--","-",$txt);
 		return $txt."_test";
 	}
