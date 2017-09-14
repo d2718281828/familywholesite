@@ -176,7 +176,7 @@ class CPost {
 	public function showAllPend(){
 		$m = "<h3>".$this->pends["post_title"]."</h3>";
 		foreach($this->pends as $prop=>$pendval){
-			$m.= "<p><strong>".$prop."</strong> ".htmlentities($pendval)."</p>"
+			$m.= "<p><strong>".$prop."</strong> ".htmlentities($pendval)."</p>";
 		}
 		return $m;
 	}
