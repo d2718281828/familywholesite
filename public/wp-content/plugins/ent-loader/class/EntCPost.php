@@ -38,6 +38,7 @@ class EntCPost  {
 			$new["occupation"] = $ent->get("occupation");
 			$new["date_marriage"] = $ent->get("date_wedding");
 			$new["place_marriage"] = $ent->get("place_wedding");
+			$new["date_baptism"] = $ent->get("date_baptized");
 			break;
 			
 			case "fs_place":

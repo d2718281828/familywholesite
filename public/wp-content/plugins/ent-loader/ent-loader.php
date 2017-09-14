@@ -78,7 +78,13 @@ class EntLoader {
 	  
 	  $this->build();
 	  
-	  return $this->report2();
+	  return $this->report3();
+  }
+  protected function report3(){
+	  $m = $this->cposts["neils"]->showAllPend();
+	  $m.= $this->cposts["derek"]->showAllPend();
+	  $m.= $this->cposts["marians"]->showAllPend();
+	  return $m;
   }
   protected function report2(){
   

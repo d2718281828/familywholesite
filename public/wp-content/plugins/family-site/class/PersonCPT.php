@@ -30,6 +30,7 @@ class PersonCPT extends FSCpt {
         ->addField(new FieldHelper("birthname", "Birth Name", "Full name at birth (maiden name for ladies)"))
         ->addField(new FieldHelper("occupation", "Occupation", "Main occupation"))
         ->addField(new UseridSelector("userid", "Login id", "Link to the person's login id, if they have one"))
+        ->addField(new DateHelper("date_baptism", "Date of Baptism", "This features in a few geneological records"))
     ;
   }
   protected function on_save($post_id, $post){

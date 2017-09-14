@@ -173,6 +173,13 @@ class CPost {
 		if ($this->postid<0) return $cl.":NEW:".$this->pends["post_name"]."(".$this->type.")";
         return $cl.":".$this->postid."(".$this->type.")";
     }
+	public function showAllPend(){
+		$m = "<h3>".$this->pends["post_title"]."</h3>";
+		foreach($this->pends as $prop=>$pendval){
+			$m.= "<p><strong>".$prop."</strong> ".htmlentities($pendval)."</p>"
+		}
+		return $m;
+	}
 
 
 }
