@@ -42,6 +42,7 @@ class Ent  {
 		$this->props["index"] = [];
 		
 		foreach($lines as $line){
+			if ($this->isBadLine($line)) continue;
 			$l = rtrim($line);		// remove any residual line end crap
 			if (substr($l,0,1)=='<'){
 				$etag = strpos($l,'>');
@@ -58,6 +59,14 @@ class Ent  {
 				if ($l && $lastprop!="index") $this->props[$lastprop].="\n".$l;
 			}
 		}
+	}
+	protected function isBadLine($str){
+		$bad = (strlen($str)==0) || ((strlen($str)==1) && (ord($str)==26));
+		return $bad;
+		// leave this here in case we encounter other bad inputs
+		$m = "";
+		for ($k=0; $k<strlen($str); $k++) $m.=".".ord(substr($str,$k,1));
+		echo "<br>".$str." ".strlen($str)." ".$m.($bad?" BAD":" GOOD");
 	}
 	public function setMale($ismale){
 		$this->gender = $ismale ? "M" : "F";

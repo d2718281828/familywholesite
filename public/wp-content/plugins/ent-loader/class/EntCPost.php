@@ -79,7 +79,7 @@ class EntCPost  {
 	*/
 	protected function personName($ent){
 		$year = substr($ent->get("date_birth"),0,4);
-		return $this->itemName($ent)."-".$year;
+		return $this->itemName($ent).(($year && $year<"1920") ? "-".$year : "");
 	}
 	/**
 	* Make a name from the title
