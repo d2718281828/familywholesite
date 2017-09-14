@@ -20,25 +20,25 @@ class EntCPost  {
 		$new["post_content"] = $this->xlateText($ent->get("description"));
 		// the ent_ properties are for resolution later
 		$new["ent_ref"] = $ent->key();
-		$new["ent_required"] = $ent->get("picnode");
+		$new["ent_required"] = strtolower($ent->get("picnode"));
 		$new["ent_links"] = $ent->get("index");
 		
 		switch($new["post_type"]){
 			case "fs_person":
 			$new["post_name"] = $this->personName($ent);
 			$new["gender"] = $ent->getGender();
-			$new["birthname"] = $ent->get("fullname");
-			$new["date_birth"] = $ent->get("date_birth");
-			$new["place_birth"] = $ent->get("place_birth");
-			$new["date_death"] = $ent->get("date_death");
-			$new["place_death"] = $ent->get("place_death");
-			$new["father"] = $ent->get("father");
-			$new["mother"] = $ent->get("mother");
-			$new["spouse"] = $ent->get("married_to");
-			$new["occupation"] = $ent->get("occupation");
-			$new["date_marriage"] = $ent->get("date_wedding");
-			$new["place_marriage"] = $ent->get("place_wedding");
-			$new["date_baptism"] = $ent->get("date_baptized");
+			$this->    cp($new, "birthname" , $ent, "fullname");
+			$this->cpDate($new, "date_birth" , $ent, "date_birth");
+			$this->    cp($new, "place_birth" , $ent, "place_birth");
+			$this->cpDate($new, "date_death" , $ent, "date_death");
+			$this->    cp($new, "place_death" , $ent, "place_death");
+			$this->cpLink($new, "father" , $ent, "father");
+			$this->cpLink($new, "mother" , $ent, "mother");
+			$this->cpLink($new, "spouse" , $ent, "married_to");
+			$this->    cp($new, "occupation" , $ent, "occupation");
+			$this->cpDate($new, "date_marriage" , $ent, "date_wedding");
+			$this->    cp($new, "place_marriage" , $ent, "place_wedding");
+			$this->cpDate($new, "date_baptism" , $ent, "date_baptized");
 			break;
 			
 			case "fs_place":
@@ -55,6 +55,18 @@ class EntCPost  {
 		}
 		
 		return CptHelper::make($new);
+	}
+	protected function cp(&$new, $newprop , $ent, $entprop){
+		$val = $ent->get($entprop);
+		if ($val) $new[$newprop] = $val;
+	}
+	protected function cpDate(&$new, $newprop , $ent, $entprop){
+		$val = $ent->get($entprop);
+		if ($val) $new[$newprop] = $this->xdate($val);
+	}
+	protected function cpLink(&$new, $newprop , $ent, $entprop){
+		$val = $ent->get($entprop);
+		if ($val) $new[$newprop] = strtolower($val);
 	}
 	/**
 	* Convert link references - this will be tricky.
@@ -93,6 +105,9 @@ class EntCPost  {
 		$txt = str_replace("\"","",$txt);
 		$txt = str_replace("--","-",$txt);
 		return $txt."_test";
+	}
+	protected function xdate($str){
+		return str_replace("/","-",$str);
 	}
 
 }
