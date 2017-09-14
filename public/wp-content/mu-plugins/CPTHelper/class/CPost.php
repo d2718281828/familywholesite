@@ -10,6 +10,9 @@ namespace CPTHelper;
 // try to make this as lazy as possible. we can get custom fields without ever loading the post object, for example.
 class CPost {
 
+	static public $post_properties = ["post_title","post_content","post_author","post_name","post_title","post_date","post_date_gmt","post_excerpt","post_status",
+            "comment_status","post_parent","post_modified","post_modified_gmt","comment_count","menu_order",];
+
     public $postid = -1;		// -1 means it is a CPost that has not been instantiated
     protected $type = null;
     public $post = null;
@@ -38,8 +41,6 @@ class CPost {
             $this->is_error = true;
             $this->error_message = "Object constructed with invalid argument";
         }
-        $this->post_properties = ["poat_title","post_content","post_author","post_name","post_title","post_date","post_date_gmt","post_excerpt","post_status",
-            "comment_status","post_parent","post_modified","post_modified_gmt","comment_count","menu_order",];
     }
 
     /**
@@ -134,11 +135,29 @@ class CPost {
       return "Info";
     }
     /**
-    * Create a new post based on the info which was previously supplied
+    * Create a new post based on the info which was previously supplied. If postid already set then update.
+	* In either case $pends is the data to change.
     */
     public function create(){
-      if ($this->postid>0) return;	// already exists
 	  if (!$this->pends) return;	// no info so cant.
+	  
+	  $postnew = [];
+	  $meta = [];
+	  foreach ($this->pends as $prop=>$val){
+		  if (in_array($prop, self::$post_properties)) $postnew[$prop] = $val;
+		  else $meta = $val;
+	  }
+	  if ($meta) $postnew["meta_input"] = $meta;
+	  // validate the postnew???
+	  $rc = wp_insert_post($postnew, true);
+	  if (is_wp_error($rc)){
+		  $this->is_error = true;
+		  $this->error_message = "CREATE ERROR: ".$rc->get_error_message();
+		  return false;
+	  }
+	  $this->postid = $rc;
+	  $this->props = $meta;
+	  $this->pends = [];
     }
     /**
     * Component of the info box.

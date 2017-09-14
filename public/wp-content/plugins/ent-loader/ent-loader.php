@@ -77,8 +77,9 @@ class EntLoader {
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  
 	  $this->build();
+	  $m = $this->phase1();		// initial WP create of everything.
 	  
-	  return $this->report3();
+	  return $m;
   }
   protected function report3(){
 	  $m = $this->cposts["neils"]->showAllPend();
@@ -119,6 +120,15 @@ class EntLoader {
 	  }
   
   }
+  protected function phase1(){
+	  $m = "";
+	  $m.= "<br/>neils ".$this->cposts["neils"]->create();
+	  return $m;
+  }
+  public function get($who){
+      return isset($this->set[$who]) ? $this->set[$who] : null;
+  }
+  // clean up input data
   protected function setGenders(){
 	  $males=["brianhe","alanmit","alex","benben","calebs","chrismit","danst","davben","edwardt","elijah","ericm","jackn","jakell",
 	  "jamess","jimnay","joelst","johnbus","johnll","johns","johnst","jonathoh","kieran","laurben","markmac","maxn",
@@ -136,9 +146,6 @@ class EntLoader {
   public function wantedEvents(){
 	  $events = ["slub","vvcaleb","wedpsan","vvwpedor","vvwmarhe","vvwjonpa","vvwaldor",];
 	  foreach ($events as $m) $this->get($m)->setWanted();
-  }
-  public function get($who){
-      return isset($this->set[$who]) ? $this->set[$who] : null;
   }
   protected function listWanted(){
 	  $m="<ul>";
