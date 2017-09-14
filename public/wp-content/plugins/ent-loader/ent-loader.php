@@ -122,7 +122,9 @@ class EntLoader {
   }
   protected function phase1(){
 	  $m = "";
-	  $m.= "<br/>neils ".$this->cposts["neils"]->create();
+	  $cp = $this->cposts["neils"];
+	  $rc = $cp->create();
+	  $m.= "<br/>neils ".( $rc===false ? $cp->error_message : $rc); 
 	  return $m;
   }
   public function get($who){

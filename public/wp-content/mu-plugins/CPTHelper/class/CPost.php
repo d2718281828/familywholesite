@@ -10,7 +10,7 @@ namespace CPTHelper;
 // try to make this as lazy as possible. we can get custom fields without ever loading the post object, for example.
 class CPost {
 
-	static public $post_properties = ["post_title","post_content","post_author","post_name","post_title","post_date","post_date_gmt","post_excerpt","post_status",
+	static public $post_properties = ["post_title","post_content","post_author","post_name","post_type","post_date","post_date_gmt","post_excerpt","post_status",
             "comment_status","post_parent","post_modified","post_modified_gmt","comment_count","menu_order",];
 
     public $postid = -1;		// -1 means it is a CPost that has not been instantiated
@@ -18,8 +18,7 @@ class CPost {
     public $post = null;
     protected $cpthelper = null;
     protected $is_error = false;        // true if this object is in error and cannot be used
-    protected $error_message = null;      // message to explain the problem.
-    protected $post_properties = null;
+    public $error_message = null;      // message to explain the problem.
     protected $props = [];              // cache requested properties
     protected $pends = [];              // Properties of a post which hasnt been created yet. Post fields and custom fields together
 
@@ -74,7 +73,7 @@ class CPost {
 
         if (isset($this->props[$property])) return $this->props[$property];
 
-        if (in_array($property,$this->post_properties)){
+        if (in_array($property,self::$post_properties)){
             if ($this->post===null) {
                 $this->post = get_post($this->postid);
                 if ($this->post===null){
@@ -140,14 +139,19 @@ class CPost {
     */
     public function create(){
 	  if (!$this->pends) return;	// no info so cant.
+
+		print_r($this->pends); echo "*********<br><br>"; print_r(self::$post_properties); echo "<br><br><br>";
 	  
 	  $postnew = [];
 	  $meta = [];
 	  foreach ($this->pends as $prop=>$val){
 		  if (in_array($prop, self::$post_properties)) $postnew[$prop] = $val;
-		  else $meta = $val;
+		  else $meta[$prop] = $val;
 	  }
 	  if ($meta) $postnew["meta_input"] = $meta;
+	  $postnew["post_status"] = "publish";
+
+	  print_r($postnew);
 	  // validate the postnew???
 	  $rc = wp_insert_post($postnew, true);
 	  if (is_wp_error($rc)){
