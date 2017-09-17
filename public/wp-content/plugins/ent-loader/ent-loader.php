@@ -71,6 +71,8 @@ class EntLoader {
 	  $this->get("violet")->setMale(false);
 	  $this->setAncs("paulinst");
 	  $this->setDescs("violet",5);
+	  $this->setDescs("anc5",5);
+	  $this->setDescs("ans1",5);
 	  $this->setGenders();
 	  $this->wantedEvents();
 	  
