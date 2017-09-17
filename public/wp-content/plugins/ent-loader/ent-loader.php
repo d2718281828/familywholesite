@@ -23,7 +23,7 @@ class EntLoader {
 	protected $numfiles = 0;
 	protected $set = [];		// Ent objects read from the node files
 	protected $cposts = [];		// CPost objects, before creation
-	protected $loadReport = "";
+	protected $report = "";
 
   public function __construct(){
 	  add_action("init", [$this,"init"]);
@@ -67,7 +67,7 @@ class EntLoader {
 		  }
 	  }
 	  $m.="</ul>";
-	  $this->loadReport = $m;
+	  $this->report["load"] = $m;
 	  
 	  // pre-filtering
 	  $this->get("violet")->setMale(false);
@@ -81,11 +81,11 @@ class EntLoader {
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  
 	  $this->build();
-	  $m = $this->phase1();		// initial WP create of everything.
+	  $this->phase1();		// initial WP create of everything.
 
-	  $m.= $this->phase2();		// resolve references.
+	  $this->phase2();		// resolve references.
 	  
-	  $m.= $this->listWanted();
+	  $m = $this->reports("makeplaces","phase2");
 	  return $m;
   }
   protected function report3(){
@@ -126,14 +126,15 @@ class EntLoader {
 		  $this->cposts[$id] = $convert->make($obj);
 	  }
 
-	  $this->makePlaces();
+	  $this->report["makeplaces"] = $this->makePlaces();
   
   }
   protected function phase1(){
 	  $m = "<h2>Phase 1</h2>";
 	  $cp = $this->cposts["neils"];
-	  $rc = $cp->create();
+	  //$rc = $cp->create();
 	  $m.= "<br/>neils ".( $rc===false ? $cp->error_message : $rc); 
+	  $this->report["phase1"] = $m;
 	  return $m;
   }
   protected function makePlaces(){
@@ -159,10 +160,16 @@ class EntLoader {
 	  $rc = $cp->create();
 	  
 	  $m.= "<br/>neils ".( $rc===false ? $cp->error_message : $rc); 
+	  $this->report["phase2"] = $m;
 	  return $m;
   }
   public function get($who){
       return isset($this->set[$who]) ? $this->set[$who] : null;
+  }
+  public function reports($list){
+      $m = "";
+	  foreach($list as $rep) $m.=$this->reports[$rep];
+	  return $m;
   }
   // clean up input data
   protected function setGenders(){
