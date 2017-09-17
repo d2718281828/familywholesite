@@ -159,6 +159,7 @@ class CPost {
 	  $this->postid = $rc;
 	  $this->props = $meta;
 	  $this->pends = [];
+	  return $rc;
     }
     /**
     * Component of the info box.

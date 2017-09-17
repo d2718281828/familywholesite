@@ -82,6 +82,8 @@ class EntLoader {
 	  
 	  $this->build();
 	  $m = $this->phase1();		// initial WP create of everything.
+
+	  $m.= $this->phase2();		// resolve references.
 	  
 	  $m.= $this->listWanted();
 	  return $m;
@@ -123,12 +125,39 @@ class EntLoader {
 		  if (!$obj->isWanted()) continue;
 		  $this->cposts[$id] = $convert->make($obj);
 	  }
+
+	  $this->makePlaces();
   
   }
   protected function phase1(){
-	  $m = "";
+	  $m = "<h2>Phase 1</h2>";
 	  $cp = $this->cposts["neils"];
 	  $rc = $cp->create();
+	  $m.= "<br/>neils ".( $rc===false ? $cp->error_message : $rc); 
+	  return $m;
+  }
+  protected function makePlaces(){
+	  $list = [];
+	  $m = "<h2>Making places</h2></ul>";
+	  foreach($this->set as $id=>$obj) {
+		  if (!$obj->isWanted()) continue;
+		  if ($s=$obj->get("place_birth")) $this->addPlaceToList($list,$s);
+		  if ($s=$obj->get("place_death")) $this->addPlaceToList($list,$s);
+		  if ($s=$obj->get("place_wedding")) $this->addPlaceToList($list,$s);
+		  
+	  }
+	  $m.='<li>'.implode('</li><li>',$list).'</li>';
+	  return $m.'</ul>';
+  }
+  protected function addPlaceToList(&$list, $place){
+	  if (!in_array($place,$list)) $list[] = $place;
+  }
+  protected function phase2(){
+	  $m = "<h2>Phase 2</h2>";
+	  
+	  $cp = $this->cposts["neils"];
+	  $rc = $cp->create();
+	  
 	  $m.= "<br/>neils ".( $rc===false ? $cp->error_message : $rc); 
 	  return $m;
   }

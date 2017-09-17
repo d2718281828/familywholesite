@@ -32,9 +32,9 @@ class EntCPost  {
 			$this->    cp($new, "place_birth" , $ent, "place_birth");
 			$this->cpDate($new, "date_death" , $ent, "date_death");
 			$this->    cp($new, "place_death" , $ent, "place_death");
-			$this->cpLink($new, "father" , $ent, "father");
-			$this->cpLink($new, "mother" , $ent, "mother");
-			$this->cpLink($new, "spouse" , $ent, "married_to");
+			$this->cpLink($new, "ent_link_father" , $ent, "father");
+			$this->cpLink($new, "ent_link_mother" , $ent, "mother");
+			$this->cpLink($new, "ent_link_spouse" , $ent, "married_to");
 			$this->    cp($new, "occupation" , $ent, "occupation");
 			$this->cpDate($new, "date_marriage" , $ent, "date_wedding");
 			$this->    cp($new, "place_marriage" , $ent, "place_wedding");
