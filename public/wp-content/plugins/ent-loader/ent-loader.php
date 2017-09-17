@@ -154,7 +154,8 @@ class EntLoader {
 	  $this->report["placecode"] = implode('<br>',$code);
 	  return $m.'</ul>';
   }
-  protected function addPlaceToList(&$list, &$code, $place){
+  protected function addPlaceToList(&$list, &$code, $pplace){
+	  $place = $this->placeNorm($pplace);
 	  if (!in_array($place,$list)) {
 		$list[] = $place;
 		$code[] = 'case: "'.$place.'": return "'.$place.'";';
@@ -259,6 +260,46 @@ class EntLoader {
 		  error_log("father of ".$who." is ".$dad);
 		  $this->get($dad)->setMale(true); 
 		  $this->setAncs($dad);
+	  }
+  }
+  protected function placeNorm($place){
+	  switch($place){
+case: "18 Normansmead, Willesden (?)": return "18 Normansmead, Willesden";
+case: "Bardwell": return "Bardwell, Suffolk";
+case: "Bardwell, Suffolk": return "Bardwell, Suffolk";
+case: "Bardwell, Thingoe, Suffolk": return "Bardwell, Thingoe, Suffolk";
+case: "Barningham Wesleyan": return "Barningham Wesleyan";
+case: "Barningham": return "Barningham";
+case: "Blything Union Workhouse Bulcamp": return "Blything Union Workhouse Bulcamp";
+case: "Chediston Suffolk": return "Chediston, Suffolk";
+case: "Chediston": return "Chediston, Suffolk";
+case: "Chediston, Suffolk": return "Chediston, Suffolk";
+case: "Chediston?": return "Chediston, Suffolk";
+case: "Euston": return "Euston, Thetford, Norfolk";
+case: "Euston, Thetford, Norfolk": return "Euston, Thetford, Norfolk";
+case: "Felmingham, Norfolk": return "Felmingham, Norfolk";
+case: "Filby Norfolk": return "Filby, Norfolk";
+case: "Filby": return "Filby, Norfolk";
+case: "Filby, Norfolk": return "Filby, Norfolk";
+case: "Hopton, Norfolk": return "Hopton, Norfolk";
+case: "Hopton, Suffolk": return "Hopton, Suffolk";
+case: "Hopton, W Suffolk": return "Hopton, Suffolk";
+case: "Huntingfield Suffolk": return "Huntingfield, Suffolk";
+case: "Huntingfield, Suffolk": return "Huntingfield, Suffolk";
+case: "North Walsham": return "North Walsham, Norfolk";
+case: "North Walsham, Norfolk": return "North Walsham, Norfolk";
+case: "Prim. Meth. Kilburn, London": return "Prim. Meth. Kilburn, London";
+case: "Registry Office, Mutford and Lothingland": return "Registry Office, Mutford and Lothingland";
+case: "Somerton Norfolk": return "Somerton Norfolk";
+case: "Somerton": return "Somerton Norfolk";
+case: "South Walsham": return "South Walsham";
+case: "Spa Common, N Walsham": return "Spa Common, North Walsham, Norfolk";
+case: "Spa Common, North Walsham, Norfolk": return "Spa Common, North Walsham, Norfolk";
+case: "St Marys Parish Church": return "St Marys Parish Church";
+case: "Tunstead": return "Tunstead, Norfolk";
+case: "Tunstead, Norfolk": return "Tunstead, Norfolk";
+case: "Witton, near North Walsham": return "Witton, near North Walsham";
+default: return $place;
 	  }
   }
 
