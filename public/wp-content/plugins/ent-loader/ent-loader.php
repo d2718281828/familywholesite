@@ -85,7 +85,7 @@ class EntLoader {
 
 	  $this->phase2();		// resolve references.
 	  
-	  $m = $this->reports("makeplaces","phase2");
+	  $m = $this->reports("makeplaces","phase2","placecode");
 	  return $m;
   }
   protected function report3(){
@@ -140,24 +140,30 @@ class EntLoader {
   protected function makePlaces(){
 	  $list = [];
 	  $m = "<h2>Making places</h2></ul>";
+	  $code = [];
 	  foreach($this->set as $id=>$obj) {
 		  if (!$obj->isWanted()) continue;
-		  if ($s=$obj->get("place_birth")) $this->addPlaceToList($list,$s);
-		  if ($s=$obj->get("place_death")) $this->addPlaceToList($list,$s);
-		  if ($s=$obj->get("place_wedding")) $this->addPlaceToList($list,$s);
+		  if ($s=$obj->get("place_birth")) $this->addPlaceToList($list,$code,$s);
+		  if ($s=$obj->get("place_death")) $this->addPlaceToList($list,$code,$s);
+		  if ($s=$obj->get("place_wedding")) $this->addPlaceToList($list,$code,$s);
 		  
 	  }
+	  sort($list);
+	  sort($code);	
 	  $m.='<li>'.implode('</li><li>',$list).'</li>';
+	  $this->report["placecode"] = implode('<br>',$code);
 	  return $m.'</ul>';
   }
-  protected function addPlaceToList(&$list, $place){
-	  if (!in_array($place,$list)) $list[] = $place;
+  protected function addPlaceToList(&$list, &$code, $place){
+	  if (!in_array($place,$list)) {
+		$list[] = $place;
+		$code[] = 'case: "'.$place.'": return "'.$place.'";';
+  	  }
   }
   protected function phase2(){
 	  $m = "<h2>Phase 2</h2>";
 	  
 	  $cp = $this->cposts["neils"];
-	  $rc = $cp->create();
 	  
 	  $m.= "<br/>neils ".( $rc===false ? $cp->error_message : $rc); 
 	  $this->report["phase2"] = $m;
@@ -168,7 +174,8 @@ class EntLoader {
   }
   public function reports($list){
       $m = "";
-	  foreach($list as $rep) $m.=$this->reports[$rep];
+	  $z = func_get_args();
+	  foreach($z as $rep) $m.=$this->report[$rep];
 	  return $m;
   }
   // clean up input data
