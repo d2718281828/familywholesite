@@ -155,7 +155,7 @@ class EntLoader {
   protected function listWanted(){
 	  $m="<ul>";
 	  foreach($this->set as $id=>$obj) if ($obj->isWanted()) $m.='<li>'.$obj->show().'</li>';
-	  return $m.'</ul>';
+	  return $m.'</ul>('.count($this->set).' people)';
   }
   protected function listTypes($type){
 	  $m="<ul>";
