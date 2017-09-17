@@ -140,8 +140,6 @@ class CPost {
     public function create(){
 	  if (!$this->pends) return;	// no info so cant.
 
-		print_r($this->pends); echo "*********<br><br>"; print_r(self::$post_properties); echo "<br><br><br>";
-	  
 	  $postnew = [];
 	  $meta = [];
 	  foreach ($this->pends as $prop=>$val){
@@ -151,7 +149,6 @@ class CPost {
 	  if ($meta) $postnew["meta_input"] = $meta;
 	  $postnew["post_status"] = "publish";
 
-	  print_r($postnew);
 	  // validate the postnew???
 	  $rc = wp_insert_post($postnew, true);
 	  if (is_wp_error($rc)){

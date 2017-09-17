@@ -79,6 +79,7 @@ class EntLoader {
 	  $this->build();
 	  $m = $this->phase1();		// initial WP create of everything.
 	  
+	  $m.= $this->listWanted();
 	  return $m;
   }
   protected function report3(){

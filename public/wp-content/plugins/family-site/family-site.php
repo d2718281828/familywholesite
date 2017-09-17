@@ -8,14 +8,18 @@ Version: 0.1
 Author URI:
 */
 /* TODO
+change the link in save_post to include dob if old.
+explicitly invoke on_save - because it was written to work off REQUEST
+change father, mother etc to ent_father... because it isnt a post id.
+Create the virtual places. give them virtual ent ids and add those to the post. 
+
 person pics link
 people, places etc shortcodes
-timeline - pictures, events and implicit events (births, deaths)
 how to model marriages/spouses. Possibly use wedding event. In the album just a simple spouse field.
 set up test env
 EntLoader pictures
 test duplicate person
-siblings list - full and half
+siblings list - full and half. Also children
 */
 namespace FamilySite;
 use CPTHelper\CptHelper;

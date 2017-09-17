@@ -14,6 +14,7 @@ class PersonCPT extends FSCpt {
 	$this
         ->set_taxonomy("person_tax")
         ->setClass("FamilySite\Person")
+        ->addField(new FieldHelper("email_address", "Email Address", "How to contact this person"))
         ->addField(new DateHelper("date_birth", "Date of Birth", "Date the person was born"))
         ->addField(new CPTSelectHelper("place_birth", "Place of Birth", "Place the person was living in immediately after birth", ["posttype"=>"fs_place"]))
         ->addField(new DateHelper("date_death", "Date of Death", "Date the person was born"))
