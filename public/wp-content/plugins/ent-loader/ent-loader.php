@@ -23,6 +23,7 @@ class EntLoader {
 	protected $numfiles = 0;
 	protected $set = [];		// Ent objects read from the node files
 	protected $cposts = [];		// CPost objects, before creation
+	protected $loadReport = "";
 
   public function __construct(){
 	  add_action("init", [$this,"init"]);
@@ -65,12 +66,13 @@ class EntLoader {
 			  $m.= "<li>".$z->show()."</li>";
 		  }
 	  }
-	  $m.="</ul>";		// we dont need the full list right now.
+	  $m.="</ul>";
+	  $this->loadReport = $m;
 	  
 	  // pre-filtering
 	  $this->get("violet")->setMale(false);
 	  $this->setAncs("paulinst");
-	  $this->setDescs("violet",5);
+	  //$this->setDescs("violet",5);
 	  $this->setDescs("anc5",5);
 	  $this->setDescs("ans1",5);
 	  $this->setGenders();
@@ -153,9 +155,15 @@ class EntLoader {
 	  foreach ($events as $m) $this->get($m)->setWanted();
   }
   protected function listWanted(){
+	  $num=0;
 	  $m="<ul>";
-	  foreach($this->set as $id=>$obj) if ($obj->isWanted()) $m.='<li>'.$obj->show().'</li>';
-	  return $m.'</ul>('.count($this->set).' people)';
+	  foreach($this->set as $id=>$obj) {
+		if ($obj->isWanted()) {
+			$m.='<li>'.$obj->show().'</li>';
+			$num++;
+		}
+	  }
+	  return $m.'</ul>('.$num.' people)';
   }
   protected function listTypes($type){
 	  $m="<ul>";

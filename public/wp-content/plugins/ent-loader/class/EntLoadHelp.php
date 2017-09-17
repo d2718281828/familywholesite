@@ -6,15 +6,15 @@ use AdminPage\BaseAdmin;
 class EntLoadHelp extends BaseAdmin {
 
   protected function setOpts(){
-    $this->parms = ["Ent Load", "Ent Load", "edit_posts", "ent_loader"];
+    $this->parms = ["Ent Load", "Ent Load", "activate_plugins", "ent_loader"]; // admin only
     $this->options = [
       ["Load", "thisloader"],
     ];
   }
 
   public function page_content() {
-	  echo "<h2>I am here</h2>";
-	  echo "<p><input type='submit' name='action' value='Load'></p>";
+	  echo "<h2>Ent Load information</h2>";
+	  echo "<p><input type='submit' name='action' value='Load'>Load up  people - requires nodes flder in uploads.</p>";
   }
   
   public function thisloader(){
