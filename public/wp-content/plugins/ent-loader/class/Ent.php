@@ -13,12 +13,17 @@ class Ent  {
 	public $props = [];
 	protected $wanted = false;
 	protected $gender=null;  // only applicable to people. Set during the ancestor process
+	protected $virtual = false;	// virtual is for those that are being created, not read from disk
 	
-	public function __construct($filename, $reldir, $fulldir){
+	public function __construct($filename, $reldir = null, $fulldir = null){
 		$this->reldir = $reldir;
 		$this->sourcedir = $fulldir;
 		$this->key = str_replace(".txt","",strtolower($filename));
-		$this->getit($filename);
+		if ($reldir){
+			$this->getit($filename);
+		} else {
+			$this->virtual = true;
+		}
 	}
 	public function key(){
 		return $this->key;
@@ -79,6 +84,9 @@ class Ent  {
 	}
 	public function get($prop){
 		return isset($this->props[$prop]) ? $this->props[$prop] : null;
+	}
+	public function set($prop,$val){
+		$this->props[$prop] = $val;
 	}
 	public function reorg(){
 		if (isset($this->props["type"])) $this->type = $this->props["type"];

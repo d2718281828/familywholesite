@@ -24,6 +24,7 @@ class EntLoader {
 	protected $set = [];		// Ent objects read from the node files
 	protected $cposts = [];		// CPost objects, before creation
 	protected $report = "";
+	protected $newplaces = [];
 
   public function __construct(){
 	  add_action("init", [$this,"init"]);
@@ -126,7 +127,7 @@ class EntLoader {
 		  $this->cposts[$id] = $convert->make($obj);
 	  }
 
-	  $this->report["makeplaces"] = $this->makePlaces();
+	  $this->makePlaces();
   
   }
   protected function phase1(){
@@ -138,28 +139,40 @@ class EntLoader {
 	  return $m;
   }
   protected function makePlaces(){
-	  $list = [];
-	  $m = "<h2>Making places</h2></ul>";
-	  $code = [];
-	  foreach($this->set as $id=>$obj) {
-		  if (!$obj->isWanted()) continue;
-		  if ($s=$obj->get("place_birth")) $this->addPlaceToList($list,$code,$s);
-		  if ($s=$obj->get("place_death")) $this->addPlaceToList($list,$code,$s);
-		  if ($s=$obj->get("place_wedding")) $this->addPlaceToList($list,$code,$s);
-		  
+	  $m = "<h2>Making places</h2>";
+	  foreach($this->set as $id=>$ent) {
+		  if (!$ent->isWanted()) continue;
+		  $this->translatePlace($ent, "place_birth");
+		  $this->translatePlace($ent, "place_death");
+		  $this->translatePlace($ent, "place_wedding");
 	  }
-	  sort($list);
-	  sort($code);	
-	  $m.='<li>'.implode('</li><li>',$list).'</li>';
-	  $this->report["placecode"] = implode('<br>',$code);
-	  return $m.'</ul>';
+	  $this->report["makeplaces"] =  $this->listPlaces();
+	  return;
   }
-  protected function addPlaceToList(&$list, &$code, $pplace){
-	  $place = $this->placeNorm($pplace);
-	  if (!in_array($place,$list)) {
-		$list[] = $place;
-		$code[] = 'case: "'.$place.'": return "'.$place.'";';
-  	  }
+  protected function translatePlace($ent, $property){
+	  $pr=$ent->get($property);
+	  if (!$pr) return;
+	  $place = $this->placeNorm($pr);
+	  $token = EntCPost::makeName($place);
+	  
+	  if (!isset($this->newplaces[$token])){
+		  $z = new Ent($token);	// a virtual ent
+		  $z->props = [
+			"title"=>$place,
+			"type"=>"place",
+			"ent_ref"=>$token,
+		  ];
+		  $z-reorg();
+		  
+		  $this->newplaces[$token] = $z;
+	  } else $z = $this->newplaces[$token];
+	  
+	  $ent->set("ent_link_".$property, $token);
+  }
+  protected function listPlaces(){
+	  $m = "<h3>New Places</h3><ul>";
+	  foreach ($this->newplaces as $tok->$ent) $m.="<li>".$tok."</li>";
+	  return $m."</ul>";
   }
   protected function phase2(){
 	  $m = "<h2>Phase 2</h2>";

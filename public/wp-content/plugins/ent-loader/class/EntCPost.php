@@ -42,15 +42,15 @@ class EntCPost  {
 			break;
 			
 			case "fs_place":
-			$new["post_name"] = $this->itemName($ent);
+			$new["post_name"] = self::makeName($ent);
 			break;
 			
 			case "fs_event":
-			$new["post_name"] = $this->itemName($ent);
+			$new["post_name"] = self::makeName($ent);
 			break;
 			
 			case "post":
-			$new["post_name"] = $this->itemName($ent);
+			$new["post_name"] = self::makeName($ent);
 			break;
 		}
 		
@@ -92,7 +92,7 @@ class EntCPost  {
 	*/
 	protected function personName($ent){
 		$year = substr($ent->get("date_birth"),0,4);
-		return $this->itemName($ent).(($year && $year<"1920") ? "-".$year : "");
+		return self::makeName($ent).(($year && $year<"1920") ? "-".$year : "");
 	}
 	/**
 	* Make a name from the title
@@ -108,6 +108,11 @@ class EntCPost  {
 	}
 	protected function xdate($str){
 		return str_replace("/","-",$str);
+	}
+	static public function makeName($str){
+		$s = str_replace(" ","-",$str);
+		$s = preg_replace("\W","",$s);
+		return $s;
 	}
 
 }
