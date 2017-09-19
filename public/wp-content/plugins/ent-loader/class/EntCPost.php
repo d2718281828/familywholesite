@@ -92,7 +92,7 @@ class EntCPost  {
 	*/
 	protected function personName($ent){
 		$year = substr($ent->get("date_birth"),0,4);
-		return self::makeName($ent).(($year && $year<"1920") ? "-".$year : "");
+		return self::makeName($ent->get("title")).(($year && $year<"1920") ? "-".$year : "");
 	}
 	/**
 	* Make a name from the title OBSOLETE
@@ -113,6 +113,7 @@ class EntCPost  {
 		$s = str_replace(" ","_",$str);
 		$s = preg_replace("#\W#","",$s);
 		$s = str_replace("_","-",$s);
+		$s = strtolower($s);
 		return $s;
 	}
 

@@ -87,7 +87,7 @@ class EntLoader {
 
 	  $this->phase2();		// resolve references.
 	  
-	  $m = $this->reports("load","afterload","makeplaces","phase2","placecode");
+	  $m = $this->reports("makeplaces","phase2","placecode");
 	  return $m;
   }
   protected function report3(){
@@ -127,14 +127,22 @@ class EntLoader {
 		  if (!$obj->isWanted()) continue;
 		  $this->cposts[$id] = $convert->make($obj);
 	  }
-
 	  $this->makePlaces();
+
+	  foreach($this->newplaces as $id=>$obj) {
+		  $this->cposts[$id] = $convert->make($obj);
+	  }
   
   }
   protected function phase1(){
 	  $m = "<h2>Phase 1</h2>";
+
 	  $cp = $this->cposts["neils"];
-	  //$rc = $cp->create();
+	  $rc = $cp->create();
+
+	  $cp = $this->cposts["euston-thetford-norfolk"];
+	  $rc = $cp->create();
+
 	  $m.= "<br/>neils ".( $rc===false ? $cp->error_message : $rc); 
 	  $this->report["phase1"] = $m;
 	  return $m;
@@ -160,10 +168,11 @@ class EntLoader {
 		  $z = new Ent($token);	// a virtual ent
 		  $z->props = [
 			"title"=>$place,
+			"description" => $place,
 			"type"=>"place",
 			"ent_ref"=>$token,
 		  ];
-		  $z-reorg();
+		  $z->reorg();
 		  
 		  $this->newplaces[$token] = $z;
 	  } else $z = $this->newplaces[$token];
@@ -172,7 +181,7 @@ class EntLoader {
   }
   protected function listPlaces(){
 	  $m = "<h3>New Places</h3><ul>";
-	  foreach ($this->newplaces as $tok->$ent) $m.="<li>".$tok."</li>";
+	  foreach ($this->newplaces as $tok=>$ent) $m.="<li>".$tok."</li>";
 	  return $m."</ul>";
   }
   protected function phase2(){
