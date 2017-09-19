@@ -95,9 +95,9 @@ class EntCPost  {
 		return self::makeName($ent).(($year && $year<"1920") ? "-".$year : "");
 	}
 	/**
-	* Make a name from the title
+	* Make a name from the title OBSOLETE
 	*/
-	protected function itemName($ent){
+	protected function itemName_xxx($ent){
 		$txt = str_replace(" ","-",strtolower($ent->get("title")));
 		$txt = str_replace("(","",$txt);
 		$txt = str_replace(")","",$txt);

@@ -19,7 +19,7 @@ class Ent  {
 		$this->reldir = $reldir;
 		$this->sourcedir = $fulldir;
 		$this->key = str_replace(".txt","",strtolower($filename));
-		if ($reldir){
+		if ($fulldir){
 			$this->getit($filename);
 		} else {
 			$this->virtual = true;
