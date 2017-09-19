@@ -90,6 +90,17 @@ class EntLoader {
 	  $m = $this->reports("makeplaces","phase2","placecode");
 	  return $m;
   }
+  public function deleteAll(){
+	  global $wpdb;
+	  $s = 'select post_id from '.$wpdb->postmeta.' where meta_key="ent_ref";';
+	  $posts = $wpdb->get_col($s);
+	  $m = "";
+	  foreach ($posts as $post){
+		  wp_delete_post($post, true);
+		  $m.= ",".$post;
+	  }
+	  return $m;
+  }
   protected function report3(){
 	  $m = $this->cposts["neils"]->showAllPend();
 	  $m.= $this->cposts["derek"]->showAllPend();

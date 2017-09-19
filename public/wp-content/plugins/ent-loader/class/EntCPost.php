@@ -20,7 +20,7 @@ class EntCPost  {
 		$new["post_content"] = $this->xlateText($ent->get("description"));
 		// the ent_ properties are for resolution later
 		$new["ent_ref"] = $ent->key();
-		$new["ent_required"] = strtolower($ent->get("picnode"));
+		if ($s=$ent->get("picnode")) $new["ent_link_featured"] = strtolower($s);
 		$new["ent_links"] = $ent->get("index");
 		
 		switch($new["post_type"]){
