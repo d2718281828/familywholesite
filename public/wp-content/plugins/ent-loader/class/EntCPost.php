@@ -42,15 +42,15 @@ class EntCPost  {
 			break;
 			
 			case "fs_place":
-			$new["post_name"] = self::makeName($ent);
+			$new["post_name"] = self::makeName($ent->get("title"));
 			break;
 			
 			case "fs_event":
-			$new["post_name"] = self::makeName($ent);
+			$new["post_name"] = self::makeName($ent->get("title"));
 			break;
 			
 			case "post":
-			$new["post_name"] = self::makeName($ent);
+			$new["post_name"] = self::makeName( $ent->get("title"));
 			break;
 		}
 		
@@ -110,8 +110,9 @@ class EntCPost  {
 		return str_replace("/","-",$str);
 	}
 	static public function makeName($str){
-		$s = str_replace(" ","-",$str);
-		$s = preg_replace("\W","",$s);
+		$s = str_replace(" ","_",$str);
+		$s = preg_replace("#\W#","",$s);
+		$s = str_replace("_","-",$s);
 		return $s;
 	}
 
