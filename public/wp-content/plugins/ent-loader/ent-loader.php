@@ -80,13 +80,14 @@ class EntLoader {
 	  $this->wantedEvents();
 	  
 	  foreach($this->set as $id=>$obj) $obj->reorg();
+	  $this->reportLoad();
 	  
 	  $this->build();
 	  $this->phase1();		// initial WP create of everything.
 
 	  $this->phase2();		// resolve references.
 	  
-	  $m = $this->reports("makeplaces","phase2","placecode");
+	  $m = $this->reports("load","afterload","makeplaces","phase2","placecode");
 	  return $m;
   }
   protected function report3(){
@@ -106,7 +107,7 @@ class EntLoader {
 	$m.= ".".ord(substr($str,-1,1));
 	return $m;
   }
-  protected function report(){
+  protected function reportLoad(){
   
 	  $m = $this->listWanted();
 	  //$m.= $this->listTypes("event");
@@ -116,7 +117,7 @@ class EntLoader {
 	  $m.=$this->set["yvonne"]->showAll();
 	  
 	  
-	  return $m;
+	  $this->report["afterload"] = $m;
   }
   protected function build(){
 	  
