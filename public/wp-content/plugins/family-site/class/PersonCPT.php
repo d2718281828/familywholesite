@@ -34,27 +34,35 @@ class PersonCPT extends FSCpt {
         ->addField(new DateHelper("date_baptism", "Date of Baptism", "This features in a few geneological records"))
     ;
   }
-  protected function on_save($post_id, $post){
+  /**
+  * This can be called directly after wp_insert_post()
+  * @param $data array/null array of custom fields. If null, e.g. when driven in a real post save, then use $_REQUEST
+  */
+  public function on_save($post_id, $post, $data = null){
     if (WP_DEBUG) error_log("in FamilySite::PersonCPT::on_save method");
-	parent::on_save($post_id, $post);
+	parent::on_save($post_id, $post, $data);
 
+	if (!$data) $data = $_REQUEST;
+	// MOVE THIS LOGIC INTO the CPOST???? !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	// refresh timeline info
 	TimeLine::clearSource($post_id);
 	
-	if (isset($_REQUEST["date_birth"]) && $_REQUEST["date_birth"]){
-		$place = $_REQUEST["place_birth"] ?: 0;
-		TimeLine::add1($_REQUEST["date_birth"], $post_id, "BORN", $place, 0);
+	if (isset($data["date_birth"]) && $data["date_birth"]){
+		$place = $data["place_birth"] ?: 0;
+		TimeLine::add1($data["date_birth"], $post_id, "BORN", $place, 0);
+		// add mother and father too
 	}
-	if (isset($_REQUEST["date_death"]) && $_REQUEST["date_death"]){
-		$place = $_REQUEST["place_death"] ?: 0;
-		TimeLine::add1($_REQUEST["date_death"], $post_id, "DIED", $place,0 );
+	if (isset($data["date_death"]) && $data["date_death"]){
+		$place = $data["place_death"] ?: 0;
+		TimeLine::add1($data["date_death"], $post_id, "DIED", $place,0 );
+		// add mother and father too ???
 	}
-	if (isset($_REQUEST["date_marriage"]) && $_REQUEST["date_marriage"]){
-		$place = $_REQUEST["place_marriage"] ?: 0;
-		$spouse = $_REQUEST["spouse"] ?: 0;		// so you can record that someone married without saying who to!
-		TimeLine::addMarriage($_REQUEST["date_marriage"], $post_id, $post_id, $spouse,$place,0);
+	if (isset($data["date_marriage"]) && $data["date_marriage"]){
+		$place = $data["place_marriage"] ?: 0;
+		$spouse = $data["spouse"] ?: 0;		// so you can record that someone married without saying who to!
+		TimeLine::addMarriage($data["date_marriage"], $post_id, $post_id, $spouse,$place,0);
 		if ($spouse){
-			TimeLine::addMarriage($_REQUEST["date_marriage"], $post_id, $spouse, $post_id,$place,0);
+			TimeLine::addMarriage($data["date_marriage"], $post_id, $spouse, $post_id,$place,0);
 		}
 	}
   }

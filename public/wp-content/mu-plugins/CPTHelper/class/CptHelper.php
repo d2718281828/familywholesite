@@ -1,11 +1,14 @@
 <?php
 namespace CPTHelper;
-// WARNING DO NOT MERGE THE FLIPSIDE CPTHELPER WITHOUT CARE
+// WARNING DO NOT MERGE THE WORK CPTHELPER WITHOUT CARE
 /**
  * Class CptHelper - represents a custom post type.
  * You can also add custom fields for the post type, using addField(new FieldHelper()) and related classes.
  * You can extend this class to provide a standard prefix and further modify behaviour
  * There are a lot of methods apart from addField to modify the behaviour. They all return $this to allow chaining.
+ *
+ * There will always be an instance of this in the system for each post type, so it is where all the hooks need to be set.
+ * However, I think it is easier to understand if all CPT specific behaviour is moved into the CPost rather than the CptHelper child
  *
  * Compared to just using register_post_type() directly it doesnt add much value, but it is much more useful when you also add fields.
  * It is just one more line to add a new field which automatically gets added to the meta box for the post and gets saved for you.
@@ -15,9 +18,10 @@ namespace CPTHelper;
  */
 
 /*
- * Sample usage (GsgCpt) is a child class that just sets a prefix):
-       $case = new GsgCpt("casestudy","Case Study","Case Studies",[],__FILE__);
+ * Sample usage 
+       $case = new CptHelper("casestudy","Case Study","Case Studies",[],__FILE__);
        $case->urlSlug('case_studies')
+		   ->setPrefix("gsg_")
            ->addField(new FieldHelper("post-class","Post-specific CSS classes","The class will be added to post and to links. Can be multiple, separated by spaces."))
            ->addField(new PostSelector("author_contact","Author contact or organisation","The real author, if a known contact in the system",["posttypes"=>["gsg_contact","gsg_nab"]]))
            ->addField(new FieldHelper("actual_author","Actual Case Study Author","The real author, if not a contact in the system"))
@@ -33,6 +37,11 @@ namespace CPTHelper;
            ->allowComments()
            ->allowExcerpt();
 
+ */
+ 
+ /* Revision history
+ added setPrefix
+ on_save no longer checks for presence of method
  */
 class CptHelper {
 
@@ -85,13 +94,23 @@ class CptHelper {
     }
 
     /**
-     * This function is present to allow child classes to set up other things.
+     * This function is present to allow child classes to set prefix and add fields
      */
     protected function setup(){
 
     }
+	/**
+	* Set the class name of the associated CPT instance - will be a CPost extension
+	*/
     public function setClass($class){
       $this->instanceClass = $class;
+      return $this;
+    }
+	/**
+	* Set the prefix for the custom post type name
+	*/
+    public function setPrefix($pref){
+      $this->prefix = $pref;
       return $this;
     }
     /**
@@ -142,9 +161,7 @@ class CptHelper {
             add_action( 'admin_init', [$this,'admin_init'] );
 
         }
-        if (method_exists($this,"on_save")){
-          add_action('save_post',[$this, 'save_post'], 1,2);
-        }
+        add_action('save_post',[$this, 'save_post'], 1,2);
     }
     public function admin_init(){
         foreach($this->metaFields as $field) $field->admin_init();
@@ -155,6 +172,13 @@ class CptHelper {
       if ($post->post_type != $this->posttype()) return;
       $this->on_save($post_id,$post);
     }
+	/**
+	* This function is callable directly when a post is created by wp_insert_post instead of in an online save
+	* @param $data array/null If called directly then this is for an array of custom field values.
+	*/
+	public function on_save($post_id,$post,$data=null){
+		
+	}
     protected function globaldefault(){
         return [
             'has_archive'         => true,
@@ -274,7 +298,6 @@ class CptHelper {
         global $post;
         if (TRACEIT) traceit( ($post) ? "POST-".$post->ID : "No Post");
     }
-
     /**
      * Static function which uses a class static variable which stores all of the CptHelpers indexed by the post type.
      * @param $slug

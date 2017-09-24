@@ -136,6 +136,7 @@ class CPost {
     /**
     * Create a new post based on the info which was previously supplied. If postid already set then update.
 	* In either case $pends is the data to change.
+	* @return the return code from wp_insert_post
     */
     public function create(){
 	  if (!$this->pends) return;	// no info so cant.
@@ -161,6 +162,15 @@ class CPost {
 	  $this->pends = [];
 	  return $rc;
     }
+	/**
+	* Destroy the post and any related bits
+	*/
+	public function destroy(){
+		wp_delete_post($post, true);
+		$this-is_error = true;		//signal that it is no longer usable
+		$this->postid = -1;
+		$this->error_message = "Deleted";
+	}
     /**
     * Component of the info box.
     */

@@ -16,7 +16,7 @@ class EntLoadHelp extends BaseAdmin {
   public function page_content() {
 	  echo "<h2>Ent Load information</h2>";
 	  echo "<p><input type='submit' name='action' value='Load'>Load up  people - requires nodes flder in uploads.</p>";
-	  echo "<p><input type='submit' name='action' value='Delete'>Delete all ent-created posts</p>";
+	  echo "<p><input type='submit' name='action' value='Delete'>Delete all ent-created posts - <strong>there is no warning!</strong></p>";
   }
   
   public function thisloader(){

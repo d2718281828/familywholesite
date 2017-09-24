@@ -96,7 +96,8 @@ class EntLoader {
 	  $posts = $wpdb->get_col($s);
 	  $m = "";
 	  foreach ($posts as $post){
-		  wp_delete_post($post, true);
+		  $cp = CptHelper::make($post);
+		  $cp->destroy();
 		  $m.= ",".$post;
 	  }
 	  return $m;
