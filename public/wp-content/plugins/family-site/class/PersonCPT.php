@@ -38,7 +38,7 @@ class PersonCPT extends FSCpt {
   * This can be called directly after wp_insert_post()
   * @param $data array/null array of custom fields. If null, e.g. when driven in a real post save, then use $_REQUEST
   */
-  public function on_save($post_id, $post, $data = null){
+  public function on_save($post_id, $post){
     if (WP_DEBUG) error_log("in FamilySite::PersonCPT::on_save method");
 	parent::on_save($post_id, $post, $data);
 
