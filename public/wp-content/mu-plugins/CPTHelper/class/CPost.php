@@ -167,7 +167,7 @@ class CPost {
 	*/
 	public function destroy(){
 		wp_delete_post($post, true);
-		$this-is_error = true;		//signal that it is no longer usable
+		$this->is_error = true;		//signal that it is no longer usable
 		$this->postid = -1;
 		$this->error_message = "Deleted";
 	}

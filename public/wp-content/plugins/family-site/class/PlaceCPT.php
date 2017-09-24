@@ -18,7 +18,7 @@ class PlaceCPT extends FSCpt {
         ->addField(new FieldHelper("long", "Longitude", "In degrees, + is East, - is West."))
     ;
   }
-  protected function on_save($post_id, $post){
+ public function on_save($post_id, $post){
     if (WP_DEBUG) error_log("in FamilySite::PlaceCPT::on_save method");
 	parent::on_save($post_id, $post);
 

@@ -176,7 +176,7 @@ class CptHelper {
 	* This function is callable directly when a post is created by wp_insert_post instead of in an online save
 	* @param $data array/null If called directly then this is for an array of custom field values.
 	*/
-	public function on_save($post_id,$post,$data=null){
+	public function on_save($post_id,$post){
 		
 	}
     protected function globaldefault(){
