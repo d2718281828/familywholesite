@@ -170,7 +170,9 @@ class CptHelper {
       if (WP_DEBUG) error_log("in save_post hook id=".$post_id.", type=".$post->post_type);
       if ( wp_is_post_revision( $post_id ) ) return;
       if ($post->post_type != $this->posttype()) return;
-      $this->on_save($post_id,$post);
+	  $cp = self::make($post);
+	  $cp->on_update(true);
+      //$this->on_save($post_id,$post);
     }
 	/**
 	* This function is callable directly when a post is created by wp_insert_post instead of in an online save

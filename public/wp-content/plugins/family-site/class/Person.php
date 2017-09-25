@@ -50,5 +50,28 @@ class Person extends FSPost {
   public function getLinks(){
 	  return [];
   }
+  public function on_update($req = false){
+		parent::on_update($data);
+		TimeLine::clearSource($post_id);
+		
+		if ($s=$this->getcf($req,"date_birth")){
+			$place = $this>getcf($req,"place_birth",0);
+			TimeLine::add1($s, $post_id, "BORN", $place, 0);
+			// add mother and father too
+		}
+		if ($s=$this->getcf($req,"date_death")){
+			$place = $this->getcf($req,"place_death", 0);
+			TimeLine::add1($s, $post_id, "DIED", $place,0 );
+			// add mother and father too ???
+		}
+		if ($s=$this->getcf($req,"date_marriage")){
+			$place = $this->getcf($req,"place_marriage",0);
+			$spouse = $this->getcf($req,"spouse",0);		// so you can record that someone married without saying who to!
+			TimeLine::addMarriage($s, $post_id, $post_id, $spouse,$place,0);
+			if ($spouse){
+				TimeLine::addMarriage($s, $post_id, $spouse, $post_id,$place,0);
+			}
+		}
+  }
 
 }

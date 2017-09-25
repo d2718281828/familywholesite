@@ -87,6 +87,46 @@ class FSPost extends CPost {
 	  }
 	  return $cposts;
   }
+  /**
+  * Slug for the tag which will match this post.
+  */ 
+  protected function matching_tag_slug(){
+	  return $this->post->post_name;
+  }
+  protected function matching_tag_title(){
+	  return $this->post->post_title;
+  }
+  public function on_update($req = false){
+	  parent::on_update($req);
+	if (WP_DEBUG) error-log("FSpost::on_update for ".$this->postid);
+	  
+    $name = $this->matching_tag_slug();
+	
+	if (!$reltax=$this->cpthelper->related_tax) return;	// if there isnt a related taxonomy then we dont need to create an entry
+	
+    // do we have a matching tag?
+    $matchingtag = get_post_meta($this->postid, "fs_matching_tag_id", true);
+    if ($matchingtag) return;
+
+    // is there a tag with this postname?
+    $term = get_term_by("slug", $name, $reltax );
+    if ($term) {
+	    if (WP_DEBUG) error_log("eek, already have a tax term with name ".$name." for post=".$this->postid);
+	    return;
+    }
+
+    $rc = wp_insert_term($this->matching_tag_title(), $reltax, [
+        "description"=>"Term relating to post ".$this->post->post_title,
+        "slug" => $name,
+      ] );
+    if (is_wp_error($rc)){
+      error_log("ERROR inserting taxonomy term for ".$this->post->post_title.", tax=".$reltax.": ".$rc->get_error_message());
+    } else {
+      update_post_meta($this->postid, "fs_matching_tag_id", $rc["term_taxonomy_id"]);
+      if (WP_DEBUG) error_log("saving term id ".$rc["term_taxonomy_id"]." for ".$this->post->post_title);
+    }
+	  
+  }
 
 }
 

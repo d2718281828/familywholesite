@@ -63,6 +63,27 @@ class CPost {
     }
 
     /**
+     * Driven whenever the underlying post is created or changed - to maintain the consistency of any links
+	 * Postid will be set when driven
+	 * @param $req boolean If true, custom field data is in $_REQUEST. Otherwise in $props
+     * @return 
+     */
+    public function on_update($req = false){
+		if (WP_DEBUG) error-log("CPOST::on_update for ".$this->postid);
+			
+    }
+
+    /**
+     * Driven whenever the underlying post is destroyed - to tidy up
+	 * Postid will be set when driven
+	 * @param $data array should be an array of any custom field values. not sure if I need this.
+     * @return 
+     */
+    public function on_destroy(){
+		if (WP_DEBUG) error-log("CPOST::on_delete for ".$this->postid);
+    }
+
+    /**
      * Get post property.
      * Dont use it for ID, type etc.
      * In keeping with the lazy loading, if this isnt a post property we will just use get_postmeta
@@ -160,6 +181,7 @@ class CPost {
 	  $this->postid = $rc;
 	  $this->props = $meta;
 	  $this->pends = [];
+	  $this->on_update(false);
 	  return $rc;
     }
 	/**
@@ -167,6 +189,7 @@ class CPost {
 	*/
 	public function destroy(){
 		wp_delete_post($post, true);
+		$this->on_destroy();		// tidy up
 		$this->is_error = true;		//signal that it is no longer usable
 		$this->postid = -1;
 		$this->error_message = "Deleted";
@@ -210,6 +233,13 @@ class CPost {
 			$m.= "<p><strong>".$prop."</strong> ".htmlentities($pendval)."</p>";
 		}
 		return $m;
+	}
+	/**
+	* Internal function to get a custom field value from props or from REQUEST
+	*/
+	protected function getcf($req,$prop,$default = null){
+		if ($req) return (isset($_REQUEST[$prop])) ? $_REQUEST[$prop] : $default;
+		return (isset($this->props[$prop])) ? $this->props[$prop] : $default;
 	}
 
 

@@ -31,7 +31,7 @@ use CPTHelper\SelectHelper;
 use CPTHelper\UseridSelector;
 
 require_once("class/FSCpt.php");
-require_once("class/FS_Post.php");
+require_once("class/FSPost.php");
 require_once("class/Person.php");
 require_once("class/Event.php");
 require_once("class/Place.php");
