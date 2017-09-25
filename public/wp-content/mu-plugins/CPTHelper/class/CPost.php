@@ -69,7 +69,7 @@ class CPost {
      * @return 
      */
     public function on_update($req = false){
-		if (WP_DEBUG) error-log("CPOST::on_update for ".$this->postid);
+		if (WP_DEBUG) error_log("CPOST::on_update for ".$this->postid);
 			
     }
 

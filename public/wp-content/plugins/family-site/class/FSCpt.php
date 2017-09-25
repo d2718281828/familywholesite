@@ -13,6 +13,10 @@ class FSCpt extends CptHelper {
     $this->related_tax = $taxname;
     return $this;
   }
+  public function get_taxonomy(){
+    return $this->related_tax;
+  }
+  
   public function on_save_obs($post_id, $post){
     if (WP_DEBUG) error_log("in FamilySite::FSCpt::on_save method");
     $name = $post->post_name;

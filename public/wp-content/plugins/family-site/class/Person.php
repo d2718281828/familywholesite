@@ -51,11 +51,11 @@ class Person extends FSPost {
 	  return [];
   }
   public function on_update($req = false){
-		parent::on_update($data);
-		TimeLine::clearSource($post_id);
+		parent::on_update($req);
+		TimeLine::clearSource($this->postid);
 		
 		if ($s=$this->getcf($req,"date_birth")){
-			$place = $this>getcf($req,"place_birth",0);
+			$place = $this->getcf($req,"place_birth",0);
 			TimeLine::add1($s, $post_id, "BORN", $place, 0);
 			// add mother and father too
 		}
