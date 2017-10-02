@@ -10,7 +10,6 @@ Author URI:
 /* TODO
 spouse not showing properly in timeline
 add places on load
-i tagged a pic with marian and it didnt show in her timeline
 
 Create the virtual places. give them virtual ent ids and add those to the post. 
 

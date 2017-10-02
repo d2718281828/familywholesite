@@ -30,7 +30,7 @@ class EntLoader {
 	  add_action("init", [$this,"init"]);
 	  $up = wp_upload_dir();
 	  $this->input = $up["basedir"]."/nodes";
-	  $this->testset = ["neils","marians","joans","rhians","euston-thetford-norfolk","bens","violet"];
+	  $this->testset = ["neils","marians","joans","rhians","euston-thetford-norfolk","bens","violet","markmac"];
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
