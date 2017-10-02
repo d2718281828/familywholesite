@@ -207,11 +207,11 @@ class EntLoader {
 		  $entref = $ref["meta_value"];
 		  $prop = substr($ref["meta_key"],9); // everything after the ent_link_ is the actual prooperty namespace
 		  $actual_id = $this->get_postid_by_entref($entref);
-		$m.="<br/>Resolved ".$prop." for ".$ref["post_id"].", ".$entref;
+		  $m.="<br/>Resolved ".$prop." for ".$ref["post_id"].", ".$entref;
 		  if ($actual_id){
 			  $m.=" as ".$actual_id;
-			  
-			  // do it
+			  update_post_meta($ref["post_id"], $prop, $actual_id);	// update the new property
+			  delete_post_meta($ref["post_id"],$ref["meta_key"]); 
 		  }
 	  }
 	  

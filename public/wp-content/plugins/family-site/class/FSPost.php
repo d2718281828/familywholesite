@@ -136,9 +136,12 @@ class FSPost extends CPost {
 		global $wpdb;
 		parent::on_destroy();
 		if (WP_DEBUG) error_log("FSPost::on_delete for ".$this->postid);
-    $matchingtag = get_post_meta($this->postid, "fs_matching_tag_id", true);
-	if (!$matchingtag) return;
-	// this is the term tax id, need to get term id and taxonomy
+		$matchingtag = get_post_meta($this->postid, "fs_matching_tag_id", true);
+		if (!$matchingtag) return;
+		// this is the term tax id, need to get term id and taxonomy
+		$s = "select term_id, taxonomy from ".$wpdb->term_taxonomy." where term_taxonomy_id=%d;";
+		$tt = $wpdb->get_results($wpdb->prepare($s,$matchingtag),ARRAY_A);
+		if (count($tt)>0) wp_delete_term($tt[0]["term_id"],$tt[0]["taxonomy"]);
     }
 }
 
