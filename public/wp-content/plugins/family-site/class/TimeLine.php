@@ -130,6 +130,11 @@ class TimeLine {
   static function add1($event_date, $sid, $evtype, $place, $event){
 	  self::addEntry($event_date, $sid, "fs_person", $evtype, $sid, "fs_person", $place, $event);
   }
+  /** person sid is child of parent, evtype is SON or DAUGHTER
+  */
+  static function addChild($event_date, $sid, $evtype, $parent, $place=0 , $event=0){
+	  self::addEntry($event_date, $sid, "fs_person", $evtype, $parent, "fs_person", $place, $event);
+  }
   /** Marriage of a to b
   */
   static function addMarriage($event_date, $sid, $a, $b, $place, $event){
