@@ -46,32 +46,6 @@ class TimeLine {
     }
     return $m;
   }
-  // redundant
-  protected function makeSQL_obs(){
-    global $wpdb;
-
-    $select = ["P.ID","P.post_type"];
-    $from = [$wpdb->posts." P "];
-    $where = ["P.post_status = 'publish'"];
-    $order = [];
-
-    if ($this->focus){
-      $tag = $this->focus->get("fs_matching_tag_id"); // this is the term_taxonomy_id
-      $from[] = $wpdb->term_relationships." TR ";
-      $where[] = "P.ID = TR.object_id";
-      $where[] = "TR.term_taxonomy_id = ".((int)$tag);
-    }
-    // get the date
-    $from[] = $wpdb->postmeta." D ";
-    $select[] = "D.meta_value as actual_date";
-    $where[] = "P.ID = D.post_id";
-    $where[] = "D.meta_key = 'actual_date'";
-    $order[] = "actual_date DESC";
-
-    $s = "SELECT ".implode(",",$select)." FROM ".implode(",",$from);
-    $s.= " WHERE (".implode(") and (", $where). ") ORDER BY ".implode(",",$order);
-    return $s;
-  }
   /* timeline types
   source is the post that writes these when being saved
   object is the filter for a particular timeline

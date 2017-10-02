@@ -25,13 +25,32 @@ class Person extends FSPost {
     }
     if ($z=$this->relativeLink("father")) $m.= $this->infoBit("Father",$z);
     if ($z=$this->relativeLink("mother")) $m.= $this->infoBit("Mother",$z);
+	
+	// children
+	$kids = $this->getChildren();
+	foreach ($kids as $kid) $m.=" ".$kid->simpleLink();
+	
     return $m;
   }
+  /** make a simple link for father or mother
+  */
   protected function relativeLink($prop){
     $z = $this->get($prop);
     if (!$z) return "";
     $pers = new Person($z);
     return $pers->simpleLink();
+  }
+  /**
+  * This isnt very efficient. Perhaps there should be some accelerator tables...
+  * I have resisted the temptation to do this in the timeline... it doesnt apply to all timelines and therefore would be wrong
+  */
+  protected function getChildren(){
+	  global $wpdb;
+	  $s = "select post_id from ".$wpdb->postmeta." where meta_key in ('father','mother') and meta_value = %d";
+	  $ids = $wpdb->get_col($wpdb->prepare($s,$this->postid));
+	  $res = [];
+	  foreach($ids as $id) $res[] = new Person($id);
+	  return $res;
   }
   /**
   * Do we have an index section?
@@ -49,6 +68,13 @@ class Person extends FSPost {
   }
   public function getLinks(){
 	  return [];
+  }
+  /** For a person, the matching tag will have the year of birth appended if it is before 1920
+  */
+  protected function matching_tag_title(){
+	  $dob = $this->get("date_birth","1980");
+	  $app = ($dob<"1920") ? " (".substr($dob,0,4).")" : "";
+	  return $this->post->post_title.$app;
   }
   public function on_update($req = false){
 		$post_id = $this->postid;
