@@ -36,7 +36,12 @@ Text Domain: familysite
   display: inline-block;
   width: 70%;
 }
-
+/* TIMELINE ========================================== */
+.timeline-link .timeline-date {
+	margin-top: 10px;
+	background-color: #e7e7e7;
+	font-weight: bold;
+}
 /* ENTRY FOOTER ===================================== */
 .entry-footer .tagsets {
   width: 100%;
