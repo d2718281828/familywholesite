@@ -26,6 +26,12 @@ class Person extends FSPost {
     if ($z=$this->relativeLink("father")) $m.= $this->infoBit("Father",$z);
     if ($z=$this->relativeLink("mother")) $m.= $this->infoBit("Mother",$z);
 	
+	// Spouse
+    if ($z=$this->relativeLink("spouse")) $m.= $this->infoBit("Spouse",$z);
+	else {
+		if ($z=$this->otherSpouseLink()) $m.= $this->infoBit("Spouse",$z);
+	}
+	
 	// children
 	$kids = $this->getChildren();
 	$k = "";
@@ -34,10 +40,22 @@ class Person extends FSPost {
 	
     return $m;
   }
-  /** make a simple link for father or mother
+  /** 
+  * make a simple link for father or mother or spouse
   */
   protected function relativeLink($prop){
     $z = $this->get($prop);
+    if (!$z) return "";
+    $pers = new Person($z);
+    return $pers->simpleLink();
+  }
+  /** 
+  * make a simple link for father or mother or spouse
+  */
+  protected function otherSpouseLink(){
+	global $wpdb;
+	$s = "select post_id from ".$wpdb->postmeta." where meta_key='spouse' and meta_value = %d; ";
+	$z = $wpdb->get_var($wpdb->prepare($s, $this->postid));
     if (!$z) return "";
     $pers = new Person($z);
     return $pers->simpleLink();
