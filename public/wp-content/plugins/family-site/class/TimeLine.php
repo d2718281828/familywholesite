@@ -31,7 +31,7 @@ class TimeLine {
 		break;
 		case "SON":
 		case "DAUGHTER":
-		$m.= '<div class="timeline-body">'.$event["event_type"].' '.$source->simpleLink().'</div>';
+		$m.= '<div class="timeline-body">'.$event["event_type"].' '.$source->simpleBirthLink().'</div>';
 		break;
 		case "MARRIAGE":
 		if ($event["object2"]){

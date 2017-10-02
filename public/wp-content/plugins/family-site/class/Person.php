@@ -117,5 +117,13 @@ class Person extends FSPost {
 		if (WP_DEBUG) error_log("Person::on_delete for ".$this->postid);
 		TimeLine::clearSource($this->postid);
     }
+    /**
+    * Return a simple a tag linked to the permalink, with text which is the person's birthname.
+    */
+    public function simpleBirthLink(){
+      $url = get_permalink($this->postid);
+	  $birthname = $this->get("birthname");
+      return '<a href="'.$url.'">'.($birthname ?: $this->get("post_title")).'</a>';
+    }
 
 }
