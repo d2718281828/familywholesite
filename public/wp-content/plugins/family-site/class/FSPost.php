@@ -98,16 +98,18 @@ class FSPost extends CPost {
   }
   public function on_update($req = false){
 	  parent::on_update($req);
-	if (WP_DEBUG) error_log("FSpost::on_update for ".$this->postid);
+	if (WP_DEBUG) error_log("FSpost::on_update for ".$this->postid.", ".($req?"REQ":"props"));
 	  
     $name = $this->matching_tag_slug();
 	
 	if (!$reltax=$this->cpthelper->get_taxonomy()) return;	// if there isnt a related taxonomy then we dont need to create an entry
 	
+	if (WP_DEBUG) error_log("FSpost::on_update reltax=".$reltax);
     // do we have a matching tag?
     $matchingtag = get_post_meta($this->postid, "fs_matching_tag_id", true);
     if ($matchingtag) return;
 
+	if (WP_DEBUG) error_log("FSpost::on_update reltax=".$reltax.", name=".$name);
     // is there a tag with this postname?
     $term = get_term_by("slug", $name, $reltax );
     if ($term) {

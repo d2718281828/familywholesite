@@ -51,9 +51,12 @@ class Person extends FSPost {
 	  return [];
   }
   public function on_update($req = false){
+		$post_id = $this->postid;
 		parent::on_update($req);
+		if (WP_DEBUG) error_log("Person::on_update for ".$post_id.", ".($req?"REQ":"props"));
 		TimeLine::clearSource($this->postid);
 		
+		if (WP_DEBUG) error_log("Person::on_update date_birth= ".$this->getcf($req,"date_birth","none"));
 		if ($s=$this->getcf($req,"date_birth")){
 			$place = $this->getcf($req,"place_birth",0);
 			TimeLine::add1($s, $post_id, "BORN", $place, 0);
