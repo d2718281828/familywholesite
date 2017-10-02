@@ -94,18 +94,6 @@ class EntCPost  {
 		$year = substr($ent->get("date_birth"),0,4);
 		return self::makeName($ent->get("title")).(($year && $year<"1920") ? "-".$year : "");
 	}
-	/**
-	* Make a name from the title OBSOLETE
-	*/
-	protected function itemName_xxx($ent){
-		$txt = str_replace(" ","-",strtolower($ent->get("title")));
-		$txt = str_replace("(","",$txt);
-		$txt = str_replace(")","",$txt);
-		$txt = str_replace("'","",$txt);
-		$txt = str_replace("\"","",$txt);
-		$txt = str_replace("--","-",$txt);
-		return $txt."_test";
-	}
 	protected function xdate($str){
 		return str_replace("/","-",$str);
 	}

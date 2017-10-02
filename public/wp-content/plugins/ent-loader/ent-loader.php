@@ -30,6 +30,7 @@ class EntLoader {
 	  add_action("init", [$this,"init"]);
 	  $up = wp_upload_dir();
 	  $this->input = $up["basedir"]."/nodes";
+	  $this->testset = ["neils","marians","joans","rhians","euston-thetford-norfolk"];
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
@@ -87,7 +88,7 @@ class EntLoader {
 
 	  $this->phase2();		// resolve references.
 	  
-	  $m = $this->reports("makeplaces","phase2","placecode");
+	  $m = $this->reports("makeplaces","phase1","phase2","placecode");
 	  return $m;
   }
   public function deleteAll(){
@@ -149,13 +150,12 @@ class EntLoader {
   protected function phase1(){
 	  $m = "<h2>Phase 1</h2>";
 
-	  $cp = $this->cposts["neils"];
-	  $rc = $cp->create();
-
-	  $cp = $this->cposts["euston-thetford-norfolk"];
-	  $rc = $cp->create();
-
-	  $m.= "<br/>neils ".( $rc===false ? $cp->error_message : $rc); 
+	  // will be for every cpost
+	  foreach ($this->testset as $test){
+		$cp = $this->cposts[$test];
+		$rc = $cp->create();
+		$m.= "<br/>".$cp->get("post_title")." ".( $rc===false ? $cp->error_message : $rc);   
+	  }
 	  $this->report["phase1"] = $m;
 	  return $m;
   }
@@ -197,13 +197,34 @@ class EntLoader {
 	  return $m."</ul>";
   }
   protected function phase2(){
+	  global $wpdb;
 	  $m = "<h2>Phase 2</h2>";
 	  
-	  $cp = $this->cposts["neils"];
+	  // pick up the hanging refs
+	  $s = "select * from ".$wpdb->postmeta." where meta_key like 'ent_link_%';";
+	  $refs = $wpdb->get_results($s,ARRAY_A);
+	  foreach ($refs as $ref){
+		  $entref = $ref["meta_value"];
+		  $prop = substr($ref["meta_key"],9); // everything after the ent_link_ is the actual prooperty namespace
+		  $actual_id = $this->>get_postid_by_entref($entref);
+		  if ($actual_id){
+			  $m.="<br/>Resolved ".$prop." for ".$ref["post_id"]." as ".$actual_id;
+			  // do it
+		  }
+	  }
 	  
-	  $m.= "<br/>neils ".( $rc===false ? $cp->error_message : $rc); 
-	  $this->report["phase2"] = $m;
+	  // will be for every cpost
+	  foreach ($this->testset as $test){
+		$cp = $this->cposts[$test];
+	  }
+	  
 	  return $m;
+  }
+  protected function get_postid_by_entref($entref){
+	  global $wpdb;
+	  $s = "select postid from ".$wpdb->postmeta." where meta_key = 'ent_ref' and meta_value=%s;";
+	  $pid = $wpdb->get_var($wpdb->prepare($s,$entref));
+	  return $pid;
   }
   public function get($who){
       return isset($this->set[$who]) ? $this->set[$who] : null;
