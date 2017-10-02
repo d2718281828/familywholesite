@@ -30,7 +30,7 @@ class EntLoader {
 	  add_action("init", [$this,"init"]);
 	  $up = wp_upload_dir();
 	  $this->input = $up["basedir"]."/nodes";
-	  $this->testset = ["neils","marians","joans","rhians","euston-thetford-norfolk"];
+	  $this->testset = ["neils","marians","joans","rhians","euston-thetford-norfolk","bens","violet"];
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
@@ -206,9 +206,11 @@ class EntLoader {
 	  foreach ($refs as $ref){
 		  $entref = $ref["meta_value"];
 		  $prop = substr($ref["meta_key"],9); // everything after the ent_link_ is the actual prooperty namespace
-		  $actual_id = $this->>get_postid_by_entref($entref);
+		  $actual_id = $this->get_postid_by_entref($entref);
+		$m.="<br/>Resolved ".$prop." for ".$ref["post_id"].", ".$entref;
 		  if ($actual_id){
-			  $m.="<br/>Resolved ".$prop." for ".$ref["post_id"]." as ".$actual_id;
+			  $m.=" as ".$actual_id;
+			  
 			  // do it
 		  }
 	  }
@@ -217,12 +219,15 @@ class EntLoader {
 	  foreach ($this->testset as $test){
 		$cp = $this->cposts[$test];
 	  }
-	  
+	 $this->report["phase2"] = $m; 
 	  return $m;
   }
   protected function get_postid_by_entref($entref){
 	  global $wpdb;
-	  $s = "select postid from ".$wpdb->postmeta." where meta_key = 'ent_ref' and meta_value=%s;";
+	  $s = "select post_id from ".$wpdb->postmeta." PM,
+		".$wpdb->posts." P 
+		where P.ID = PM.post_id and P.post_status = 'publish' and 
+		meta_key = 'ent_ref' and meta_value=%s;";
 	  $pid = $wpdb->get_var($wpdb->prepare($s,$entref));
 	  return $pid;
   }
@@ -232,7 +237,7 @@ class EntLoader {
   public function reports($list){
       $m = "";
 	  $z = func_get_args();
-	  foreach($z as $rep) $m.=$this->report[$rep];
+	  foreach($z as $rep) if (isset($this->report[$rep])) $m.=$this->report[$rep];
 	  return $m;
   }
   // clean up input data

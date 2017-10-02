@@ -91,9 +91,11 @@ class FSPost extends CPost {
   * Slug for the tag which will match this post.
   */ 
   protected function matching_tag_slug(){
+	 if (!$this->post) $this->post = get_post($this->postid);
 	  return $this->post->post_name;
   }
   protected function matching_tag_title(){
+	 if (!$this->post) $this->post = get_post($this->postid);
 	  return $this->post->post_title;
   }
   public function on_update($req = false){
@@ -130,6 +132,14 @@ class FSPost extends CPost {
 	  
   }
 
+    public function on_destroy(){
+		global $wpdb;
+		parent::on_destroy();
+		if (WP_DEBUG) error_log("FSPost::on_delete for ".$this->postid);
+    $matchingtag = get_post_meta($this->postid, "fs_matching_tag_id", true);
+	if (!$matchingtag) return;
+	// this is the term tax id, need to get term id and taxonomy
+    }
 }
 
 

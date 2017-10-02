@@ -80,7 +80,7 @@ class CPost {
      * @return 
      */
     public function on_destroy(){
-		if (WP_DEBUG) error-log("CPOST::on_delete for ".$this->postid);
+		if (WP_DEBUG) error_log("CPOST::on_delete for ".$this->postid);
     }
 
     /**
@@ -188,8 +188,8 @@ class CPost {
 	* Destroy the post and any related bits
 	*/
 	public function destroy(){
-		wp_delete_post($post, true);
 		$this->on_destroy();		// tidy up
+		wp_delete_post($this->postid, true);
 		$this->is_error = true;		//signal that it is no longer usable
 		$this->postid = -1;
 		$this->error_message = "Deleted";

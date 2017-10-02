@@ -74,8 +74,8 @@ class Person extends FSPost {
   /** For a person, the matching tag will have the year of birth appended if it is before 1920
   */
   protected function matching_tag_title(){
-	  $dob = $this->get("date_birth","1980");
-	  $app = ($dob<"1920") ? " (".substr($dob,0,4).")" : "";
+	  $dob = $this->get("date_birth");
+	  $app = ($dob && $dob<"1920") ? " (".substr($dob,0,4).")" : "";
 	  return $this->post->post_title.$app;
   }
   public function on_update($req = false){
@@ -112,5 +112,10 @@ class Person extends FSPost {
 			}
 		}
   }
+    public function on_destroy(){
+		parent::on_destroy();
+		if (WP_DEBUG) error_log("Person::on_delete for ".$this->postid);
+		TimeLine::clearSource($this->postid);
+    }
 
 }
