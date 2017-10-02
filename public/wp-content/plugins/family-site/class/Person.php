@@ -28,7 +28,9 @@ class Person extends FSPost {
 	
 	// children
 	$kids = $this->getChildren();
-	foreach ($kids as $kid) $m.=" ".$kid->simpleLink();
+	$k = "";
+	foreach ($kids as $kid) $k.=" ".$kid->simpleLink();
+	if ($k) $m.= $this->infoBit("Children",$k);
 	
     return $m;
   }
