@@ -29,6 +29,10 @@ class TimeLine {
 		case "DIED":
 		$m.= '<div class="timeline-body">Died</div>';
 		break;
+		case "SON":
+		case "DAUGHTER":
+		$m.= '<div class="timeline-body">'.$event["event_type"].' '.$source->simpleLink().'</div>';
+		break;
 		case "MARRIAGE":
 		if ($event["object2"]){
 			$spouse = \CPTHelper\CPTHelper::make($event["object2"],$event["object2_type"]);
