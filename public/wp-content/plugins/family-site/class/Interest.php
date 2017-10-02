@@ -21,5 +21,28 @@ class Interest extends FSPost {
 	  $z = $this->getLinksViaTax("place_tax","fs_place");
 	  return array_merge($x,$y,$z);
   }
+  public function on_update($req = false){
+	$post_id = $this->postid;
+	parent::on_update($req);
+	if (WP_DEBUG) error_log("Person::on_update for ".$post_id.", ".($req?"REQ":"props"));
+	TimeLine::clearSource($post_id);
+
+	$actual_date = "";
+	if (!$actual_date=$this->getcf($req,"actual_date")) {
+		if ($event = $this->getcf($req,"event")) {
+			$event = (int)$event;
+			$actual_date = get_post_meta($event, "actual_date", true);
+		}
+	}
+    if (WP_DEBUG) error_log("Interest $post_id has date $actual_date");
+	
+	if ($actual_date){
+		$links = $this->getLinks();
+		foreach($links as $link){
+			TimeLine::addInterest($actual_date, $post_id,  $this->getType(), $link->postid, $link->getType());
+		}
+	}
+
+  }
 
 }

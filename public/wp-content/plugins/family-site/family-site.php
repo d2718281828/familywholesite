@@ -8,10 +8,10 @@ Version: 0.1
 Author URI:
 */
 /* TODO
-change the link in save_post to include dob if old.
-explicitly invoke on_save - because it was written to work off REQUEST
-	MOVE THE LOGIC INTO THE CPOST, MAYBE? may be able to reduce the role of the PersonCPT
-change father, mother etc to ent_father... because it isnt a post id.
+spouse not showing properly in timeline
+add places on load
+i tagged a pic with marian and it didnt show in her timeline
+
 Create the virtual places. give them virtual ent ids and add those to the post. 
 
 person pics link
