@@ -65,10 +65,11 @@ class CPost {
     /**
      * Driven whenever the underlying post is created or changed - to maintain the consistency of any links
 	 * Postid will be set when driven
-	 * @param $req boolean If true, custom field data is in $_REQUEST. Otherwise in $props
+	 * @param $req int If 1, custom field data is in $_REQUEST. If 0,it is in $props. If 2, you need to go back to postmeta. 
+	 * Children should use getcf($req) for each data value they need
      * @return 
      */
-    public function on_update($req = false){
+    public function on_update($req = 0){
 		if (WP_DEBUG) error_log("CPOST::on_update for ".$this->postid);
 			
     }
@@ -85,7 +86,7 @@ class CPost {
 
     /**
      * Get post property.
-     * Dont use it for ID, type etc.
+     * Dont use it for ID, type
      * In keeping with the lazy loading, if this isnt a post property we will just use get_postmeta
      * @param $property
      */
@@ -113,6 +114,16 @@ class CPost {
         $this->props[$property] = $val;
         return $val;
     }
+	public function set($property,$value){
+        if ($this->is_error) return;
+        if (in_array($property,self::$post_properties)){
+			$rc = wp_update_post(["ID"=>$this->postid, $property=>$value], true);
+		} else {
+			$this->props[$property] = $value;	// save it
+			update_post_meta($this->postid, $property, $value);
+		}
+		
+	}
 
     public function getCPH(){
         if ($this->is_error) return null;
@@ -181,7 +192,7 @@ class CPost {
 	  $this->postid = $rc;
 	  $this->props = $meta;
 	  $this->pends = [];
-	  $this->on_update(false);
+	  $this->on_update(0);
 	  return $rc;
     }
 	/**
@@ -235,11 +246,19 @@ class CPost {
 		return $m;
 	}
 	/**
-	* Internal function to get a custom field value from props or from REQUEST
+	* Internal function to get a custom field value from props or from REQUEST or from postmeta
+	* @param $req int If 1, custom field data is in $_REQUEST. If 0,it is in $props. If 2, you need to go back to postmeta.
 	*/
 	protected function getcf($req,$prop,$default = null){
-		if ($req) return (isset($_REQUEST[$prop])) ? $_REQUEST[$prop] : $default;
-		return (isset($this->props[$prop])) ? $this->props[$prop] : $default;
+		switch($req){
+			case 0:
+			return (isset($this->props[$prop])) ? $this->props[$prop] : $default;
+			case 1:
+			return (isset($_REQUEST[$prop])) ? $_REQUEST[$prop] : $default;
+			case 2:
+			default:
+			return $this->get($prop);
+		}
 	}
 
 

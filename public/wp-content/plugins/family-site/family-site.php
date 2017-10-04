@@ -9,7 +9,7 @@ Author URI:
 */
 /* TODOs
 need a phase 3 which drives the update again - and need another req value (0,1,2) to direct it to use normal get
-spouse not showing properly in info box
+	also to translate the descriptions
 add places on load
 
 Create the virtual places. give them virtual ent ids and add those to the post. 

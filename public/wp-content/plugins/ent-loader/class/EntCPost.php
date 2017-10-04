@@ -17,7 +17,7 @@ class EntCPost  {
 		$new["post_type"] = $this->xlateType($enttype);
 		$new["post_title"] = $ent->get("title");
 		// this will need to be translated when all the cposts are in.
-		$new["post_content"] = $this->xlateText($ent->get("description"));
+		$new["post_content"] = $ent->get("description");
 		// the ent_ properties are for resolution later
 		$new["ent_ref"] = $ent->key();
 		if ($s=$ent->get("picnode")) $new["ent_link_featured"] = strtolower($s);
@@ -85,7 +85,17 @@ class EntCPost  {
 	* Convert link references - this will be tricky.
 	*/
 	protected function xlateText($txt){
-		return $txt;
+		return "XX".$txt;
+	}
+	/**
+	* Convert the description and resave
+	*/
+	public function phase3($cpost){
+		$m="";
+		$desc = $cpost->get("post_content");
+		$cpost->set("post_content", $this->xlateText($desc));
+		$cpost->on_update(2);		// re-save it, checking the custom fields and ensuring consistency
+		return $m;
 	}
 	/**
 	* Make a name from the title, including the dob

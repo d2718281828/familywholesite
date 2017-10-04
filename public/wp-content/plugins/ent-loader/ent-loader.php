@@ -88,7 +88,9 @@ class EntLoader {
 
 	  $this->phase2();		// resolve references.
 	  
-	  $m = $this->reports("makeplaces","phase1","phase2","placecode");
+	  $this->phase3();		// re-save and convert text
+	  
+	  $m = $this->reports("phase2","phase3","placecode");
 	  return $m;
   }
   public function deleteAll(){
@@ -219,7 +221,21 @@ class EntLoader {
 	  foreach ($this->testset as $test){
 		$cp = $this->cposts[$test];
 	  }
-	 $this->report["phase2"] = $m; 
+	  $this->report["phase2"] = $m; 
+	  return $m;
+  }
+  protected function phase3(){
+	  global $wpdb;
+	  $m = "<h2>Phase 3</h2>";
+	  $convert = new EntCPost($this);
+	  
+	  // will be for every cpost
+	  foreach ($this->testset as $test){
+		$cp = $this->cposts[$test];
+		$m.=$convert->phase3($cp);
+	  }
+	  
+	  $this->report["phase3"] = $m; 
 	  return $m;
   }
   protected function get_postid_by_entref($entref){
