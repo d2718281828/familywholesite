@@ -95,6 +95,7 @@ class EntCPost  {
 		$desc = $cpost->get("post_content");
 		$cpost->set("post_content", $this->xlateText($desc));
 		$cpost->on_update(2);		// re-save it, checking the custom fields and ensuring consistency
+		$m.="<br />Phase 3 on ".$cpost->get("post_title");
 		return $m;
 	}
 	/**
