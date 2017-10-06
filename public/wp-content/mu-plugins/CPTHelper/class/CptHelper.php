@@ -333,6 +333,16 @@ class CptHelper {
         }
         return null;
     }
+	static function makeByName($name){
+		global $wpdb;
+		$s = "select * from ".$wpdb->posts." where post_name=%s;";
+		$res = $wpdb->get_results($wpdb->prepare($s,$name));	// return object
+		if (count($res)==0) return null;
+		$cpt = self::get($res[0]->post_type);
+        $class = $cpt->instanceClass;
+		$z = new $class($p);
+		return $z;
+	}
 }
 
 ?>

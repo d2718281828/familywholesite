@@ -214,9 +214,9 @@ class CPost {
     /**
     * Return a simple a tag linked to the permalink, with text which is the post title.
     */
-    public function simpleLink(){
+    public function simpleLink($text = null){
       $url = get_permalink($this->postid);
-      return '<a href="'.$url.'">'.$this->get("post_title").'</a>';
+      return '<a href="'.$url.'">'.($text ?: $this->get("post_title")).'</a>';
     }
 	/**
 	* Return title plus image, linked.
@@ -260,7 +260,6 @@ class CPost {
 			return $this->get($prop);
 		}
 	}
-
 
 }
 

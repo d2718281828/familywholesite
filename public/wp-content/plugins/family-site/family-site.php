@@ -57,6 +57,7 @@ class FamilySite {
   }
   public function init(){
     $this->setupTaxes();
+	add_shortcode("a",[$this,"do_a"]);
   }
   public function wp_head(){
     // if this is a single page set up the cpost which will be used in templates
@@ -124,6 +125,16 @@ class FamilySite {
       "re-write" => ["slug"=>"event",],
 
     ]);
+  }
+  public function do_a($att,$content,$tag){
+	  if (isset($att[0]) && $att[0]){
+		  $cp = CptHelper::makeByName($att[0]);
+		  if ($content) $text = do_shortcode($content);
+		  elseif (isset($att[1]) && $att[1]) $text = $att[1];
+		  else $text = null;
+		  return $cp->simpleLink($text);
+	  }
+	  return "";
   }
 
 }
