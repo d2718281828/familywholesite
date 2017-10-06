@@ -340,7 +340,7 @@ class CptHelper {
 		if (count($res)==0) return null;
 		$cpt = self::get($res[0]->post_type);
         $class = $cpt->instanceClass;
-		$z = new $class($p);
+		$z = new $class($res[0]);
 		return $z;
 	}
 }
