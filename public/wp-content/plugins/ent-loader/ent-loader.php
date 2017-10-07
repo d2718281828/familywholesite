@@ -83,6 +83,8 @@ class EntLoader {
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  $this->reportLoad();
 	  
+	  return $this->testTrasnalte();
+	  
 	  $this->build();
 	  $this->phase1();		// initial WP create of everything.
 
@@ -91,6 +93,14 @@ class EntLoader {
 	  $this->phase3();		// re-save and convert text
 	  
 	  $m = $this->reports("phase2","phase3","placecode");
+	  return $m;
+  }
+  protected testTrasnalte(){
+	  $test = "Husband of {a marians:Marian}, Derek’s cousin, and father
+of {a karas:Kara} and {a rhians:Rhian}.";
+	  $m = "<br>".$test;
+	  $convert = new EntCPost($this);
+	  $m.= "<br>".$convert->xlateText($test);
 	  return $m;
   }
   public function deleteAll(){

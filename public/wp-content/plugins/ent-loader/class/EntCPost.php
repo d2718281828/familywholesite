@@ -84,8 +84,41 @@ class EntCPost  {
 	/**
 	* Convert link references - this will be tricky.
 	*/
-	protected function xlateText($txt){
-		return "XX".$txt;
+	public function xlateText($txt){
+		$o = "";
+		$pairs = $this->parseit($txt);
+		$including = true;
+		foreach ($pairs as $pair){
+			switch($pair[0]){
+				case "=":
+				$o.=$pair[1];
+				break;
+				default:
+				$o.="[".$pair[0]." ".$pair[1]."]";
+			}
+		}
+		return $o;
+	}
+	// eeek - this code should bee in ent.
+	protected function parseit($txt){
+		$o = [];
+		$p = 0;
+		while ($p < strlen($txt)){
+			$lb = strpos($txt,"{",$p);
+			if ($lb===false){
+				$o[] = ["=", substr($txt,$p)];
+				return $o;
+			}
+			if ($lb>$p) $o[] = ["=", substr($txt,$p,$lb-$p)];
+			$rb = strpos($txt,"{",$lb+1);
+			if ($rb===false) $rb = strlen($txt);
+			$bl = strpos($txt," ",$lb+1);
+			if ($bl===false || $bl > $rb) $arg = "";
+			else $arg = substr($txt, $bl+1, $rb-$bl-1);
+			$o[] = [substr($txt,$lb+1, $bl-$lb-1), $arg];
+			$p = $rb+1;
+		}
+		return $o;
 	}
 	/**
 	* Convert the description and resave
