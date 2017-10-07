@@ -218,7 +218,7 @@ of {a karas:Kara} and {a rhians:Rhian}.";
 	  foreach ($refs as $ref){
 		  $entref = $ref["meta_value"];
 		  $prop = substr($ref["meta_key"],9); // everything after the ent_link_ is the actual prooperty namespace
-		  $actual_id = $this->get_postid_by_entref($entref);
+		  $actual_id = EntCPost::get_postid_by_entref($entref);
 		  $m.="<br/>Resolved ".$prop." for ".$ref["post_id"].", ".$entref;
 		  if ($actual_id){
 			  $m.=" as ".$actual_id;
@@ -247,15 +247,6 @@ of {a karas:Kara} and {a rhians:Rhian}.";
 	  
 	  $this->report["phase3"] = $m; 
 	  return $m;
-  }
-  protected function get_postid_by_entref($entref){
-	  global $wpdb;
-	  $s = "select post_id from ".$wpdb->postmeta." PM,
-		".$wpdb->posts." P 
-		where P.ID = PM.post_id and P.post_status = 'publish' and 
-		meta_key = 'ent_ref' and meta_value=%s;";
-	  $pid = $wpdb->get_var($wpdb->prepare($s,$entref));
-	  return $pid;
   }
   public function get($who){
       return isset($this->set[$who]) ? $this->set[$who] : null;

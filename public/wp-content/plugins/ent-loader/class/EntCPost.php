@@ -101,7 +101,7 @@ class EntCPost  {
 				$including = true;
 				break;
 				case "a":
-				$args = $pair[1][0];
+				$args = self::get_postname_by_entref($pair[1][0]);
 				if (count($pair[1])>1) {
 					$args.=" ";
 					if (strpos($pair[1][1]," ")!==false) $args.='"'.$pair[1][1].'"';
@@ -146,5 +146,23 @@ class EntCPost  {
 		$s = strtolower($s);
 		return $s;
 	}
+	  static function get_postid_by_entref($entref){
+		  global $wpdb;
+		  $s = "select post_id from ".$wpdb->postmeta." PM,
+			".$wpdb->posts." P 
+			where P.ID = PM.post_id and P.post_status = 'publish' and 
+			meta_key = 'ent_ref' and meta_value=%s;";
+		  $pid = $wpdb->get_var($wpdb->prepare($s,$entref));
+		  return $pid;
+	  }
+	  static function get_postname_by_entref($entref){
+		  global $wpdb;
+		  $s = "select post_name from ".$wpdb->postmeta." PM,
+			".$wpdb->posts." P 
+			where P.ID = PM.post_id and P.post_status = 'publish' and 
+			meta_key = 'ent_ref' and meta_value=%s;";
+		  $pid = $wpdb->get_var($wpdb->prepare($s,$entref));
+		  return $pid;
+	  }
 
 }
