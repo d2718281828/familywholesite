@@ -95,7 +95,7 @@ class EntLoader {
 	  $m = $this->reports("phase2","phase3","placecode");
 	  return $m;
   }
-  protected testTrasnalte(){
+  protected function testTrasnalte(){
 	  $test = "Husband of {a marians:Marian}, Derek’s cousin, and father
 of {a karas:Kara} and {a rhians:Rhian}.";
 	  $m = "<br>".$test;

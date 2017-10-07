@@ -94,7 +94,7 @@ class EntCPost  {
 				$o.=$pair[1];
 				break;
 				default:
-				$o.="[".$pair[0]." ".$pair[1]."]";
+				$o.="[".$pair[0]."~".$pair[1]."]";
 			}
 		}
 		return $o;
@@ -110,7 +110,7 @@ class EntCPost  {
 				return $o;
 			}
 			if ($lb>$p) $o[] = ["=", substr($txt,$p,$lb-$p)];
-			$rb = strpos($txt,"{",$lb+1);
+			$rb = strpos($txt,"}",$lb+1);
 			if ($rb===false) $rb = strlen($txt);
 			$bl = strpos($txt," ",$lb+1);
 			if ($bl===false || $bl > $rb) $arg = "";
