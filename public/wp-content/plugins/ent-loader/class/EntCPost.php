@@ -143,8 +143,8 @@ class EntCPost  {
 	*
 	*/
 	protected function deLineEnd($txt){
-		if (substr($txt,-1)=="\n") return substr($txt,0,strlen($txt)-1);
-		return $txt;		
+		$t = str_replace("\n"," ",$txt);
+		return str_replace("<p>","\n\n",$t);
 	}
 	static public function makeName($str){
 		$s = str_replace(" ","_",$str);

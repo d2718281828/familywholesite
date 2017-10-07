@@ -30,7 +30,7 @@ class EntLoader {
 	  add_action("init", [$this,"init"]);
 	  $up = wp_upload_dir();
 	  $this->input = $up["basedir"]."/nodes";
-	  $this->testset = ["neils","marians","joans","rhians","euston-thetford-norfolk","bens","violet","markmac"];
+	  $this->testset = ["neils","marians","joans","rhians","20-raglan-st-lowestoft-suffolk","euston-thetford-norfolk","bens","violet","markmac"];
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
@@ -92,7 +92,7 @@ class EntLoader {
 	  
 	  $this->phase3();		// re-save and convert text
 	  
-	  $m = $this->reports("phase2","phase3","placecode");
+	  $m = $this->reports("makeplaces","phase2","phase3","placecode");
 	  return $m;
   }
   protected function testTrasnalte(){

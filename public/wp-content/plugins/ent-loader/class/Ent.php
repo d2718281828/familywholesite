@@ -149,6 +149,8 @@ class Ent  {
 			if ($prop=="index"){
 				$vv = "";
 				foreach ($val as $entry) $vv.="<br />".implode("-",$entry);
+			} elseif(!is_string($val)) {
+ 				$vv = print_r($val,true);
 			} else $vv = htmlentities($val);
 			$m.='<p><strong>'.$prop.'</strong> '.$vv.'</p>';
 		}
