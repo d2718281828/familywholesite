@@ -182,6 +182,10 @@ of {a karas:Kara} and {a rhians:Rhian}.";
 	  $this->report["makeplaces"] =  $this->listPlaces();
 	  return;
   }
+  /**
+  * get the place string from a person, make it into an ent-like token, create a place with that token as ent_ref,
+  * and add it as an ent_link_ to that person
+  */
   protected function translatePlace($ent, $property){
 	  $pr=$ent->get($property);
 	  if (!$pr) return;
@@ -213,11 +217,11 @@ of {a karas:Kara} and {a rhians:Rhian}.";
 	  $m = "<h2>Phase 2</h2>";
 	  
 	  // pick up the hanging refs
-	  $s = "select * from ".$wpdb->postmeta." where meta_key like 'ent_link_%';";
+	  $s = "select * from ".$wpdb->postmeta." where meta_key like 'ent#_link#_%' ESCAPE '#';";
 	  $refs = $wpdb->get_results($s,ARRAY_A);
 	  foreach ($refs as $ref){
 		  $entref = $ref["meta_value"];
-		  $prop = substr($ref["meta_key"],9); // everything after the ent_link_ is the actual prooperty namespace
+		  $prop = substr($ref["meta_key"],9); // everything after the ent_link_ is the actual prooperty name
 		  $actual_id = EntCPost::get_postid_by_entref($entref);
 		  $m.="<br/>Resolved ".$prop." for ".$ref["post_id"].", ".$entref;
 		  if ($actual_id){
@@ -226,7 +230,7 @@ of {a karas:Kara} and {a rhians:Rhian}.";
 			  delete_post_meta($ref["post_id"],$ref["meta_key"]); 
 		  }
 	  }
-	  
+	  	  
 	  // will be for every cpost
 	  foreach ($this->testset as $test){
 		$cp = $this->cposts[$test];

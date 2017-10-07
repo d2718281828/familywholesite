@@ -8,19 +8,18 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-need a phase 3 which drives the update again - and need another req value (0,1,2) to direct it to use normal get
-	also to translate the descriptions
-add places on load
+add places on load and make sure that they are assigned properly as attribute values, e.g. place of birth.
 
-Create the virtual places. give them virtual ent ids and add those to the post. 
-
+Want to be able to add events like "Moved to <new place>", can then tag that event with the whole family. Will timeline handle that?
+EntLoader pictures
+Tagging pictures based on the index
+Auto adding pictures tto an event??
 person pics link
 people, places etc shortcodes
 how to model marriages/spouses. Possibly use wedding event. In the album just a simple spouse field.
 set up test env
-EntLoader pictures
 test duplicate person
-siblings list - full and half. Also children
+siblings list - full and half
 */
 namespace FamilySite;
 use CPTHelper\CptHelper;

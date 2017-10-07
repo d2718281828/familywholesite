@@ -92,7 +92,7 @@ class EntCPost  {
 		foreach ($pairs as $pair){
 			switch($pair[0]){
 				case "=":
-				if ($including) $o.=$pair[1];
+				if ($including) $o.=$this->deLineEnd($pair[1]);
 				break;
 				case "iffor":
 				$including = false;
@@ -138,6 +138,13 @@ class EntCPost  {
 	}
 	protected function xdate($str){
 		return str_replace("/","-",$str);
+	}
+	/**
+	*
+	*/
+	protected function deLineEnd($txt){
+		if (substr($txt,-1)=="\n") return substr($txt,0,strlen($txt)-1);
+		return $txt;		
 	}
 	static public function makeName($str){
 		$s = str_replace(" ","_",$str);
