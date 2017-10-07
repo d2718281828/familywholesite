@@ -92,7 +92,7 @@ class EntLoader {
 	  
 	  $this->phase3();		// re-save and convert text
 	  
-	  $m = $this->reports("phase2","phase3","placecode");
+	  $m = $this->reports("makeplaces","phase1","phase2","phase3","placecode");
 	  return $m;
   }
   protected function testTrasnalte(){
