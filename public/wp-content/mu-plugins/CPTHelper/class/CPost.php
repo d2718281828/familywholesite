@@ -236,7 +236,8 @@ class CPost {
 		$cl = get_class($this);
 		if ($this->is_error) return $cl.":BAD ".$this->error_message;
 		if ($this->postid<0) return $cl.":NEW:".$this->pends["post_name"]."(".$this->type.")";
-        return $cl.":".$this->postid."(".$this->type.")";
+		$m = $cl.($this->post ? $this->post->post_title : "").":[".$this->postid."](".$this->type.")"
+        return $m;
     }
 	public function showAllPend(){
 		$m = "<h3>".$this->pends["post_title"]."</h3>";

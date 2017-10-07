@@ -30,7 +30,7 @@ class EntLoader {
 	  add_action("init", [$this,"init"]);
 	  $up = wp_upload_dir();
 	  $this->input = $up["basedir"]."/nodes";
-	  $this->testset = ["neils","marians","joans","rhians","euston-thetford-norfolk","bens","violet","markmac"];
+	  $this->testset = ["neils","marians","joans","rhians","20-raglan-st-lowestoft-suffolk","euston-thetford-norfolk","bens","violet","markmac"];
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
@@ -43,7 +43,9 @@ class EntLoader {
 	  $this->numfiles = 0;	 
 	  $this->set = [];
   }
-  //phase 1 - from nodes files to CPost pre-entries
+  /**
+  * COMMAND read in from nodes files to CPost pre-entries
+  */
   public function load($dir = null){
 	  if ($dir){
 		  $ddir = $dir;
@@ -71,7 +73,7 @@ class EntLoader {
 	  $m.="</ul>";
 	  $this->report["load"] = $m;
 	  
-	  // pre-filtering
+	  // pre-filtering - fixing problems with the album nodes
 	  $this->get("violet")->setMale(false);
 	  $this->setAncs("paulinst");
 	  //$this->setDescs("violet",5);
@@ -83,24 +85,16 @@ class EntLoader {
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  $this->reportLoad();
 	  
-	  //return $this->testTrasnalte();
+	  $this->build();		// create cposts out of ents
 	  
-	  $this->build();
 	  $this->phase1();		// initial WP create of everything.
 
-	  $this->phase2();		// resolve references.
+	  $this->phase2();		// resolve references in parameters, like mother, father
 	  
-	  $this->phase3();		// re-save and convert text
+	  $this->phase3();		// re-save and convert text in the descriptions
 	  
+	  $m.= "<p>Available reports: ".implode(",",array_keys($this->report));
 	  $m = $this->reports("makeplaces","phase1","phase2","phase3","placecode");
-	  return $m;
-  }
-  protected function testTrasnalte(){
-	  $test = "Husband of {a marians:Marian}, Derek’s cousin, and father
-of {a karas:Kara} and {a rhians:Rhian}.";
-	  $m = "<br>".$test;
-	  $convert = new EntCPost($this);
-	  $m.= "<br>".$convert->xlateText($test);
 	  return $m;
   }
   public function deleteAll(){
@@ -144,6 +138,9 @@ of {a karas:Kara} and {a rhians:Rhian}.";
 	  
 	  $this->report["afterload"] = $m;
   }
+  /**
+  * create cposts out of ents, for people and the newly made places
+  */
   protected function build(){
 	  
 	  $convert = new EntCPost($this);
@@ -201,6 +198,7 @@ of {a karas:Kara} and {a rhians:Rhian}.";
 			"ent_ref"=>$token,
 		  ];
 		  $z->reorg();
+		  $z->digestAtts();
 		  
 		  $this->newplaces[$token] = $z;
 	  } else $z = $this->newplaces[$token];

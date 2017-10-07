@@ -34,6 +34,9 @@ class Ent  {
 	public function isWanted(){
 		return $this->wanted;
 	}
+	/**
+	* Read the file to bring in this ent
+	*/
 	protected function getit($fname){
 		$content = file_get_contents($this->sourcedir.$fname);
 		$this->size = strlen($content);
@@ -86,6 +89,15 @@ class Ent  {
 	public function get($prop){
 		return isset($this->props[$prop]) ? $this->props[$prop] : null;
 	}
+	/**
+	* get all the properties where the property name starts with $start - it needs to be a prop=>val map
+	*/
+	public function getPropsLike($start){
+		$res = [];
+		$keez = array_keys($this->props);
+		foreach($keez as $kee) $res[$kee] = $this->props[$kee];
+		return $res;
+	}
 	public function set($prop,$val){
 		$this->props[$prop] = $val;
 	}
@@ -96,9 +108,9 @@ class Ent  {
 		if (isset($this->props["type"])) $this->type = $this->props["type"];
 	}
 	/**
-	* Any further special processing for different types of attribute
+	* Any further special processing for different types of attribute. Applies to virtuals as well as reals.
 	*/
-	protected function digestAtts(){
+	public function digestAtts(){
 		// process the markup
 		$for = ["description"];
 		foreach ($for as $att){
@@ -149,6 +161,8 @@ class Ent  {
 			if ($prop=="index"){
 				$vv = "";
 				foreach ($val as $entry) $vv.="<br />".implode("-",$entry);
+			} elseif(!is_string($val)) {
+ 				$vv = print_r($val,true);
 			} else $vv = htmlentities($val);
 			$m.='<p><strong>'.$prop.'</strong> '.$vv.'</p>';
 		}

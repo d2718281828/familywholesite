@@ -24,6 +24,8 @@ class EntCPost  {
 		if ($s=$ent->get("picnode")) $new["ent_link_featured"] = strtolower($s);
 		$new["ent_links"] = $ent->get("index");
 		
+		$new = array_merge($new, $ent->getPropsLike("ent_link_"));
+		
 		switch($new["post_type"]){
 			case "fs_person":
 			$new["post_name"] = $this->personName($ent);
@@ -126,7 +128,7 @@ class EntCPost  {
 		$cpost->set("post_content", $this->wpRender($desc));
 		
 		$cpost->on_update(2);		// re-save it, checking the custom fields and ensuring consistency
-		$m.="<br />Phase 3 on ".$cpost->get("post_title");
+		$m.="<br />Phase 3 on ".$cpost->show();
 		return $m;
 	}
 	/**
@@ -143,8 +145,8 @@ class EntCPost  {
 	*
 	*/
 	protected function deLineEnd($txt){
-		if (substr($txt,-1)=="\n") return substr($txt,0,strlen($txt)-1);
-		return $txt;		
+		$t = str_replace("\n"," ",$txt);
+		return str_replace("<p>","\n\n",$t);
 	}
 	static public function makeName($str){
 		$s = str_replace(" ","_",$str);
