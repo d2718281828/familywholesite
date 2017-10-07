@@ -83,7 +83,7 @@ class EntLoader {
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  $this->reportLoad();
 	  
-	  return $this->testTrasnalte();
+	  //return $this->testTrasnalte();
 	  
 	  $this->build();
 	  $this->phase1();		// initial WP create of everything.

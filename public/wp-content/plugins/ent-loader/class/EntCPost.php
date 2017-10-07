@@ -17,7 +17,8 @@ class EntCPost  {
 		$new["post_type"] = $this->xlateType($enttype);
 		$new["post_title"] = $ent->get("title");
 		// this will need to be translated when all the cposts are in.
-		$new["post_content"] = $ent->get("description");
+		$new["post_content"] = "pending";
+		$new["ent_curly_desc"] = $ent->get("description");
 		// the ent_ properties are for resolution later
 		$new["ent_ref"] = $ent->key();
 		if ($s=$ent->get("picnode")) $new["ent_link_featured"] = strtolower($s);
@@ -82,41 +83,35 @@ class EntCPost  {
 		return "post";
 	}
 	/**
-	* Convert link references - this will be tricky.
+	* Prepare my curly markup for Wordpress post content
+	* @param $struct is an array of parsed things 
 	*/
-	public function xlateText($txt){
+	public function wpRender($pairs){
 		$o = "";
-		$pairs = $this->parseit($txt);
 		$including = true;
 		foreach ($pairs as $pair){
 			switch($pair[0]){
 				case "=":
-				$o.=$pair[1];
+				if ($including) $o.=$pair[1];
+				break;
+				case "iffor":
+				$including = false;
+				break;
+				case "endif":
+				$including = true;
+				break;
+				case "a":
+				$args = $pair[1][0];
+				if (count($pair[1])>1) {
+					$args.=" ";
+					if (strpos($pair[1][1]," ")!==false) $args.='"'.$pair[1][1].'"';
+					else $args.=$pair[1][1];
+				} 
+				if ($including) $o.="[".$pair[0]." ".$args."]";
 				break;
 				default:
-				$o.="[".$pair[0]."~".$pair[1]."]";
+				if ($including) $o.="[".$pair[0]." ".$pair[1]."]";
 			}
-		}
-		return $o;
-	}
-	// eeek - this code should bee in ent.
-	protected function parseit($txt){
-		$o = [];
-		$p = 0;
-		while ($p < strlen($txt)){
-			$lb = strpos($txt,"{",$p);
-			if ($lb===false){
-				$o[] = ["=", substr($txt,$p)];
-				return $o;
-			}
-			if ($lb>$p) $o[] = ["=", substr($txt,$p,$lb-$p)];
-			$rb = strpos($txt,"}",$lb+1);
-			if ($rb===false) $rb = strlen($txt);
-			$bl = strpos($txt," ",$lb+1);
-			if ($bl===false || $bl > $rb) $arg = "";
-			else $arg = substr($txt, $bl+1, $rb-$bl-1);
-			$o[] = [substr($txt,$lb+1, $bl-$lb-1), $arg];
-			$p = $rb+1;
 		}
 		return $o;
 	}
@@ -125,8 +120,11 @@ class EntCPost  {
 	*/
 	public function phase3($cpost){
 		$m="";
-		$desc = $cpost->get("post_content");
-		$cpost->set("post_content", $this->xlateText($desc));
+		
+		// resolve the descriptions
+		$desc = $cpost->get("ent_curly_desc");	// should be array
+		$cpost->set("post_content", $this->wpRender($desc));
+		
 		$cpost->on_update(2);		// re-save it, checking the custom fields and ensuring consistency
 		$m.="<br />Phase 3 on ".$cpost->get("post_title");
 		return $m;

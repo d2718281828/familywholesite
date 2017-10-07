@@ -41,6 +41,7 @@ class Ent  {
 		$this->firstline = $lines[0];
 		$this->numlines = count($lines);
 		$this->digest($lines);
+		$this->digestAtts();
 	}
 	protected function digest($lines){
 		$lastprop = "";
@@ -88,9 +89,57 @@ class Ent  {
 	public function set($prop,$val){
 		$this->props[$prop] = $val;
 	}
+	/**
+	* This needs to be called from outside, later (cant remember  why)
+	*/
 	public function reorg(){
 		if (isset($this->props["type"])) $this->type = $this->props["type"];
 	}
+	/**
+	* Any further special processing for different types of attribute
+	*/
+	protected function digestAtts(){
+		// process the markup
+		$for = ["description"];
+		foreach ($for as $att){
+			if (isset($this->props[$att])) $this->props[$att] = $this->parseMarkup($this->props[$att]);
+		}
+	}
+	/**
+	* For description and other marked up fields, convert them into a sequence of pairs
+	* @param $txt string containing my trademark markup language with curly brackets
+	* @return list of pairs of [operation, argument]. For neat text, the operation is =
+	* Process the values a bit, so a tags are split by colon
+	*/
+	protected function parseMarkup($txt){
+		$o = [];
+		$p = 0;
+		while ($p < strlen($txt)){
+			$lb = strpos($txt,"{",$p);
+			if ($lb===false){
+				$o[] = ["=", substr($txt,$p)];
+				return $o;
+			}
+			if ($lb>$p) $o[] = $this->makePair("=", substr($txt,$p,$lb-$p));
+			$rb = strpos($txt,"}",$lb+1);
+			if ($rb===false) $rb = strlen($txt);
+			$bl = strpos($txt," ",$lb+1);
+			if ($bl===false || $bl > $rb) $arg = "";
+			else $arg = substr($txt, $bl+1, $rb-$bl-1);
+			$o[] = $this->makePair(substr($txt,$lb+1, $bl-$lb-1), $arg);
+			$p = $rb+1;
+		}
+		return $o;
+	}
+	protected function makePair($op,$arg){
+		switch($op){
+			case 'a':
+			return [$op, explode(":",$arg)];
+			default:
+			return [$op,$arg];
+		}
+	}
+	// used for debugging
 	public function show(){
 		return $this->key.'-'.$this->size.'-'.$this->numlines.'('.$this->get("title").')'.$this->gender;
 	}

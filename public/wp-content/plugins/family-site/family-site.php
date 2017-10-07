@@ -129,6 +129,7 @@ class FamilySite {
   public function do_a($att,$content,$tag){
 	  if (isset($att[0]) && $att[0]){
 		  $cp = CptHelper::makeByName($att[0]);
+		  if ($cp===null) return "-".$att[0]." not known-"
 		  if ($content) $text = do_shortcode($content);
 		  elseif (isset($att[1]) && $att[1]) $text = $att[1];
 		  else $text = null;
