@@ -94,8 +94,10 @@ class Ent  {
 	*/
 	public function getPropsLike($start){
 		$res = [];
-		$keez = array_keys($this->props);
-		foreach($keez as $kee) $res[$kee] = $this->props[$kee];
+		$len = strlen($start);
+		foreach($this->props as $kee=>$val) {
+			if (substr($kee,0,$len)==$start) $res[$kee] = $val;
+		}
 		return $res;
 	}
 	public function set($prop,$val){

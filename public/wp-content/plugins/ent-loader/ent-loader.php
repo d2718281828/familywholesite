@@ -151,9 +151,12 @@ class EntLoader {
 	  }
 	  $this->makePlaces();
 
+	  $m = "<h2>Build of places</h2>";
 	  foreach($this->newplaces as $id=>$obj) {
 		  $this->cposts[$id] = $convert->make($obj);
+		  $m.=$this->cposts[$id]->showAll();
 	  }
+	  $this->report["buildplaces"] = $m;
   
   }
   protected function phase1(){
