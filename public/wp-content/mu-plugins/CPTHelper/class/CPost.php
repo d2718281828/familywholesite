@@ -251,7 +251,7 @@ class CPost {
 	*/
 	public function showAll(){
 		$m = "<h4>".($this->post ? $this->post->post_title : $this->type."-".$this->postid) . "</h4>";
-		$m.= "<p><strong>ID=".$this->postid."</strong>, type".$this->type."</p>";
+		$m.= "<p><strong>ID=".$this->postid."</strong>, type ".$this->type."</p>";
 		foreach($this->props as $prop=>$pendval){
 			$m.= "<p><strong>".$prop."</strong> ".(is_string($pendval) ? htmlentities($pendval) : print_r($pendval,true))."</p>";
 		}

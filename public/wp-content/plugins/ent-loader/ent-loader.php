@@ -140,6 +140,7 @@ class EntLoader {
   }
   /**
   * create cposts out of ents, for people and the newly made places
+  * The cposts are all virtual at this point, they havent been created.
   */
   protected function build(){
 	  
@@ -154,9 +155,10 @@ class EntLoader {
 	  $m = "<h2>Build of places</h2>";
 	  foreach($this->newplaces as $id=>$obj) {
 		  $this->cposts[$id] = $convert->make($obj);
-		  $m.=$this->cposts[$id]->showAll();
+		  $m.=$this->cposts[$id]->showAllPend();
 	  }
-	  $m.= $this->cposts["violet"]->showAll();
+	  $m.= $this->cposts["violet"]->showAllPend();
+	  $m.= $this->set["violet"]->showAll();
 	  $this->report["buildplaces"] = $m;
   
   }
