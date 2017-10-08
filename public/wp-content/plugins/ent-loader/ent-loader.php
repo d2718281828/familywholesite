@@ -146,11 +146,12 @@ class EntLoader {
 	  
 	  $convert = new EntCPost($this);
 
+	  $this->makePlaces();
+
 	  foreach($this->set as $id=>$obj) {
 		  if (!$obj->isWanted()) continue;
 		  $this->cposts[$id] = $convert->make($obj);
 	  }
-	  $this->makePlaces();
 
 	  $m = "<h2>Build of places</h2>";
 	  foreach($this->newplaces as $id=>$obj) {
