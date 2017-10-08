@@ -167,6 +167,7 @@ class Ent  {
 	public function show(){
 		$m = $this->key.'-'.$this->size.'-'.$this->numlines.'('.$this->get("title").')'.$this->gender;
 		if ($this->media) $m.=":MEDIA=".count($this->media);
+		if ($this->isWanted()) $m.="*";
 		return $m;
 	}
 	public function showAll(){

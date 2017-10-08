@@ -94,7 +94,7 @@ class EntLoader {
 		  if ($fil=='.' || $fil=='..') continue;
 		  $full = $adir.'/'.$fil;
 		  if (is_dir($full)){
-			  $m.=$this->load($full);
+			  $m.=$this->load($ddir.'/'.$fil);
 		  } else {
 			  $key = Ent::makeKey($fil);
 			  if (isset($this->set[$key]){

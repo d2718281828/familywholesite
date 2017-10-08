@@ -8,16 +8,18 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-add places on load and make sure that they are assigned properly as attribute values, e.g. place of birth.
+neils is bens daughter. Even though he was male. saving him solved the problem.
+formatting for picture tags
+remove posted by for people, places events
+add the stephens's to wanted
+id there any point tagging photos with events??
 
 Want to be able to add events like "Moved to <new place>", can then tag that event with the whole family. Will timeline handle that?
 EntLoader pictures
 Tagging pictures based on the index
 Auto adding pictures tto an event??
 person pics link
-people, places etc shortcodes
 how to model marriages/spouses. Possibly use wedding event. In the album just a simple spouse field.
-set up test env
 test duplicate person
 siblings list - full and half
 */
