@@ -24,9 +24,9 @@ class EntCPost  {
 		if ($s=$ent->get("picnode")) $new["ent_link_featured"] = strtolower($s);
 		$new["ent_links"] = $ent->get("index");
 		
-		if ($ent->key()=="violet") echo "<p>****** Violets make before ".print_r($new,true);
+		if ($ent->key()=="violet") echo "<p>****** Violets make before ".print_r(array_keys($new),true);
 		$new = array_merge($new, $ent->getPropsLike("ent_link_"));
-		if ($ent->key()=="violet") echo "<p>****** Violets make after ".print_r($new,true);
+		if ($ent->key()=="violet") echo "<p>****** Violets make after ".print_r(array_keys($new),true);
 		
 		switch($new["post_type"]){
 			case "fs_person":

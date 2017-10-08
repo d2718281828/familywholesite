@@ -94,7 +94,7 @@ class EntLoader {
 	  $this->phase3();		// re-save and convert text in the descriptions
 	  
 	  $m.= "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m = $this->reports("makeplaces","phase1","phase2","phase3","placecode");
+	  $m = $this->reports("buildplaces","phase1","phase2","phase3","placecode");
 	  return $m;
   }
   public function deleteAll(){
@@ -156,6 +156,7 @@ class EntLoader {
 		  $this->cposts[$id] = $convert->make($obj);
 		  $m.=$this->cposts[$id]->showAll();
 	  }
+	  $m.= $this->cposts["violet"]->showAll();
 	  $this->report["buildplaces"] = $m;
   
   }
