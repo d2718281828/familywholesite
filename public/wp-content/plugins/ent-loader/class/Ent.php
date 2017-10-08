@@ -70,7 +70,7 @@ class Ent  {
 					$prop = strtolower(substr($l,1,$etag-1));
 					$lastprop = $prop;
 					if ($prop=="index"){
-						$this->props[$lastprop][] = explode("<x>", $last);
+						$this->props[$prop][] = explode("<x>", $last);
 					} else $this->props[$lastprop]=$last;
 				}
 			} else {
@@ -194,7 +194,9 @@ class Ent  {
 	static function makeKey($filename){
 		$point = strrpos($filename, ".");
 		$fn = ($point===false) ? $filename : substr($filename,0, $point);
-		return strtolower($fn);
+		$fn = strtolower($fn);
+		if (substr($fn,-2)=="_t") $fn = substr($fn,0,strlen($fn)-2);
+		return $fn;
 	}
 
 

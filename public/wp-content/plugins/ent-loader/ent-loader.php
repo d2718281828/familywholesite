@@ -329,6 +329,7 @@ class EntLoader {
 			  $ent->set("ent_is_image_for",$node);
 		  }
 		  // if the index is a tag for any known node
+		  echo "<p>*****"; print_r($ix);
 		  foreach($ix as $ixentry){
 			  if ($cpost=$this->get_cpost_by_entref($ixentry[0])){
 				$ent->setWanted();
@@ -367,6 +368,8 @@ class EntLoader {
 	  
   }
   protected function get_cpost_by_entref($entref){
+	  if ($entref=="derek" || $entref=="anna" || $entref=="maja" || $entref=="alex") return null;
+	  
 	  if (isset($this->knownEnts[$entref])) return $this->knownEnts[$entref];
 	  
 	  $pid = EntCPost::get_postid_by_entref($entref);
