@@ -13,8 +13,7 @@ namespace CPTHelper;
  * Compared to just using register_post_type() directly it doesnt add much value, but it is much more useful when you also add fields.
  * It is just one more line to add a new field which automatically gets added to the meta box for the post and gets saved for you.
  *
- * Late in the project, I added instance classes too, which feed off the CptHelper to get info about their custom data values.
- * There are currently a lot of functions in GSG related to specific post types which would have been better written on their instance classes.
+ * CPost is an instance class for the CPT, which feed off the CptHelper to get info about their custom data values.
  */
 
 /*
@@ -69,7 +68,7 @@ class CptHelper {
         $this->setup();
         $this->builtin = ($name===null);
         if (!$this->builtin){
-            if (TRACEIT) traceit("NEW CPT ".$slug);
+            if (WP_DEBUG) error_log("NEW CPT ".$slug);
             $this->labels = ['name'=>$plural, 'singular_name'=>$name,
               'add_new'=>"Add new ".$name,
               'add_new_item'=>"Add new ".$name,
@@ -160,7 +159,7 @@ class CptHelper {
 
         }
         add_action('save_post',[$this, 'save_post'], 1,2);
-		add_shortcode($this->labels["name"], [$this, 'list_them']);
+		if ($this->labels["name"]) add_shortcode(strtolower($this->labels["name"]), [$this, 'list_them']);
     }
     public function admin_init(){
         foreach($this->metaFields as $field) $field->admin_init();
@@ -305,7 +304,7 @@ class CptHelper {
 	public function list_them($atts,$content,$tag){
 		global $wpdb;
 		$s = "select * from ".$wpdb->posts." where post_type=%s";
-		$res = $wpdb->get_results($wpdb->prepare($s, $this->slug));
+		$res = $wpdb->get_results($wpdb->prepare($s, $this->posttype()));
 		$m = "<table>";
 		$m.= "<tr>".$this->list_heading()."</tr>";
 		foreach($res as $post) $m.="<tr>".$this->list_row($post)."</tr>";
