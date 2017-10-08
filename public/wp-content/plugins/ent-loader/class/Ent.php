@@ -101,7 +101,7 @@ class Ent  {
 		return $res;
 	}
 	public function set($prop,$val){
-		echo "<br/>Setting ent property ".$this->key."-".$prop."=".$val;
+		//echo "<br/>Setting ent property ".$this->key."-".$prop."=".$val;
 		$this->props[$prop] = $val;
 	}
 	/**

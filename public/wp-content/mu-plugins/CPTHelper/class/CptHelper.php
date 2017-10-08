@@ -30,10 +30,8 @@ namespace CPTHelper;
            ->addField(new FieldHelper("sub-heading","Subheading under the main header","This appears just below the white box on the page."))
            ->addField(new FieldHelper("title-short","Short version of the title","The default will be an abbreviation to ".$this->title_chars_short." chars"))
            ->addField(new FieldHelper("title-very-short","Very short version of the title","The default will be an abbreviation to ".$this->title_chars_very_short." chars"))
-           ->addField(new GSGStatistic("statistics","Stand-out Statistics","The most important statistics, highlighted for the public"))
            ->addField(new MediaSelector2("casestudy_logo","Logo for the case study","If there is one, it will be shown below the hero image."))
            ->addField(new FieldHelper("sequence","Sequence","Used to infuence the order that posts, pages etc are shown.".$seqdesc))
-           ->addField(new CPTSelectHelper("nabowner","Owning NAB","Which NAB 'owns' - is responsible for the content of - this item.",["posttype"=>"gsg_nab"]))
            ->allowComments()
            ->allowExcerpt();
 
@@ -162,6 +160,7 @@ class CptHelper {
 
         }
         add_action('save_post',[$this, 'save_post'], 1,2);
+		add_shortcode($this->labels["name"], [$this, 'list_them']);
     }
     public function admin_init(){
         foreach($this->metaFields as $field) $field->admin_init();
@@ -300,6 +299,27 @@ class CptHelper {
         global $post;
         if (TRACEIT) traceit( ($post) ? "POST-".$post->ID : "No Post");
     }
+	/**
+	* shortcode handler to list the custom posts on a page, in a table form
+	*/
+	public function list_them($atts,$content,$tag){
+		global $wpdb;
+		$s = "select * from ".$wpdb->posts." where post_type=%s";
+		$res = $wpdb->get_results($wpdb->prepare($s, $this->slug));
+		$m = "<table>";
+		$m.= "<tr>".$this->list_heading()."</tr>";
+		foreach($res as $post) $m.="<tr>".$this->list_row($post)."</tr>";
+		$m.= "</table>";
+		return $m;
+	}
+	protected function list_heading(){
+		return "<th>".$this->labels["singular_name"]."</th>";
+	}
+	protected function list_row($postobj){
+		$url = get_permalink($postobj);
+		$m = '<td><a href="'.$url.'">'.$postobj->post_title.'</a></td>';
+		return $m;
+	}
     /**
      * Static function which uses a class static variable which stores all of the CptHelpers indexed by the post type.
      * @param $slug

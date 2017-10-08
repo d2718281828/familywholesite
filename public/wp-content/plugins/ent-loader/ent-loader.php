@@ -47,6 +47,37 @@ class EntLoader {
   /**
   * COMMAND read in from nodes files to CPost pre-entries
   */
+  public function loadPeople(){
+	  $up = wp_upload_dir();
+	  $this->input = $up["basedir"]."/nodes";
+	  
+	  $this->load();
+	  
+	  // pre-filtering - fixing problems with the album nodes
+	  $this->get("violet")->setMale(false);
+	  $this->setAncs("paulinst");
+	  //$this->setDescs("violet",5);
+	  $this->setDescs("anc5",5);
+	  $this->setDescs("ans1",5);
+	  $this->setGenders();
+	  $this->wantedEvents();
+	  
+	  foreach($this->set as $id=>$obj) $obj->reorg();
+	  $this->reportLoad();
+	  
+	  $this->build();		// create cposts out of ents
+	  
+	  $this->phase1();		// initial WP create of everything.
+
+	  $this->phase2();		// resolve references in parameters, like mother, father
+	  
+	  $this->phase3();		// re-save and convert text in the descriptions
+	  
+	  $m.= "<p>Available reports: ".implode(",",array_keys($this->report));
+	  $m = $this->reports("phase1","phase2","phase3","placecode");
+	  return $m;
+	  
+  }
   public function load($dir = null){
 	  if ($dir){
 		  $ddir = $dir;
@@ -74,14 +105,78 @@ class EntLoader {
 	  $m.="</ul>";
 	  $this->report["load"] = $m;
 	  
-	  // pre-filtering - fixing problems with the album nodes
-	  $this->get("violet")->setMale(false);
-	  $this->setAncs("paulinst");
-	  //$this->setDescs("violet",5);
-	  $this->setDescs("anc5",5);
-	  $this->setDescs("ans1",5);
-	  $this->setGenders();
-	  $this->wantedEvents();
+  }
+  /**
+  * COMMAND delete everything which was loaded from ent
+  */
+  public function deleteAll(){
+	  global $wpdb;
+	  $s = 'select post_id from '.$wpdb->postmeta.' where meta_key="ent_ref";';
+	  $posts = $wpdb->get_col($s);
+	  $m = "";
+	  foreach ($posts as $post){
+		  $cp = CptHelper::make($post);
+		  $cp->destroy();
+		  $m.= ",".$post;
+	  }
+	  return $m;
+  }
+  /**
+  * COMMAND read in pics from album
+  */
+  public function loadPics(){
+	  $up = wp_upload_dir();
+	  $this->input = $up["basedir"]."/album";
+
+	  $this->load();
+	  
+	  $this->wantedPics();
+	  
+	  foreach($this->set as $id=>$obj) $obj->reorg();
+	  
+	  $this->build();		// create cposts out of ents
+	  
+	  $this->phase1();		// initial WP create of everything.
+
+	  $this->phase2();		// resolve references in parameters, like mother, father
+	  
+	  $this->phase3();		// re-save and convert text in the descriptions
+	  
+	  $m.= "<p>Available reports: ".implode(",",array_keys($this->report));
+	  $m = $this->reports("load","phase1","phase2","phase3");
+	  return $m;
+	  
+  }
+  public function loadPics($dir = null){
+	  $up = wp_upload_dir();
+
+	  if ($dir){
+		  $ddir = $dir;
+	  } else {
+		  $ddir = "";
+		  $this->loadStartPics();
+	  }
+	  $m = "<ul>";
+	  
+	  $adir = $this->input.'/'.$ddir;
+	  
+	  if (WP_DEBUG) error_log("Loading Ents from ".$adir);
+	  $list = scandir($adir);
+	  foreach ($list as $fil){
+		  if ($fil=='.' || $fil=='..') continue;
+		  $full = $adir.'/'.$fil;
+		  if (is_dir($full)){
+			  $m.=$this->loadPics($full);
+		  } else {
+			  $z = new Ent($fil, $ddir, $adir);
+			  $this->set[$z->key()] = $z;
+			  $m.= "<li>".$z->show()."</li>";
+		  }
+	  }
+	  $m.="</ul>";
+	  $this->report["load"] = $m;
+	  
+	  $this->wantedPics();
 	  
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  $this->reportLoad();
@@ -96,18 +191,6 @@ class EntLoader {
 	  
 	  $m.= "<p>Available reports: ".implode(",",array_keys($this->report));
 	  $m = $this->reports("buildplaces","phase1","phase2","phase3","placecode");
-	  return $m;
-  }
-  public function deleteAll(){
-	  global $wpdb;
-	  $s = 'select post_id from '.$wpdb->postmeta.' where meta_key="ent_ref";';
-	  $posts = $wpdb->get_col($s);
-	  $m = "";
-	  foreach ($posts as $post){
-		  $cp = CptHelper::make($post);
-		  $cp->destroy();
-		  $m.= ",".$post;
-	  }
 	  return $m;
   }
   protected function report3(){
