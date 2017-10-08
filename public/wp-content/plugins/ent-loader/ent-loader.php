@@ -97,7 +97,7 @@ class EntLoader {
 			  $m.=$this->load($ddir.'/'.$fil);
 		  } else {
 			  $key = Ent::makeKey($fil);
-			  if (isset($this->set[$key]){
+			  if (isset($this->set[$key])){
 				$z = $this->set[$key];
 				$z->addFile($fil, $ddir, $adir);
 			  } else {
