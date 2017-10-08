@@ -25,6 +25,7 @@ class EntLoader {
 	protected $cposts = [];		// CPost objects, before creation
 	protected $report = "";
 	protected $newplaces = [];
+	protected $knownEnts = [];
 
   public function __construct(){
 	  add_action("init", [$this,"init"]);
@@ -94,7 +95,7 @@ class EntLoader {
 		  if ($fil=='.' || $fil=='..') continue;
 		  $full = $adir.'/'.$fil;
 		  if (is_dir($full)){
-			  $m.=$this->load($ddir.'/'.$fil);
+			  $this->load($ddir.'/'.$fil);
 		  } else {
 			  $key = Ent::makeKey($fil);
 			  if (isset($this->set[$key])){
@@ -104,11 +105,8 @@ class EntLoader {
 				$z = new Ent($fil, $ddir, $adir);
 				$this->set[$key] = $z;
 			  }
-			  $m.= "<li>".$z->show()."</li>";
 		  }
 	  }
-	  $m.="</ul>";
-	  $this->report["load"] = $m;
 	  
   }
   /**
@@ -134,9 +132,9 @@ class EntLoader {
 	  $this->input = $up["basedir"]."/album";
 
 	  $this->load();
-	  $this->reportLoad();
 	  
 	  $this->wantedPics();
+	  $this->reportLoad();
 	  
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  
@@ -172,7 +170,7 @@ class EntLoader {
   }
   protected function reportLoad($wantall=true){
   
-	  $m = "<h2>Loaded files</h2><ul>";
+	  $m = "<h2>Loaded files</h2><p>Total ".count($this->set)." items.</p><ul>";
 	  foreach ($this->set as $ent) {
 		  if ($wantall || $ent->isWanted()) $m.="<li>".$ent->show()."</li>";
 	  }
@@ -316,6 +314,67 @@ class EntLoader {
 	  
 	  foreach ($males as $m) $this->get($m)->setMale(true);
 	  foreach ($females as $f) $this->get($f)->setMale(false);
+  }
+  /**
+  * Determine whether a picture is wanted.
+  */
+  public function wantedPics(){
+	  foreach($this->set as $id=>$ent){
+		  $entid = $ent->key();
+		  $ix = $ent->get("index");
+		  $picdate = $ent->get("date_created");
+		  // if any current nodes have this as a featured image
+		  if ($node=$this->isImageFor($entid)){
+			  $ent->setWanted();
+			  $ent->set("ent_is_image_for",$node);
+		  }
+		  // if the index is a tag for any known node
+		  foreach($ix as $ixentry){
+			  if ($cpost=$this->get_cpost_by_entref($ixentry[0])){
+				$ent->setWanted();
+				$ent->tagWith($cpost);
+			  }
+		  }
+		  // if the picture is on the same date as an existing event (only if exactly one event)
+		  if ($theevent=$this->getEventWithDate($picdate)){
+			  $ent->setWanted();
+			  $ent->set("event",$theevent);			  
+		  }
+	  }
+  }
+  protected function isImageFor($entid){
+	  global $wpdb;
+	  $s = "select PM.post_id from ".$wpdb->postmeta." PM,".$wpdb->posts." P 
+	  where PM.post_id = P.ID
+	  and P.post_status='publish'
+	  and PM.meta_key='ent_link_featured'
+	  and PM.meta_value = %s";
+	  $res = $wpdb->get_results($wpdb->prepare($s,$entid),ARRAY_A);
+	  if (count($res)>0) return $res[0]["post_id"];
+	  return null;
+  }
+  protected function getEventWithDate($date){
+	  global $wpdb;
+	  $s = "select PM.post_id from ".$wpdb->postmeta." PM,".$wpdb->posts." P 
+	  where PM.post_id = P.ID
+	  and P.post_status='publish'
+	  and P.post_type='fs_event'
+	  and PM.meta_key='actual_date'
+	  and PM.meta_value = %s";
+	  $res = $wpdb->get_results($wpdb->prepare($s,$date),ARRAY_A);
+	  if (count($res)==1) return $res[0]["post_id"];
+	  return null;
+	  
+  }
+  protected function get_cpost_by_entref($entref){
+	  if (isset($this->knownEnts[$entref])) return $this->knownEnts[$entref];
+	  
+	  $pid = EntCPost::get_postid_by_entref($entref);
+	  if ($pid) $cp = CptHelper::make($pid);
+	  else $cp = null;
+	  
+	  $this->knownEnts[$entref] = $cp;
+	  return $cp;
   }
   public function wantedEvents(){
 	  $events = ["slub","vvcaleb","wedpsan","vvwpedor","vvwmarhe","vvwjonpa","vvwaldor",];

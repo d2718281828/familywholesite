@@ -13,6 +13,7 @@ formatting for picture tags
 remove posted by for people, places events
 add the stephens's to wanted
 id there any point tagging photos with events??
+events need to be taggable by person
 
 Want to be able to add events like "Moved to <new place>", can then tag that event with the whole family. Will timeline handle that?
 EntLoader pictures

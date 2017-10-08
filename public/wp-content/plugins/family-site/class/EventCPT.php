@@ -15,7 +15,7 @@ class EventCPT extends FSCpt {
         ->set_taxonomy("event_tax")
         ->setClass("FamilySite\Event")
         ->addField(new DateHelper("actual_date", "Actual date", "Date event started"))
-        ->addField(new FieldHelper("duration", "Duration", "The length of the event in days"))
+        ->addField(new FieldHelper("duration", "Duration", "The length of the event in days - leave blank if it took place on only one day"))
         ->addField(new CPTSelectHelper("event_place", "Place of the event", "Place where the event occurred", ["posttype"=>"fs_place"]))
     ;
   }

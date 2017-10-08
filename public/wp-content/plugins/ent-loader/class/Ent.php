@@ -14,7 +14,8 @@ class Ent  {
 	protected $wanted = false;
 	protected $gender=null;  // only applicable to people. Set during the ancestor process
 	protected $virtual = false;	// virtual is for those that are being created, not read from disk
-	protected $media = [];
+	protected $media = [];		// each element is a triplet describing the file
+	protected $tags = [];		// each element is a cpost for the item to tag this with
 	
 	public function __construct($filename, $reldir = null, $fulldir = null){
 		$this->key = self::makeKey($filename);
@@ -47,7 +48,7 @@ class Ent  {
 	* Read the file to bring in this ent
 	*/
 	protected function getit($fname){
-		$content = file_get_contents($this->sourcedir.$fname);
+		$content = file_get_contents($this->sourcedir.'/'.$fname);
 		$this->size = strlen($content);
 		$lines = explode("\n",$content);
 		$this->firstline = $lines[0];
@@ -128,6 +129,12 @@ class Ent  {
 		foreach ($for as $att){
 			if (isset($this->props[$att])) $this->props[$att] = $this->parseMarkup($this->props[$att]);
 		}
+	}
+	/**
+	* This ent needs to be tagged with the entity represented by $cpost
+	*/
+	public function tagWith($cpost){
+		$this->tags[] = $cpost;
 	}
 	/**
 	* For description and other marked up fields, convert them into a sequence of pairs
