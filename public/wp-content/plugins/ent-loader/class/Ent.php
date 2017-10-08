@@ -14,15 +14,24 @@ class Ent  {
 	protected $wanted = false;
 	protected $gender=null;  // only applicable to people. Set during the ancestor process
 	protected $virtual = false;	// virtual is for those that are being created, not read from disk
+	protected $media = [];
 	
 	public function __construct($filename, $reldir = null, $fulldir = null){
-		$this->reldir = $reldir;
-		$this->sourcedir = $fulldir;
-		$this->key = str_replace(".txt","",strtolower($filename));
+		$this->key = self::makeKey($filename);
 		if ($fulldir){
-			$this->getit($filename);
+			$this->addFile($filename, $reldir, $fulldir);
 		} else {
 			$this->virtual = true;
+		}
+	}
+	public function addFile($filename, $reldir = null, $fulldir = null){
+		// if it is the descriptor file, then save it, otherwise, save up the media file details
+		if (substr($filename,-4)==".txt") {
+			$this->reldir = $reldir;
+			$this->sourcedir = $fulldir;
+			$this->getit($filename);
+		} else {
+			$this->media[] = [$filename, $reldir, $fulldir];
 		}
 	}
 	public function key(){
@@ -156,7 +165,9 @@ class Ent  {
 	}
 	// used for debugging
 	public function show(){
-		return $this->key.'-'.$this->size.'-'.$this->numlines.'('.$this->get("title").')'.$this->gender;
+		$m = $this->key.'-'.$this->size.'-'.$this->numlines.'('.$this->get("title").')'.$this->gender;
+		if ($this->media) $m.=":MEDIA=".count($this->media);
+		return $m;
 	}
 	public function showAll(){
 		$m = "";
@@ -171,6 +182,11 @@ class Ent  {
 		}
 		if ($this->gender) $m.='<p><strong>Gender</strong> '.$this->gender.'</p>';
 		return $m;
+	}
+	static function makeKey($filename){
+		$point = strrpos($filename, ".");
+		$fn = ($point===false) ? $filename : substr($filename,0, $point);
+		return strtolower($fn);
 	}
 
 

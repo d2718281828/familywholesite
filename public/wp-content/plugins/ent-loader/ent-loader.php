@@ -52,6 +52,7 @@ class EntLoader {
 	  $this->input = $up["basedir"]."/nodes";
 	  
 	  $this->load();
+	  $this->reportLoad();
 	  
 	  // pre-filtering - fixing problems with the album nodes
 	  $this->get("violet")->setMale(false);
@@ -74,7 +75,7 @@ class EntLoader {
 	  $this->phase3();		// re-save and convert text in the descriptions
 	  
 	  $m.= "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m = $this->reports("phase1","phase2","phase3","placecode");
+	  $m = $this->reports("loaded","phase1","phase2","phase3","placecode");
 	  return $m;
 	  
   }
@@ -85,8 +86,6 @@ class EntLoader {
 		  $ddir = "";
 		  $this->loadStart();
 	  }
-	  $m = "<ul>";
-	  
 	  $adir = $this->input.'/'.$ddir;
 	  
 	  if (WP_DEBUG) error_log("Loading Ents from ".$adir);
@@ -97,8 +96,14 @@ class EntLoader {
 		  if (is_dir($full)){
 			  $m.=$this->load($full);
 		  } else {
-			  $z = new Ent($fil, $ddir, $adir);
-			  $this->set[$z->key()] = $z;
+			  $key = Ent::makeKey($fil);
+			  if (isset($this->set[$key]){
+				$z = $this->set[$key];
+				$z->addFile($fil, $ddir, $adir);
+			  } else {
+				$z = new Ent($fil, $ddir, $adir);
+				$this->set[$key] = $z;
+			  }
 			  $m.= "<li>".$z->show()."</li>";
 		  }
 	  }
@@ -129,6 +134,7 @@ class EntLoader {
 	  $this->input = $up["basedir"]."/album";
 
 	  $this->load();
+	  $this->reportLoad();
 	  
 	  $this->wantedPics();
 	  
@@ -143,7 +149,7 @@ class EntLoader {
 	  //$this->phase3();		// re-save and convert text in the descriptions
 	  
 	  $m.= "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m = $this->reports("load","phase1","phase2","phase3");
+	  $m = $this->reports("loaded","phase1","phase2","phase3");
 	  return $m;
 	  
   }
@@ -164,17 +170,15 @@ class EntLoader {
 	$m.= ".".ord(substr($str,-1,1));
 	return $m;
   }
-  protected function reportLoad(){
+  protected function reportLoad($wantall=true){
   
-	  $m = $this->listWanted();
-	  //$m.= $this->listTypes("event");
-	  //$m.= $this->listTypes("place");
-	  
-	  $m.=$this->set["violet"]->showAll();
-	  $m.=$this->set["yvonne"]->showAll();
-	  
-	  
-	  $this->report["afterload"] = $m;
+	  $m = "<h2>Loaded files</h2><ul>";
+	  foreach ($this->set as $ent) {
+		  if ($wantall || $ent->isWanted()) $m.="<li>".$ent->show()."</li>";
+	  }
+	  $m.= "</ul>";
+	  	  
+	  $this->report["loaded"] = $m;
   }
   /**
   * create cposts out of ents, for people and the newly made places
@@ -204,9 +208,8 @@ class EntLoader {
   protected function phase1(){
 	  $m = "<h2>Phase 1</h2>";
 
-	  // will be for every cpost
-	  foreach ($this->testset as $test){
-		$cp = $this->cposts[$test];
+	  foreach ($this->cposts as $id=>$cp){
+		//$cp = $this->cposts[$test];
 		$rc = $cp->create();
 		$m.= "<br/>".$cp->get("post_title")." ".( $rc===false ? $cp->error_message : $rc);   
 	  }
@@ -274,10 +277,6 @@ class EntLoader {
 		  }
 	  }
 	  	  
-	  // will be for every cpost
-	  foreach ($this->testset as $test){
-		$cp = $this->cposts[$test];
-	  }
 	  $this->report["phase2"] = $m; 
 	  return $m;
   }
@@ -286,9 +285,8 @@ class EntLoader {
 	  $m = "<h2>Phase 3</h2>";
 	  $convert = new EntCPost($this);
 	  
-	  // will be for every cpost
-	  foreach ($this->testset as $test){
-		$cp = $this->cposts[$test];
+	  foreach ($this->cposts as $id=>$cp){
+		//$cp = $this->cposts[$test];
 		$m.=$convert->phase3($cp);
 	  }
 	  

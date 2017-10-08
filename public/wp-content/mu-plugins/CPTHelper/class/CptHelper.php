@@ -303,7 +303,7 @@ class CptHelper {
 	*/
 	public function list_them($atts,$content,$tag){
 		global $wpdb;
-		$s = "select * from ".$wpdb->posts." where post_type=%s";
+		$s = "select * from ".$wpdb->posts." where post_type=%s and post_status='publish';";
 		$res = $wpdb->get_results($wpdb->prepare($s, $this->posttype()));
 		$m = "<table>";
 		$m.= "<tr>".$this->list_heading()."</tr>";
