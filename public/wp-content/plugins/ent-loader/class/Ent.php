@@ -192,13 +192,15 @@ class Ent  {
 		return $m;
 	}
 	public function thumb(){
+		$m="x";
 		foreach($this->media as $mediafile){
 			if (substr($mediafile[0],-6,2)=="_t"){
 				$ud = wp_upload_dir();
-				return '<img src="'.$ud["url"].$mediafile[1]."/".$mediafile[0].'">';
+				return '<img src="'.$ud["baseurl"]."/album".$mediafile[1]."/".$mediafile[0].'">';
 			}
+			$m.=" ".substr($mediafile[0],-6,2);
 		}
-		return "";
+		return $m;
 	}
 	static function makeKey($filename){
 		$point = strrpos($filename, ".");
