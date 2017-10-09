@@ -8,6 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
+have a stop list for pictures that i dont want to include
 neils is bens daughter. Even though he was male. saving him solved the problem.
 	neil's kids not selected
 	joan not married to ben
@@ -15,12 +16,10 @@ if something has correspondence as the second tag dont select it
 the ent still needs to be tagged for anna, derek, yvonne etc, just not selected on that basis...
 add occupation to the info box
 formatting for picture tags
-remove posted by for people, places events
 add the stephens's to wanted
 also mr & mrs lively
 id there any point tagging photos with events??
 events need to be taggable by person
-have a stop list for pictures that i dont want to include
 GOT TO SORT OUT PAUL STEPHENS
 remove the sidebar from single
 
@@ -88,7 +87,7 @@ class FamilySite {
   }
 
   protected function setupTaxes(){
-    register_taxonomy("person_tax", "post", [
+    register_taxonomy("person_tax", ["post","fs_event"], [
       "labels"=>[
         "name"=>__("People","familysite"),
         "singular_name"=>__("Person","familysite"),

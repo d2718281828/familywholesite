@@ -328,7 +328,7 @@ class EntLoader {
 			  $ent->set("ent_is_image_for",$node);
 		  }
 		  // if the index is a tag for any known node
-		  echo "<p>*****"; print_r($ix);
+		  //echo "<p>*****"; print_r($ix);
 		  foreach($ix as $ixentry){
 			  if ($cpost=$this->get_cpost_by_entref($ixentry[0])){
 				$ent->setWanted();
