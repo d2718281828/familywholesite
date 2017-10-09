@@ -25,5 +25,8 @@ class Place extends FSPost {
   public function indexSection(){
     return "pictures";
   }
+	public function showPosted(){
+		return false;
+	}
 
 }

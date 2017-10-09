@@ -9,16 +9,25 @@ Author URI:
 */
 /* TODOs
 neils is bens daughter. Even though he was male. saving him solved the problem.
+	neil's kids not selected
+	joan not married to ben
+if something has correspondence as the second tag dont select it
+the ent still needs to be tagged for anna, derek, yvonne etc, just not selected on that basis...
+add occupation to the info box
 formatting for picture tags
 remove posted by for people, places events
 add the stephens's to wanted
+also mr & mrs lively
 id there any point tagging photos with events??
 events need to be taggable by person
+have a stop list for pictures that i dont want to include
+GOT TO SORT OUT PAUL STEPHENS
+remove the sidebar from single
 
 Want to be able to add events like "Moved to <new place>", can then tag that event with the whole family. Will timeline handle that?
 EntLoader pictures
 Tagging pictures based on the index
-Auto adding pictures tto an event??
+Auto adding pictures to an event??
 person pics link
 how to model marriages/spouses. Possibly use wedding event. In the album just a simple spouse field.
 test duplicate person

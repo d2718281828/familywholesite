@@ -158,7 +158,6 @@ class EntLoader {
 	  return $m;
   }
   protected function report2(){
-  
 	  $m = "";
 	  foreach($this->cposts as $id=>$cpost) $m.="<br />".$cpost->show()." - ".$this->end2($this->set[$id]->get("type"));
 	  return $m;
@@ -368,7 +367,7 @@ class EntLoader {
 	  
   }
   protected function get_cpost_by_entref($entref){
-	  if ($entref=="derek" || $entref=="anna" || $entref=="maja" || $entref=="alex") return null;
+	  if ($entref=="derek" || $entref=="anna" || $entref=="maja" || $entref=="alex" || $entref=="yvonne") return null;
 	  
 	  if (isset($this->knownEnts[$entref])) return $this->knownEnts[$entref];
 	  

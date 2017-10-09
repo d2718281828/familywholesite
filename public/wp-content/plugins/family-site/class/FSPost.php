@@ -143,6 +143,12 @@ class FSPost extends CPost {
 		$tt = $wpdb->get_results($wpdb->prepare($s,$matchingtag),ARRAY_A);
 		if (count($tt)>0) wp_delete_term($tt[0]["term_id"],$tt[0]["taxonomy"]);
     }
+	/**
+	* Whether to show the posted: section in single
+	*/
+	public function showPosted(){
+		return true;
+	}
 }
 
 

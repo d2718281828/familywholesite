@@ -42,4 +42,7 @@ class Event extends FSPost {
   public function getLinks(){
 	  return [];
   }
+	public function showPosted(){
+		return false;
+	}
 }

@@ -143,5 +143,8 @@ class Person extends FSPost {
 	  $birthname = $this->get("birthname");
       return '<a href="'.$url.'">'.($birthname ?: $this->get("post_title")).'</a>';
     }
+	public function showPosted(){
+		return false;
+	}
 
 }
