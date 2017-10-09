@@ -191,6 +191,15 @@ class Ent  {
 		if ($this->gender) $m.='<p><strong>Gender</strong> '.$this->gender.'</p>';
 		return $m;
 	}
+	public function thumb(){
+		foreach($this->media as $mediafile){
+			if (substr($mediafile[0],-6,2)=="_t"){
+				$ud = wp_upload_dir();
+				return '<img src="'.$ud["url"].$mediafile[1]."/".$mediafile[0].'">';
+			}
+		}
+		return "";
+	}
 	static function makeKey($filename){
 		$point = strrpos($filename, ".");
 		$fn = ($point===false) ? $filename : substr($filename,0, $point);

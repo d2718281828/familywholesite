@@ -134,7 +134,7 @@ class EntLoader {
 	  $this->load();
 	  
 	  $this->wantedPics();
-	  $this->reportLoad();
+	  $this->reportLoad(false);
 	  
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  
@@ -171,7 +171,7 @@ class EntLoader {
   
 	  $m = "<h2>Loaded files</h2><p>Total ".count($this->set)." items.</p><ul>";
 	  foreach ($this->set as $ent) {
-		  if ($wantall || $ent->isWanted()) $m.="<li>".$ent->show()."</li>";
+		  if ($wantall || $ent->isWanted()) $m.="<li>".$ent->show().$ent->thumb()."</li>";
 	  }
 	  $m.= "</ul>";
 	  	  
