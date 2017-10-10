@@ -33,6 +33,8 @@ class EntLoader {
 	  $this->input = $up["basedir"]."/nodes";
 	  $this->testset = ["neils","marians","joans","rhians","20-raglan-st-lowestoft-suffolk",
 	  "euston-thetford-norfolk","58a-robson-avenue-willesden-london-nw10","bens","violet","markmac"];
+	  // pictures we definitely dont want
+	  $this->blackPix = [];
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
@@ -169,11 +171,14 @@ class EntLoader {
   }
   protected function reportLoad($wantall=true){
   
-	  $m = "<h2>Loaded files</h2><p>Total ".count($this->set)." items.</p><ul>";
+	  $m = "<h2>Loaded files</h2><ul>";
+	  $numwanted = 0;
 	  foreach ($this->set as $ent) {
 		  if ($wantall || $ent->isWanted()) $m.="<li>".$ent->show().$ent->thumb()."</li>";
+		  if ($ent->isWanted()) $numwanted++;
 	  }
 	  $m.= "</ul>";
+	  $m.= "<p>Total ".count($this->set)." items, ".$numwanted." wanted.</p>";
 	  	  
 	  $this->report["loaded"] = $m;
   }
@@ -328,10 +333,11 @@ class EntLoader {
 			  $ent->set("ent_is_image_for",$node);
 		  }
 		  // if the index is a tag for any known node
-		  //echo "<p>*****"; print_r($ix);
+		  // except for the immediate family.
 		  foreach($ix as $ixentry){
 			  if ($cpost=$this->get_cpost_by_entref($ixentry[0])){
-				$ent->setWanted();
+				$eid = $ixentry[0];
+				if ($eid!="derek" && $eid!="anna" && $eid!="maja" && $eid!="alex" && $eid!="yvonne") $ent->setWanted();
 				$ent->tagWith($cpost);
 			  }
 		  }
@@ -340,6 +346,10 @@ class EntLoader {
 			  $ent->setWanted();
 			  $ent->set("event",$theevent);			  
 		  }
+	  }
+	  // go through again, chcking against the blaclist
+	  foreach($this->set as $id=>$ent){
+		  if (in_array($id,$this->blackPix)) $ent->setWanted(false);
 	  }
   }
   protected function isImageFor($entid){
@@ -367,7 +377,7 @@ class EntLoader {
 	  
   }
   protected function get_cpost_by_entref($entref){
-	  if ($entref=="derek" || $entref=="anna" || $entref=="maja" || $entref=="alex" || $entref=="yvonne") return null;
+	  //if ($entref=="derek" || $entref=="anna" || $entref=="maja" || $entref=="alex" || $entref=="yvonne") return null;
 	  
 	  if (isset($this->knownEnts[$entref])) return $this->knownEnts[$entref];
 	  

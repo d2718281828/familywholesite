@@ -14,7 +14,6 @@ neils is bens daughter. Even though he was male. saving him solved the problem.
 	joan not married to ben
 if something has correspondence as the second tag dont select it
 the ent still needs to be tagged for anna, derek, yvonne etc, just not selected on that basis...
-add occupation to the info box
 formatting for picture tags
 add the stephens's to wanted
 also mr & mrs lively
