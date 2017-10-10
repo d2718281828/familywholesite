@@ -19,7 +19,6 @@ formatting for picture tags
 add the stephens's to wanted
 also mr & mrs lively
 id there any point tagging photos with events??
-events need to be taggable by person
 GOT TO SORT OUT PAUL STEPHENS
 remove the sidebar from single
 

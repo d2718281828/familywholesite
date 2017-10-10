@@ -16,6 +16,8 @@ class Person extends FSPost {
     } else $placename = "";
     $m.=$this->infoBit("Born",$this->get("date_birth").$placename);
 
+    if ($z=$this->get("date_baptism")) $m.= $this->infoBit("Baptized",$z);
+
     if ($dd=$this->get("date_death")){
       if ($bp=$this->get("place_death")){
         $place = new Place($bp);
@@ -23,6 +25,8 @@ class Person extends FSPost {
       } else $placename = "";
       $m.=$this->infoBit("Died",$dd.$placename);
     }
+    if ($z=$this->get("occupation")) $m.= $this->infoBit("Occupation",$z);
+	
     if ($z=$this->relativeLink("father")) $m.= $this->infoBit("Father",$z);
     if ($z=$this->relativeLink("mother")) $m.= $this->infoBit("Mother",$z);
 	
