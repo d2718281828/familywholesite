@@ -119,7 +119,7 @@ class Ent  {
 		$f = $this->getMediaFile();
 		$dot = strrpos($f, ".");
 		if ($dot) {
-			$ext = substr($f,dot);
+			$ext = substr($f,$dot);
 			if ($ext = ".jpg" || $ext = ".gif" || $ext = ".jpeg") return $f;
 		}
 		return null;
