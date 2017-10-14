@@ -35,7 +35,7 @@ class EntLoader {
 	  "euston-thetford-norfolk","58a-robson-avenue-willesden-london-nw10","bens","violet","markmac"];
 	  // pictures we definitely dont want
 	  $this->blackPix = ["dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd","ewcndw4","ewcndw5","ewcndw6","ewcndw7",
-	  ];
+	  "kdfmdyur","mcdlvs0","17mcdlvs1","17mcdlvs2","17mcdlvs3"];
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
@@ -70,7 +70,7 @@ class EntLoader {
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  $this->reportLoad();
 	  
-	  $this->build();		// create cposts out of ents
+	  $this->build(true);		// create cposts out of ents, and get the places too
 	  
 	  $this->phase1();		// initial WP create of everything.
 
@@ -141,7 +141,7 @@ class EntLoader {
 	  
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  
-	  //$this->build();		// create cposts out of ents
+	  $this->build();		// create cposts out of ents
 	  
 	  //$this->phase1();		// initial WP create of everything.
 
@@ -150,7 +150,7 @@ class EntLoader {
 	  //$this->phase3();		// re-save and convert text in the descriptions
 	  
 	  $m.= "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m = $this->reports("loaded","phase1","phase2","phase3");
+	  $m = $this->reports("loaded","builtsample","phase1","phase2","phase3");
 	  return $m;
 	  
   }
@@ -187,25 +187,34 @@ class EntLoader {
   * create cposts out of ents, for people and the newly made places
   * The cposts are all virtual at this point, they havent been created.
   */
-  protected function build(){
+  protected function build($withplaces = false){
 	  
 	  $convert = new EntCPost($this);
 
-	  $this->makePlaces();
+	  if ($withplaces) $this->makePlaces();
 
 	  foreach($this->set as $id=>$obj) {
 		  if (!$obj->isWanted()) continue;
 		  $this->cposts[$id] = $convert->make($obj);
 	  }
 
-	  $m = "<h2>Build of places</h2>";
-	  foreach($this->newplaces as $id=>$obj) {
-		  $this->cposts[$id] = $convert->make($obj);
-		  $m.=$this->cposts[$id]->showAllPend();
+	  if ($withplaces){
+		  $m = "<h2>Build of places</h2>";
+		  foreach($this->newplaces as $id=>$obj) {
+			  $this->cposts[$id] = $convert->make($obj);
+			  $m.=$this->cposts[$id]->showAllPend();
+		  }
+		  $this->report["buildplaces"] = $m;
 	  }
-	  $m.= $this->cposts["violet"]->showAllPend();
-	  $m.= $this->set["violet"]->showAll();
-	  $this->report["buildplaces"] = $m;
+	  $m = "<h2>Sample of Built items</h2>";
+	  $sample = ["violet","dscn7225"];
+	  foreach($sample as $item){
+		  if (!isset($this->cposts[$item])) continue;
+		  $m.="<h3>".$item."</h3>";
+		  $m.= $this->cposts[$item]->showAllPend();
+		  $m.= $this->set[$item]->showAll();
+	  }
+	  $this->report["builtsample"] = $m;
   
   }
   protected function phase1(){

@@ -53,7 +53,9 @@ class EntCPost  {
 			break;
 			
 			case "post":
-			$new["post_name"] = self::makeName( $ent->get("title"));
+			$new["post_name"] = self::makeName($ent->get("title"));
+			// what about all the camera fields?
+			$this->cpDate($new, "actual_date" , $ent, "date_created");
 			break;
 		}
 		

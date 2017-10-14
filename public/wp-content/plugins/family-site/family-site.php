@@ -8,17 +8,15 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-have a stop list for pictures that i dont want to include
+add the stephens's to wanted
+also mr & mrs lively
+GOT TO SORT OUT PAUL STEPHENS
 neils is bens daughter. Even though he was male. saving him solved the problem.
 	neil's kids not selected
 	joan not married to ben
 if something has correspondence as the second tag dont select it
-the ent still needs to be tagged for anna, derek, yvonne etc, just not selected on that basis...
 formatting for picture tags
-add the stephens's to wanted
-also mr & mrs lively
 id there any point tagging photos with events??
-GOT TO SORT OUT PAUL STEPHENS
 remove the sidebar from single
 
 Want to be able to add events like "Moved to <new place>", can then tag that event with the whole family. Will timeline handle that?
