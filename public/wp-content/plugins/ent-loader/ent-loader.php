@@ -133,6 +133,8 @@ class EntLoader {
   public function loadPics(){
 	  $up = wp_upload_dir();
 	  $this->input = $up["basedir"]."/album";
+	  
+	  $testset = ["dscn7218"];
 
 	  $this->load();
 	  
@@ -143,7 +145,7 @@ class EntLoader {
 	  
 	  $this->build();		// create cposts out of ents
 	  
-	  //$this->phase1();		// initial WP create of everything.
+	  //$this->phase1($testset);		// initial WP create of everything.
 
 	  //$this->phase2();		// resolve references in parameters, like mother, father
 	  
@@ -212,18 +214,29 @@ class EntLoader {
 		  if (!isset($this->cposts[$item])) continue;
 		  $m.="<h3>".$item."</h3>";
 		  $m.= $this->cposts[$item]->showAllPend();
+		  $m.= "<p>-----";
 		  $m.= $this->set[$item]->showAll();
 	  }
 	  $this->report["builtsample"] = $m;
   
   }
-  protected function phase1(){
+  /**
+  * First pass creating actual WP posts
+  */
+  protected function phase1($testkeys = null){
 	  $m = "<h2>Phase 1</h2>";
-
-	  foreach ($this->cposts as $id=>$cp){
-		//$cp = $this->cposts[$test];
+	  if ($testkeys) $m.="<p>Test set only</p>";
+	  $keyset = $testkeys?: array_keys($this->cposts);
+	  
+	  
+	  foreach ($keyset as $id){
+		$cp = $this->cposts[$id];
 		$rc = $cp->create();
-		$m.= "<br/>".$cp->get("post_title")." ".( $rc===false ? $cp->error_message : $rc);   
+		$m.= "<br/>".$cp->get("post_title")." ".( $rc===false ? $cp->error_message : $rc);
+		
+		if ($pic = $this->set[$id]->getImageFile()){
+			$m.=" Image=".$pic;
+		}
 	  }
 	  $this->report["phase1"] = $m;
 	  return $m;
@@ -233,7 +246,7 @@ class EntLoader {
 	  foreach($this->set as $id=>$ent) {
 		  if (!$ent->isWanted()) continue;
 		  $this->translatePlace($ent, "place_birth");
-		  $this->translatePlace($ent, "place_death");
+		  $this->translPlace($ent, "place_death");
 		  $this->translatePlace($ent, "place_wedding");
 	  }
 	  $this->report["makeplaces"] =  $this->listPlaces();

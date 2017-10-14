@@ -54,6 +54,7 @@ class EntCPost  {
 			
 			case "post":
 			$new["post_name"] = self::makeName($ent->get("title"));
+			$new["uploader_ref"] = $ent->key();
 			// what about all the camera fields?
 			$this->cpDate($new, "actual_date" , $ent, "date_created");
 			break;

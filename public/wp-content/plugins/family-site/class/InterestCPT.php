@@ -14,6 +14,7 @@ class InterestCPT extends FSCpt {
 	$this
 	      ->setClass("FamilySite\Interest")
         ->addField(new DateHelper("actual_date", "Actual date", "Date that the picture was actually taken"))
+        ->addField(new FieldHelper("uploader_ref", "Uploader's reference", "The file name or folder and filename that the uploader can use to cross reference the picture"))
         ->addField(new CPTSelectHelper("event", "Event", "", ["posttype"=>"fs_event"]))
     ;
   }

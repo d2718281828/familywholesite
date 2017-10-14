@@ -110,6 +110,31 @@ class Ent  {
 		}
 		return $res;
 	}
+	/**
+	* return the full path of the media file, if it is an image, if local on the server. 
+	* This would be the featured image if it is an image
+	* @return string full image path or null if none
+	*/
+	public function getImageFile(){
+		$f = $this->getMediaFile();
+		$dot = strrpos($f, ".");
+		if ($dot) {
+			$ext = substr($f,dot);
+			if ($ext = ".jpg" || $ext = ".gif" || $ext = ".jpeg") return $f;
+		}
+		return null;
+	}
+	/**
+	* return the full path of the media file, if local on the server. 
+	* @return string full file path or null if none
+	*/
+	public function getMediaFile(){
+		foreach($this->media as $media){
+			$fn = $media[0];
+			if (strpos($fn,"_t.")===false) return $media[2]."/".$fn;
+		}
+		return null;
+	}
 	public function set($prop,$val){
 		//echo "<br/>Setting ent property ".$this->key."-".$prop."=".$val;
 		$this->props[$prop] = $val;
@@ -174,6 +199,7 @@ class Ent  {
 	public function show(){
 		$m = $this->key.'-'.$this->size.'-'.$this->numlines.'('.$this->get("title").')'.$this->gender;
 		if ($this->media) $m.=":MEDIA=".count($this->media);
+		if ($pic=$this->getImageFile()) $m.="-pic=".$pic;
 		if ($this->isWanted()) $m.="*";
 		return $m;
 	}
