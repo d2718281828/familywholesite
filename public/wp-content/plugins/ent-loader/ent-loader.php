@@ -34,7 +34,7 @@ class EntLoader {
 	  $this->testset = ["neils","marians","joans","rhians","20-raglan-st-lowestoft-suffolk",
 	  "euston-thetford-norfolk","58a-robson-avenue-willesden-london-nw10","bens","violet","markmac"];
 	  // pictures we definitely dont want
-	  $this->blackPix = ["dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd","ewcndw4","ewcndw5","ewcndw6","ewcndw7",
+	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd","ewcndw4","ewcndw5","ewcndw6","ewcndw7",
 	  "kdfmdyur","mcdlvs0","17mcdlvs1","17mcdlvs2","17mcdlvs3"];
   }
   public function init(){
@@ -145,14 +145,14 @@ class EntLoader {
 	  
 	  $this->build();		// create cposts out of ents
 	  
-	  //$this->phase1($testset);		// initial WP create of everything.
+	  $this->phase1($testset);		// initial WP create of everything.
 
 	  //$this->phase2();		// resolve references in parameters, like mother, father
 	  
 	  //$this->phase3();		// re-save and convert text in the descriptions
 	  
-	  $m.= "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m = $this->reports("loaded","builtsample","phase1","phase2","phase3");
+	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
+	  $m.= $this->reports("loaded","builtsample","phase1","phase2","phase3");
 	  return $m;
 	  
   }
@@ -236,6 +236,7 @@ class EntLoader {
 		
 		if ($pic = $this->set[$id]->getImageFile()){
 			$m.=" Image=".$pic;
+			$this->sideload($pic, $cp->postid);
 		}
 	  }
 	  $this->report["phase1"] = $m;
@@ -414,6 +415,29 @@ class EntLoader {
   public function wantedEvents(){
 	  $events = ["slub","vvcaleb","wedpsan","vvwpedor","vvwmarhe","vvwjonpa","vvwaldor",];
 	  foreach ($events as $m) $this->get($m)->setWanted();
+  }
+  public function sideload($fullfile, $post_id, $description=null){
+	// Need to require these files
+	if ( !function_exists('media_handle_upload') ) {
+		require_once(ABSPATH . "wp-admin" . '/includes/image.php');
+		require_once(ABSPATH . "wp-admin" . '/includes/file.php');
+		require_once(ABSPATH . "wp-admin" . '/includes/media.php');
+	}
+	$file_array = array();
+
+	$file_array['name'] = basename($fullfile);
+	$file_array['tmp_name'] = $fullfile;
+
+	// do the validation and storage stuff
+	$id = media_handle_sideload( $file_array, $post_id, $description ?: $file_array['name'] );
+
+	// If error storing permanently, unlink
+	if ( is_wp_error($id) ) {
+		@unlink($file_array['tmp_name']);
+		error_log("Error sideloading ".$fullfile." ".$id->get_error_message());
+		return null;
+	}
+	return $id;
   }
   protected function listWanted(){
 	  $num=0;

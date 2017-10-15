@@ -8,6 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
+i'e got the media ffile, now need to load it into featured image, and do the tagging.
 add the stephens's to wanted
 also mr & mrs lively
 GOT TO SORT OUT PAUL STEPHENS
