@@ -314,12 +314,13 @@ class EntLoader {
 	  $this->report["phase2"] = $m; 
 	  
 	  $m = "<h2>Phase 2a</h2><p>Index tagging</p>";
-	  $s = "select * from ".$wpdb->postmeta." where meta_key = 'ent#_links' ESCAPE '#';";
+	  $s = "select * from ".$wpdb->postmeta." PM,".$wpdb->posts." P 
+	  where P.ID = PM.post_id and P.post_status = 'publish' meta_key = 'ent_links' ;";
 	  $refs = $wpdb->get_results($s,ARRAY_A);
 	  foreach ($refs as $ref){
 		  $pid = $ref["post-id"];
 		  $index = $ref["meta_value"];
-		  $m.="<p>Indexing with ".print_r($index,true);
+		  $m.="<p>Indexing $pid with ".print_r($index,true);
 	  }
 	  $this->report["phase2a"] = $m; 
 	  return "";
