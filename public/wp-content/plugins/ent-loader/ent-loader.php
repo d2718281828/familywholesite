@@ -314,16 +314,25 @@ class EntLoader {
 	  $this->report["phase2"] = $m; 
 	  
 	  $m = "<h2>Phase 2a</h2><p>Index tagging</p>";
-	  $s = "select * from ".$wpdb->postmeta." PM,".$wpdb->posts." P 
-	  where P.ID = PM.post_id and P.post_status = 'publish' meta_key = 'ent_links' ;";
+	  $s = "select PM.post_id as pid, P.post_type as ptype, PM.meta_value as ix 
+	  from ".$wpdb->postmeta." PM,".$wpdb->posts." P 
+	  where P.ID = PM.post_id and P.post_status = 'publish' and meta_key = 'ent_links' ;";
+	  $m.="<p>SQL: ".$s;
 	  $refs = $wpdb->get_results($s,ARRAY_A);
 	  foreach ($refs as $ref){
-		  $pid = $ref["post-id"];
-		  $index = $ref["meta_value"];
-		  $m.="<p>Indexing $pid with ".print_r($index,true);
+		  $pid = $ref["pid"];
+		  $index = $ref["ix"];
+		  if ($index){
+		    $index = get_post_meta($pid,"ent_links",true);	// get WP to decode it the way it wants to
+		    $this->tagPostByIndex($pid,$index);
+		    $m.="<p>Indexing $pid with ".print_r($index,true);
+		  } else $m.= "<p>No actual index for $pid";
 	  }
 	  $this->report["phase2a"] = $m; 
 	  return "";
+  }
+  protected function tagPostByIndex($pid,$index){
+	
   }
   protected function phase3($testkeys = null){
 	  global $wpdb;
