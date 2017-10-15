@@ -88,6 +88,47 @@ class FSPost extends CPost {
 	  return $cposts;
   }
   /**
+  * return the taxonomy name used to represent this post.
+  */
+  public function getTax(){
+	  return $this->cpthelper->get_taxonomy();
+  }
+  /**
+  * Return the taxonomy term id if the term used to tag other posts to link to this CPost.
+  * @return integer/null
+  */
+  public function getTermTaxId(){
+	  $matchingtag = get_post_meta($this->postid, "fs_matching_tag_id", true);
+	  return $matchingtag ?: null;
+  }
+  /**
+  * Tag the post with the tags representing the posts in the argument list
+  * @param $cplist array of CPosts
+  * @return int number of tags added
+  */
+  public function tagWith($cplist){
+	  $count = 0;
+	  $termtaxes = [];
+	  foreach($cplist as $cp) {
+		  $tax = $cp->getTax();
+		  $ttid = $cp->getTermTaxId();
+		  if (isset($termtaxes[$tax])) $termtaxes[$tax][] = $ttid;
+		  else $termtaxes[$tax] = [$ttid];
+	  }
+	  // unfortunately these are all taxonomy termids and we need the termid.
+	  foreach ($termtaxes as $tax=>$ttids){
+		  $this->tagWithTtids($tax,$ttids);
+	  }
+	  return $count;
+  }
+  protected function tagWithTtids($taxname, $ttids){
+	  global $wpdb;
+	  if (count($ttids)==0) return;
+	  $s = "select term_id from ".$wpdb->term_taxonomy." where term_taxonomy_id in (".implode(",",$ttids).");";
+	  $tids = $wpdb->get_col($s);
+	  wp_set_post_terms($this->postid, $tids, $taxname, true);
+  }
+  /**
   * Slug for the tag which will match this post.
   */ 
   protected function matching_tag_slug(){

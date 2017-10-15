@@ -320,19 +320,26 @@ class EntLoader {
 	  $m.="<p>SQL: ".$s;
 	  $refs = $wpdb->get_results($s,ARRAY_A);
 	  foreach ($refs as $ref){
-		  $pid = $ref["pid"];
+		  $theItem = CptHelper::make($ref["pid"], $ref["ptype"]);
 		  $index = $ref["ix"];
 		  if ($index){
-		    $index = get_post_meta($pid,"ent_links",true);	// get WP to decode it the way it wants to
-		    $this->tagPostByIndex($pid,$index);
-		    $m.="<p>Indexing $pid with ".print_r($index,true);
+		    $index = get_post_meta($theItem->postid,"ent_links",true);	// get WP to decode it the way it wants to
+		    $co = $this->tagPostByIndex($theItem,$index);
+		    $m.="<p>Indexed $pid with $co new tags";
 		  } else $m.= "<p>No actual index for $pid";
 	  }
 	  $this->report["phase2a"] = $m; 
 	  return "";
   }
-  protected function tagPostByIndex($pid,$index){
-	
+  protected function tagPostByIndex($theItem,$index){
+	  $set=[];
+	  foreach($index as $entry){
+		  // many index entries will be nothing to do with ents
+		  $cp = $this->get_cpost_by_entref($index[0]);
+		  if ($cp) $set[] = $cp;
+	  }
+	  if ($set) $rc = $theItem->tagWith($set);
+	  return $rc;
   }
   protected function phase3($testkeys = null){
 	  global $wpdb;
