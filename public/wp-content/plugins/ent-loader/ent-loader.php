@@ -135,6 +135,7 @@ class EntLoader {
 	  $this->input = $up["basedir"]."/album";
 	  
 	  $testset = ["dscn7218"];
+	  //$testset = null;
 
 	  $this->load();
 	  
@@ -147,12 +148,12 @@ class EntLoader {
 	  
 	  $this->phase1($testset);		// initial WP create of everything.
 
-	  //$this->phase2();		// resolve references in parameters, like mother, father
+	  $this->phase2($testset);		// resolve references in parameters, like mother, father
 	  
-	  //$this->phase3();		// re-save and convert text in the descriptions
+	  $this->phase3($testset);		// re-save and convert text in the descriptions
 	  
 	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m.= $this->reports("loaded_X","builtsample","phase1","phase2","phase3");
+	  $m.= $this->reports("loaded_X","builtsample","phase1","phase2","phase2a","phase3");
 	  return $m;
 	  
   }
@@ -237,9 +238,12 @@ class EntLoader {
 		if ($pic = $this->set[$id]->getImageFile()){
 			$pic = str_replace("//","/",$pic);
 			$m.=" Image=".$pic;
-			$id = $this->sideload($pic, $cp->postid);
+			$id = $this->sideload($pic, 0);
 			if ( is_wp_error($id)) $m.="<br />Error loading image ".implode("<br/>",$id->get_error_messages());
-			else $m.=" Loaded image into item ".$id;
+			else {
+				$m.=" Loaded image into item ".$id;
+				set_post_thumbnail($cp->postid, $id);
+			}
 		}
 	  }
 	  $this->report["phase1"] = $m;
@@ -287,9 +291,10 @@ class EntLoader {
 	  foreach ($this->newplaces as $tok=>$ent) $m.="<li>".$tok."</li>";
 	  return $m."</ul>";
   }
-  protected function phase2(){
+  protected function phase2($testkeys = null){
 	  global $wpdb;
 	  $m = "<h2>Phase 2</h2>";
+	  if ($testkeys) $m.="<p>Test set only</p>";
 	  
 	  // pick up the hanging refs
 	  $s = "select * from ".$wpdb->postmeta." where meta_key like 'ent#_link#_%' ESCAPE '#';";
@@ -307,15 +312,28 @@ class EntLoader {
 	  }
 	  	  
 	  $this->report["phase2"] = $m; 
-	  return $m;
+	  
+	  $m = "<h2>Phase 2a</h2><p>Index tagging</p>";
+	  $s = "select * from ".$wpdb->postmeta." where meta_key = 'ent#_links' ESCAPE '#';";
+	  $refs = $wpdb->get_results($s,ARRAY_A);
+	  foreach ($refs as $ref){
+		  $pid = $ref["post-id"];
+		  $index = $ref["meta_value"];
+		  $m.="<p>Indexing with ".print_r($index,true);
+	  }
+	  $this->report["phase2a"] = $m; 
+	  return "";
   }
-  protected function phase3(){
+  protected function phase3($testkeys = null){
 	  global $wpdb;
 	  $m = "<h2>Phase 3</h2>";
+	  if ($testkeys) $m.="<p>Test set only</p>";
+	  $keyset = $testkeys?: array_keys($this->cposts);
+
 	  $convert = new EntCPost($this);
 	  
-	  foreach ($this->cposts as $id=>$cp){
-		//$cp = $this->cposts[$test];
+	  foreach ($keyset as $id){
+		$cp = $this->cposts[$id];
 		$m.=$convert->phase3($cp);
 	  }
 	  
