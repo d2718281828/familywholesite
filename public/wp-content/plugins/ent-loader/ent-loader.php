@@ -152,7 +152,7 @@ class EntLoader {
 	  //$this->phase3();		// re-save and convert text in the descriptions
 	  
 	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m.= $this->reports("loaded","builtsample","phase1","phase2","phase3");
+	  $m.= $this->reports("loaded_X","builtsample","phase1","phase2","phase3");
 	  return $m;
 	  
   }
@@ -232,11 +232,14 @@ class EntLoader {
 	  foreach ($keyset as $id){
 		$cp = $this->cposts[$id];
 		$rc = $cp->create();
-		$m.= "<br/>".$cp->get("post_title")." ".( $rc===false ? $cp->error_message : $rc);
+		$m.= "<br/>Created ".$cp->get("post_title")." ".( $rc===false ? $cp->error_message : $rc);
 		
 		if ($pic = $this->set[$id]->getImageFile()){
+			$pic = str_replace("//","/",$pic);
 			$m.=" Image=".$pic;
-			$this->sideload($pic, $cp->postid);
+			$id = $this->sideload($pic, $cp->postid);
+			if ( is_wp_error($id)) $m.="<br />Error loading image ".implode("<br/>",$id->get_error_messages());
+			else $m.=" Loaded image into item ".$id;
 		}
 	  }
 	  $this->report["phase1"] = $m;
@@ -427,15 +430,16 @@ class EntLoader {
 
 	$file_array['name'] = basename($fullfile);
 	$file_array['tmp_name'] = $fullfile;
+	if (WP_DEBUG) error_log("media handle sideload with ".$file_array['name'].", ".$file_array['tmp_name']);
 
 	// do the validation and storage stuff
-	$id = media_handle_sideload( $file_array, $post_id, $description ?: $file_array['name'] );
+	$id = media_handle_sideload( $file_array, $post_id ?: 0, $description ?: $file_array['name'] );
 
 	// If error storing permanently, unlink
 	if ( is_wp_error($id) ) {
 		@unlink($file_array['tmp_name']);
 		error_log("Error sideloading ".$fullfile." ".$id->get_error_message());
-		return null;
+		return $id;
 	}
 	return $id;
   }
