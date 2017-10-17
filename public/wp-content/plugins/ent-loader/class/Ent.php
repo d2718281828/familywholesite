@@ -74,8 +74,8 @@ class Ent  {
 					} else $this->props[$lastprop]=$last;
 				}
 			} else {
-				//echo "<br>".$lastprop."=".$l;
-				if ($l && $lastprop!="index") $this->props[$lastprop].="\n".$l;
+				//echo "<br>line 78 ".$lastprop."=".$l;
+				if ($l && $lastprop!="index" &&  $lastprop!="") $this->props[$lastprop].="\n".$l;
 			}
 		}
 	}

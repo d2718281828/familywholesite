@@ -325,8 +325,8 @@ class EntLoader {
 		  if ($index){
 		    $index = get_post_meta($theItem->postid,"ent_links",true);	// get WP to decode it the way it wants to
 		    $co = $this->tagPostByIndex($theItem,$index);
-		    $m.="<p>Indexed $pid with $co new tags";
-		  } else $m.= "<p>No actual index for $pid";
+		    $m.="<p>Indexed ".$ref["pid"]." with $co new tags";
+		  } else $m.= "<p>No actual index for ".$ref["pid"];
 	  }
 	  $this->report["phase2a"] = $m; 
 	  return "";
@@ -339,6 +339,7 @@ class EntLoader {
 		  if ($cp) $set[] = $cp;
 	  }
 	  if ($set) $rc = $theItem->tagWith($set);
+	  else $rc="";
 	  return $rc;
   }
   protected function phase3($testkeys = null){
@@ -440,7 +441,8 @@ class EntLoader {
   }
   protected function get_cpost_by_entref($entref){
 	  //if ($entref=="derek" || $entref=="anna" || $entref=="maja" || $entref=="alex" || $entref=="yvonne") return null;
-	  
+	  //echo "<p>--";print_r($entref); 
+	  if (is_array($entref)) $entref = $entref[0];
 	  if (isset($this->knownEnts[$entref])) return $this->knownEnts[$entref];
 	  
 	  $pid = EntCPost::get_postid_by_entref($entref);
