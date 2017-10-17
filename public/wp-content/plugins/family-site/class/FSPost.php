@@ -112,6 +112,7 @@ class FSPost extends CPost {
 	  foreach($cplist as $cp) {
 		  $tax = $cp->getTax();
 		  $ttid = $cp->getTermTaxId();
+		  echo "<p>***--* cp=".$cp->show()." tax=".$tax.", tt=".$ttid;
 		  if (isset($termtaxes[$tax])) $termtaxes[$tax][] = $ttid;
 		  else $termtaxes[$tax] = [$ttid];
 	  }
