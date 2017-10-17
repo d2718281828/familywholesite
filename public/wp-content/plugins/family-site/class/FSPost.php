@@ -125,8 +125,11 @@ class FSPost extends CPost {
 	  global $wpdb;
 	  if (count($ttids)==0) return;
 	  $s = "select term_id from ".$wpdb->term_taxonomy." where term_taxonomy_id in (".implode(",",$ttids).");";
+	  echo "<p>***** ".$s;
 	  $tids = $wpdb->get_col($s);
+	  echo "<p>***** ".implode(",",$tids);
 	  wp_set_post_terms($this->postid, $tids, $taxname, true);
+	  !!!! tried this and it didnt work
   }
   /**
   * Slug for the tag which will match this post.
