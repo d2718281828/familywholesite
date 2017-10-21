@@ -134,8 +134,8 @@ class EntLoader {
 	  $up = wp_upload_dir();
 	  $this->input = $up["basedir"]."/album";
 	  
-	  $testset = ["dscn7218"];
-	  $testset = null;
+	  //$testset = ["dscn7218"];
+	  //$testset = null;
 
 	  $this->load();
 	  
@@ -146,6 +146,9 @@ class EntLoader {
 	  
 	  $this->build();		// create cposts out of ents
 	  
+	  $testset = $this->nextBatch(10);
+	  if (!$testset) return "<p>No further pictures to load.".$this->reports("stats");
+	  
 	  $this->phase1($testset);		// initial WP create of everything.
 
 	  $this->phase2($testset);		// resolve references in parameters, like mother, father
@@ -153,9 +156,26 @@ class EntLoader {
 	  $this->phase3($testset);		// re-save and convert text in the descriptions
 	  
 	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m.= $this->reports("loaded","builtsample","phase1","phase2","phase2a","phase3");
+	  $m.= $this->reports("loaded","builtsample","stats","phase1","phase2","phase2a","phase3");
 	  return $m;
 	  
+  }
+  protected function nextBatch($batchsize = 5){
+	  $res = [];
+	  $num = 0;
+	  $created = 0;
+	  $m = "<h2>Stats</h2>";
+	  foreach($this->set as $entid=>$ent){
+		  if ($ent->exists()) $created++;
+		  else {
+			  $batchsize--;
+			  if ($batchsize>0) $res[] = $entid;
+		  }
+	  }
+	  $m.="<p>Total images to load ".$num;
+	  $m.="<p>Already loaded ".$created;
+	  $this->report["stats"] = $m;
+	  return $res;
   }
   protected function report3(){
 	  $m = $this->cposts["neils"]->showAllPend();

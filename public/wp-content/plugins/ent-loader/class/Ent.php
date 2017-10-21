@@ -16,6 +16,7 @@ class Ent  {
 	protected $virtual = false;	// virtual is for those that are being created, not read from disk
 	protected $media = [];		// each element is a triplet describing the file
 	protected $tags = [];		// each element is a cpost for the item to tag this with
+	protected $created = false;	// boolean has it been created already? Set by exists()
 	
 	public function __construct($filename, $reldir = null, $fulldir = null){
 		$this->key = self::makeKey($filename);
@@ -43,6 +44,13 @@ class Ent  {
 	}
 	public function isWanted(){
 		return $this->wanted;
+	}
+	public function exists(){
+		global $wbdp;
+		$s = "select post_id from ".$wpdb->postmeta." where meta_key = 'ent_ref' and meta_value = %s";
+		$res = $wpdb->get_col($wpdb->prepare($s,$this->key));
+		$this->created = (count($res)>0);
+		return $this->created;
 	}
 	/**
 	* Read the file to bring in this ent
