@@ -8,10 +8,11 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
+do a delete button for pics only
 i'e got the media ffile, now need to load it into featured image, and do the tagging.
 add the stephens's to wanted
 also mr & mrs lively
-GOT TO SORT OUT PAUL STEPHENS
+GOT TO SORT OUT PAUL STEPHENS - need to email Rowan
 neils is bens daughter. Even though he was male. saving him solved the problem.
 	neil's kids not selected
 	joan not married to ben
