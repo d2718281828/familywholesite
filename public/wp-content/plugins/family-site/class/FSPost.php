@@ -99,7 +99,7 @@ class FSPost extends CPost {
   */
   public function getTermTaxId(){
 	  $matchingtag = get_post_meta($this->postid, "fs_matching_tag_id", true);
-	  return $matchingtag ?: null;
+	  return $matchingtag ? $matchingtag : null;
   }
   /**
   * Tag the post with the tags representing the posts in the argument list
@@ -126,9 +126,11 @@ class FSPost extends CPost {
 	  global $wpdb;
 	  if (count($ttids)==0) return;
 	  $s = "select term_id from ".$wpdb->term_taxonomy." where term_taxonomy_id in (".implode(",",$ttids).");";
-	  echo "<p>***** ".$s;
+	  echo "<p>tagWithTtids translateed term taxids to termids ***** ".$s;
 	  $tids = $wpdb->get_col($s);
-	  echo "<p>***** ".implode(",",$tids);
+	  $makeInt = function($num){return (int)$num;};
+	  $tids = array_map($makeInt, $tids);
+	  echo "<p>tagWithTtids will tag the post in $taxname with these termids: ".implode(",",$tids);
 	  wp_set_post_terms($this->postid, $tids, $taxname, true);
 	  //!!!! tried this and it didnt work
   }

@@ -135,7 +135,7 @@ class EntLoader {
 	  $this->input = $up["basedir"]."/album";
 	  
 	  $testset = ["dscn7218"];
-	  //$testset = null;
+	  $testset = null;
 
 	  $this->load();
 	  
@@ -153,7 +153,7 @@ class EntLoader {
 	  $this->phase3($testset);		// re-save and convert text in the descriptions
 	  
 	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m.= $this->reports("loaded_X","builtsample","phase1","phase2","phase2a","phase3");
+	  $m.= $this->reports("loaded","builtsample","phase1","phase2","phase2a","phase3");
 	  return $m;
 	  
   }
@@ -335,7 +335,8 @@ class EntLoader {
 	  $set=[];
 	  foreach($index as $entry){
 		  // many index entries will be nothing to do with ents
-		  $cp = $this->get_cpost_by_entref($index[0]);
+		  //echo "<p>Tagging ".$theItem->show()." with ".print_r($entry[0],true);
+		  $cp = $this->get_cpost_by_entref($entry[0]);
 		  if ($cp) $set[] = $cp;
 	  }
 	  if ($set) $rc = $theItem->tagWith($set);
