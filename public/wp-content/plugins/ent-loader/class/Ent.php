@@ -46,7 +46,7 @@ class Ent  {
 		return $this->wanted;
 	}
 	public function exists(){
-		global $wbdp;
+		global $wpdb;
 		$s = "select post_id from ".$wpdb->postmeta." where meta_key = 'ent_ref' and meta_value = %s";
 		$res = $wpdb->get_col($wpdb->prepare($s,$this->key));
 		$this->created = (count($res)>0);

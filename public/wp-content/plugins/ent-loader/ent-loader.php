@@ -148,6 +148,7 @@ class EntLoader {
 	  
 	  $testset = $this->nextBatch(10);
 	  if (!$testset) return "<p>No further pictures to load.".$this->reports("stats");
+	  echo "<p>Test set ".implode(", ",$testset);
 	  
 	  $this->phase1($testset);		// initial WP create of everything.
 
@@ -168,8 +169,10 @@ class EntLoader {
 	  foreach($this->set as $entid=>$ent){
 		  if ($ent->exists()) $created++;
 		  else {
+			if ($ent->isWanted()) {
 			  $batchsize--;
 			  if ($batchsize>0) $res[] = $entid;
+			}
 		  }
 	  }
 	  $m.="<p>Total images to load ".$num;
@@ -252,6 +255,7 @@ class EntLoader {
 	  
 	  foreach ($keyset as $id){
 		$cp = $this->cposts[$id];
+		if (!$cp) echo "<p>*** NO CP for ".$id;
 		$rc = $cp->create();
 		$m.= "<br/>Created ".$cp->get("post_title")." ".( $rc===false ? $cp->error_message : $rc);
 		
