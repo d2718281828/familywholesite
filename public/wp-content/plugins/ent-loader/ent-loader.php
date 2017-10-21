@@ -35,7 +35,7 @@ class EntLoader {
 	  "euston-thetford-norfolk","58a-robson-avenue-willesden-london-nw10","bens","violet","markmac"];
 	  // pictures we definitely dont want
 	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd","ewcndw4","ewcndw5","ewcndw6","ewcndw7",
-	  "kdfmdyur","mcdlvs0","17mcdlvs1","17mcdlvs2","17mcdlvs3"];
+	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
