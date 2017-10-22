@@ -8,6 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
+Auto adding pictures to an event??
 do a delete button for pics only
 i'e got the media ffile, now need to load it into featured image, and do the tagging.
 add the stephens's to wanted
@@ -19,13 +20,13 @@ neils is bens daughter. Even though he was male. saving him solved the problem.
 if something has correspondence as the second tag dont select it
 formatting for picture tags
 id there any point tagging photos with events??
-remove the sidebar from single
+Theme is really not working
+	remove the sidebar from single
+	on the home page some things are full width. Is the sidebar floated?
+	need next and prev for post single()
+	event slideshow
 
 Want to be able to add events like "Moved to <new place>", can then tag that event with the whole family. Will timeline handle that?
-EntLoader pictures
-Tagging pictures based on the index
-Auto adding pictures to an event??
-person pics link
 how to model marriages/spouses. Possibly use wedding event. In the album just a simple spouse field.
 test duplicate person
 siblings list - full and half

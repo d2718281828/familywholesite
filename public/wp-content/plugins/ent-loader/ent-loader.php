@@ -114,12 +114,16 @@ class EntLoader {
   }
   /**
   * COMMAND delete everything which was loaded from ent
+  * @param $picsonly boolean if true then only delete the pictures
   */
-  public function deleteAll(){
+  public function deleteAll($picsonly = false){
 	  global $wpdb;
-	  $s = 'select post_id from '.$wpdb->postmeta.' where meta_key="ent_ref";';
-	  $posts = $wpdb->get_col($s);
-	  $m = "";
+	  $s_all = 'select post_id from '.$wpdb->postmeta.' where meta_key="ent_ref";';
+	  $s_pics = 'select P.ID from '.$wpdb->postmeta.' PM, '.$wpdb->posts.' P  
+	  where P.ID = PM.post_id and meta_key="ent_ref"
+	  and P.post_type = "post";';
+	  $posts = $wpdb->get_col($picsonly ? $s_pics : $s_all);
+	  $m = "<h2>Deleting</h2>";
 	  foreach ($posts as $post){
 		  $cp = CptHelper::make($post);
 		  $cp->destroy();
@@ -378,6 +382,7 @@ class EntLoader {
 	  foreach ($keyset as $id){
 		$cp = $this->cposts[$id];
 		$m.=$convert->phase3($cp);
+		$m.=$convert->addEvent($cp);
 	  }
 	  
 	  $this->report["phase3"] = $m; 

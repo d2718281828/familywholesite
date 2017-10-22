@@ -103,6 +103,7 @@ class FSPost extends CPost {
   }
   /**
   * Tag the post with the tags representing the posts in the argument list
+  * In other words, make a connection between this post and the list of posts in cplist.
   * @param $cplist array of CPosts
   * @return int number of tags added
   */

@@ -11,6 +11,7 @@ class EntLoadHelp extends BaseAdmin {
       ["Load People", "thisloader"],
       ["Load Pics", "picsloader"],
       ["Delete", "thiskiller"],
+      ["Delete Pics", "killpics"],
     ];
   }
 
@@ -19,6 +20,7 @@ class EntLoadHelp extends BaseAdmin {
 	  echo "<p><input type='submit' name='action' value='Load People'>Load up <strong>people</strong> - requires nodes folder in uploads.</p>";
 	  echo "<p><input type='submit' name='action' value='Load Pics'>Load up <strong>pictures</strong> - whatever is in the album folder in uploads.</p>";
 	  echo "<p><input type='submit' name='action' value='Delete'>Delete all ent-created posts - <strong>there is no warning!</strong></p>";
+	  echo "<p><input type='submit' name='action' value='Delete Pics'>Delete just the pictures - <strong>there is no warning!</strong></p>";
   }
   
   public function thisloader(){
@@ -31,6 +33,9 @@ class EntLoadHelp extends BaseAdmin {
   
   public function thiskiller(){
 	  return $this->parent->deleteAll();
+  }
+  public function killpics(){
+	  return $this->parent->deleteAll(true);
   }
 
 }

@@ -135,6 +135,25 @@ class EntCPost  {
 		return $m;
 	}
 	/**
+	* check if the actual_date of cpost corresponds to the date of an event, if so add that event to cpost.
+	*/
+	public function addEvent($cpost){
+		global $wpdb;
+		$m="<p>addEvent to ".$cpost->show();
+		$picdate = $cpost->get("actual_date");
+		$s = "select P.ID from ".$wpdb->postmeta." PM, ".$wpdb->posts." P 
+		where P.ID = PM.post_id 
+		and P.post_type = 'fs_event' 
+		and PM.meta_key = 'actual_date' and PM.meta_value=%s;";
+		$res = $wpdb->get_col($wpdb->prepare($s,$picdate));
+		if (count($res)!=1) {
+			$m.=" Found ".count($res)." matching events, nothing done";
+		}
+		$event = new Event($res[0]);
+		$cpost->tagWith([$event]);
+		return $m;
+	}
+	/**
 	* Make a name from the title, including the dob
 	*/
 	protected function personName($ent){
