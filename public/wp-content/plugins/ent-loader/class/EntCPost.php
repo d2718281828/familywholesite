@@ -149,7 +149,7 @@ class EntCPost  {
 		if (count($res)!=1) {
 			$m.=" Found ".count($res)." matching events, nothing done";
 		}
-		$event = new Event($res[0]);
+		$event = new FamilySite\Event($res[0]);
 		$cpost->tagWith([$event]);
 		return $m;
 	}
