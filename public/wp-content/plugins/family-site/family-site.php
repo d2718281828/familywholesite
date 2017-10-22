@@ -8,9 +8,9 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-Auto adding pictures to an event??
-do a delete button for pics only
-i'e got the media ffile, now need to load it into featured image, and do the tagging.
+!!! Auto adding pictures to an event. I have written it as a tag but actually it is a custom field. I tried to fix but didnt work.
+Creating a new event saves a tag which relates to "Auto-Draft" - because the post title isnt known when the matching tag is saved maybe??
+	test whether this is also true for pperson and place - i guess it is.
 add the stephens's to wanted
 also mr & mrs lively
 GOT TO SORT OUT PAUL STEPHENS - need to email Rowan
