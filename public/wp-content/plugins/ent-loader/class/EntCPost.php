@@ -143,14 +143,14 @@ class EntCPost  {
 		$picdate = $cpost->get("actual_date");
 		$s = "select P.ID from ".$wpdb->postmeta." PM, ".$wpdb->posts." P 
 		where P.ID = PM.post_id 
-		and P.post_type = 'fs_event' 
+		and P.post_type = 'fs_event' and P.post_status='publish' 
 		and PM.meta_key = 'actual_date' and PM.meta_value=%s;";
 		$res = $wpdb->get_col($wpdb->prepare($s,$picdate));
 		if (count($res)!=1) {
 			$m.=" Found ".count($res)." matching events, nothing done";
+			return;
 		}
-		$event = new FamilySite\Event($res[0]);
-		$cpost->tagWith([$event]);
+		$cpost->set("event",$res[0]);
 		return $m;
 	}
 	/**
