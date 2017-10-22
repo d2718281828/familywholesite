@@ -150,7 +150,7 @@ class EntLoader {
 	  
 	  $this->build();		// create cposts out of ents
 	  
-	  $testset = $this->nextBatch(10);
+	  $testset = $this->nextBatch(4);
 	  if (!$testset) return "<p>No further pictures to load.".$this->reports("stats");
 	  echo "<p>Test set ".implode(", ",$testset);
 	  
@@ -175,7 +175,7 @@ class EntLoader {
 		  else {
 			if ($ent->isWanted()) {
 			  $batchsize--;
-			  if ($batchsize>0) $res[] = $entid;
+			  if ($batchsize>=0) $res[] = $entid;
 			}
 		  }
 	  }
