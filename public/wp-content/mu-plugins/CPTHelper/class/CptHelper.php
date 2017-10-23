@@ -304,19 +304,22 @@ class CptHelper {
 	public function list_them($atts,$content,$tag){
 		global $wpdb;
 		$s = "select * from ".$wpdb->posts." where post_type=%s and post_status='publish';";
-		$res = $wpdb->get_results($wpdb->prepare($s, $this->posttype()));
+		$res = $wpdb->get_results($wpdb->prepare($s, $this->posttype()),ARRAY_A);
 		$m = "<table>";
 		$m.= "<tr>".$this->list_heading()."</tr>";
-		foreach($res as $post) $m.="<tr>".$this->list_row($post)."</tr>";
+		foreach($res as $post) {
+			$cpost = self::make($post);
+			$m.="<tr>".$this->list_row($cpost)."</tr>";
+		}
 		$m.= "</table>";
 		return $m;
 	}
 	protected function list_heading(){
 		return "<th>".$this->labels["singular_name"]."</th>";
 	}
-	protected function list_row($postobj){
-		$url = get_permalink($postobj);
-		$m = '<td><a href="'.$url.'">'.$postobj->post_title.'</a></td>';
+	protected function list_row($cpost){
+		$url = $cpost->permalink();
+		$m = '<td><a href="'.$url.'">'.$cpost->get("post_title").'</a></td>';
 		return $m;
 	}
     /**
