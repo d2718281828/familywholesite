@@ -66,5 +66,15 @@ class PersonCPT extends FSCpt {
 		}
 	}
   }
+	protected function list_heading(){
+		return "<th>Person</th><th>DOB</th><th>reference</th>";
+	}
+	protected function list_row($postobj){
+		$url = get_permalink($postobj);
+		$m = '<td><a href="'.$url.'">'.$postobj->post_title.'</a></td>';
+		$m.= '<td>'.$postobj->get("date_birth").'<td>';
+		$m.= '<td>[a '.$postobj->get("post_name").']<td>';
+		return $m;
+	}
 }
  ?>

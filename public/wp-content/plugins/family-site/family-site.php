@@ -8,7 +8,6 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-!!! Auto adding pictures to an event. I have written it as a tag but actually it is a custom field. I tried to fix but didnt work.
 Creating a new event saves a tag which relates to "Auto-Draft" - because the post title isnt known when the matching tag is saved maybe??
 	test whether this is also true for pperson and place - i guess it is.
 add the stephens's to wanted
