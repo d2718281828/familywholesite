@@ -14,7 +14,6 @@ class PersonCPT extends FSCpt {
 	$this
         ->set_taxonomy("person_tax")
         ->setClass("FamilySite\Person")
-        ->addField(new FieldHelper("email_address", "Email Address", "How to contact this person"))
         ->addField(new DateHelper("date_birth", "Date of Birth", "Date the person was born"))
         ->addField(new CPTSelectHelper("place_birth", "Place of Birth", "Place the person was living in immediately after birth", ["posttype"=>"fs_place"]))
         ->addField(new DateHelper("date_death", "Date of Death", "Date the person was born"))
@@ -31,6 +30,7 @@ class PersonCPT extends FSCpt {
         ->addField(new FieldHelper("birthname", "Birth Name", "Full name at birth (maiden name for ladies)"))
         ->addField(new FieldHelper("occupation", "Occupation", "Main occupation"))
         ->addField(new UseridSelector("userid", "Login id", "Link to the person's login id, if they have one"))
+        ->addField(new FieldHelper("email_address", "Email Address", "How to contact this person - not needed if the login id is set."))
         ->addField(new DateHelper("date_baptism", "Date of Baptism", "This features in a few geneological records"))
     ;
   }
@@ -43,7 +43,6 @@ class PersonCPT extends FSCpt {
 	parent::on_save($post_id, $post, $data);
 
 	if (!$data) $data = $_REQUEST;
-	// MOVE THIS LOGIC INTO the CPOST???? !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	// refresh timeline info
 	TimeLine::clearSource($post_id);
 	
