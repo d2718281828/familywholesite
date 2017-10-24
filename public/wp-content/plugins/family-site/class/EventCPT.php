@@ -44,5 +44,14 @@ class EventCPT extends FSCpt {
 		}
 	}
   }
+	protected function list_heading(){
+		return "<th>Event</th><th>Date</th>";
+	}
+	protected function list_row($cpost){
+		$url = $cpost->permalink();
+		$m = '<td><a href="'.$url.'">'.$cpost->get("post_title").'</a></td>';
+		$m.= '<td>'.$cpost->get("actual_date").'</td>';
+		return $m;
+	}
 }
  ?>
