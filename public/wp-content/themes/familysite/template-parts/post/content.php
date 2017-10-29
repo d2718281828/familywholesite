@@ -36,7 +36,7 @@ global $cpost;
 		} else {
 			the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
 		}
-		if ($cpost->showPosted()){
+		if ($cpost && $cpost->showPosted()){
 			echo '<div class="posted-info">';
 			echo 'Posted: '.$cpost->posted();
 			echo '</div>';
@@ -52,7 +52,7 @@ global $cpost;
 		</div><!-- .post-thumbnail -->
 	<?php endif; ?>
 
-	<?php if (is_single() && $cpost->hasInfoBox()){
+	<?php if (is_single() && $cpost && $cpost->hasInfoBox()){
 	  echo '<div class="info-box">';
 	  echo $cpost->infoBox();
 	  echo '</div>';
@@ -84,7 +84,7 @@ global $cpost;
 		twentyseventeen_entry_footer();
 	}
 	?>
-	<?php if (is_single() && $cpost->hasIndexSection()){
+	<?php if (is_single() && $cpost && $cpost->hasIndexSection()){
 	  echo '<div class="index-section">';
 	  echo $cpost->indexSection();
 	  echo '</div>';

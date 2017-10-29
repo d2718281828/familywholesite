@@ -17,9 +17,16 @@ class Interest extends FSPost {
   }
   public function getLinks(){
 	  $x = $this->getLinksViaTax("person_tax","fs_person");
-	  $y = $this->getLinksViaTax("event_tax","fs_event");
+	  //$y = $this->getLinksViaTax("event_tax","fs_event");
+	  $y = $this->getEventCpost();
 	  $z = $this->getLinksViaTax("place_tax","fs_place");
 	  return array_merge($x,$y,$z);
+  }
+  protected function getEventCpost(){
+	  $ev = $this->get("event");
+	  if (!$ev) return [];
+	  $evob = \CptHelper::make($ev);
+	  return [$evob];
   }
   public function on_update($req = false){
 	$post_id = $this->postid;
