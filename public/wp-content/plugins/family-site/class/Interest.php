@@ -24,7 +24,7 @@ class Interest extends FSPost {
   }
   protected function getEventCpost(){
 	  $ev = $this->get("event");
-	  (WP_DEBUG) error_log("getEventCpost: found event number ".$ev);
+	  if (WP_DEBUG) error_log("getEventCpost: found event number ".$ev);
 	  if (!$ev) return [];
 	  $evob = \CPTHelper\CptHelper::make($ev,"fs_event");
 	  if (WP_DEBUG) error_log("getEventCpost: found event ".$evob->show());
@@ -65,7 +65,7 @@ class Interest extends FSPost {
   public function indexSection(){
 	$ev = $this->getEventCpost();
 	if ($ev){
-		$m = '<div class="title">People</div>';
+		$m = '<div class="title">Event</div>';
 		$evob = $ev[0];
 		return $m.$evob->simpleLink();
 	}
