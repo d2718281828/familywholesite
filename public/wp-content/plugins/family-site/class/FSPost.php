@@ -138,26 +138,41 @@ class FSPost extends CPost {
   /**
   * Slug for the tag which will match this post.
   */ 
-  protected function matching_tag_slug(){
-	 if (!$this->post) $this->post = get_post($this->postid);
-	  return $this->post->post_name;
+  /* Sample of available fields after update of an event:
+  _wpnonce, _wp_http_referer, user_ID, action, originalaction, post_author, post_type, original_post_status, referredby, _wp_original_http_referer, 
+  post_ID, meta-box-order-nonce, closedpostboxesnonce, post_title, samplepermalinknonce, content, wp-preview, hidden_post_status, post_status, 
+  hidden_post_password, hidden_post_visibility, visibility, post_password, mm, jj, aa, hh, mn, ss, hidden_mm, cur_mm, hidden_jj, cur_jj, 
+  hidden_aa, cur_aa, hidden_hh, cur_hh, hidden_mn, cur_mn, original_publish, save, tax_input, newtag, _thumbnail_id, event_nonce, 
+  actual_date, duration, event_place, post_name, post_author_override
+  */
+  protected function matching_tag_slug($fromrequest = false){
+	if ($fromrequest){
+		//error_log("matching_tag_slug:: update request ".implode(", ",array_keys($_REQUEST)));
+		return $_REQUEST["post_name"];
+	}
+	if (!$this->post) $this->post = get_post($this->postid);
+	return $this->post->post_name;
   }
-  protected function matching_tag_title(){
-	 if (!$this->post) $this->post = get_post($this->postid);
-	  return $this->post->post_title;
+  protected function matching_tag_title($fromrequest = false){
+	if ($fromrequest){
+		return $_REQUEST["post_title"];
+	}
+	if (!$this->post) $this->post = get_post($this->postid);
+	return $this->post->post_title;
   }
   public function on_update($req = false){
 	  parent::on_update($req);
 	if (WP_DEBUG) error_log("FSpost::on_update for ".$this->postid.", ".($req?"REQ":"props"));
 	  
-    $name = $this->matching_tag_slug();
+    $name = $this->matching_tag_slug(true);
 	
 	if (!$reltax=$this->cpthelper->get_taxonomy()) return;	// if there isnt a related taxonomy then we dont need to create an entry
 	
 	if (WP_DEBUG) error_log("FSpost::on_update reltax=".$reltax);
     // do we have a matching tag?
     $matchingtag = get_post_meta($this->postid, "fs_matching_tag_id", true);
-    if ($matchingtag) return;
+	// need to change this, we might be wanting to update thee matching tag
+    //if ($matchingtag) return;
 
 	if (WP_DEBUG) error_log("FSpost::on_update reltax=".$reltax.", name=".$name);
     // is there a tag with this postname?
@@ -167,10 +182,18 @@ class FSPost extends CPost {
 	    return;
     }
 
-    $rc = wp_insert_term($this->matching_tag_title(), $reltax, [
-        "description"=>"Term relating to post ".$this->post->post_title,
-        "slug" => $name,
-      ] );
+	if ($matchingtag){
+		$rc = wp_update_term((int)$matchingtag, $reltax, [
+			"description"=>"Term relating to post ".$this->post->post_title,
+			"slug" => $name,
+			"name" => $this->matching_tag_title(true),
+		  ] );				
+	} else {
+		$rc = wp_insert_term($this->matching_tag_title(true), $reltax, [
+			"description"=>"Term relating to post ".$this->post->post_title,
+			"slug" => $name,
+		  ] );		
+	}
     if (is_wp_error($rc)){
       error_log("ERROR inserting taxonomy term for ".$this->post->post_title.", tax=".$reltax.": ".$rc->get_error_message());
     } else {

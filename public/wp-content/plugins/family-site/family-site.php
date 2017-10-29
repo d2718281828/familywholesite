@@ -10,20 +10,22 @@ Author URI:
 /* TODOs
 Creating a new event saves a tag which relates to "Auto-Draft" - because the post title isnt known when the matching tag is saved maybe??
 	test whether this is also true for pperson and place - i guess it is.
+Display event on post categories
+Brian H isnt there
 add the stephens's to wanted
 also mr & mrs lively
-GOT TO SORT OUT PAUL STEPHENS - need to email Rowan
-neils is bens daughter. Even though he was male. saving him solved the problem.
-	neil's kids not selected
-	joan not married to ben
-if something has correspondence as the second tag dont select it
-formatting for picture tags
-id there any point tagging photos with events??
+GOT TO SORT OUT weddngs/marriages PAUL STEPHENS - need to email Rowan
 Theme is really not working
 	remove the sidebar from single
 	on the home page some things are full width. Is the sidebar floated?
+	format timeline
 	need next and prev for post single()
 	event slideshow
+neils is bens daughter. Even though he was male. saving him solved the problem.
+	neil's kids not selected
+	joan not married to ben
+formatting for picture tags
+is there any point tagging photos with events??
 
 Want to be able to add events like "Moved to <new place>", can then tag that event with the whole family. Will timeline handle that?
 how to model marriages/spouses. Possibly use wedding event. In the album just a simple spouse field.

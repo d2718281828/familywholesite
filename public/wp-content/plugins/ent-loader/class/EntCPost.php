@@ -146,13 +146,13 @@ class EntCPost  {
 		and P.post_type = 'fs_event' and P.post_status='publish' 
 		and PM.meta_key = 'actual_date' and PM.meta_value=%s;";
 		$res = $wpdb->get_col($wpdb->prepare($s,$picdate));
-			echo "<p>-+-+-+-+-+ addevent SQL=".$wpdb->prepare($s,$picdate);
+			//echo "<p>-+-+-+-+-+ addevent SQL=".$wpdb->prepare($s,$picdate);
 		if (count($res)!=1) {
 			$m.=" Found ".count($res)." matching events, nothing done";
-			echo "<p>-+-+-+-+-+ addevent doing nothing - picdate=".$picdate.", res=".print_r($res,true);
+			//echo "<p>-+-+-+-+-+ addevent doing nothing - picdate=".$picdate.", res=".print_r($res,true);
 			return;
 		}
-		echo "<p>-+-+-+-+-+ addevent adding ".$res[0];
+		//echo "<p>-+-+-+-+-+ addevent adding ".$res[0];
 		$cpost->set("event",$res[0]);
 		return $m;
 	}
