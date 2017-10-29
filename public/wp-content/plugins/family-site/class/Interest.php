@@ -24,8 +24,10 @@ class Interest extends FSPost {
   }
   protected function getEventCpost(){
 	  $ev = $this->get("event");
+	  if (WP_DEBUG) error_log("getEventCpost: found event number ".$ev);
 	  if (!$ev) return [];
-	  $evob = \CptHelper::make($ev);
+	  $evob = \CptHelper::make($ev,"fs_event");
+	  if (WP_DEBUG) error_log("getEventCpost: found event ".$evob->show());
 	  return [$evob];
   }
   public function on_update($req = false){
@@ -50,6 +52,22 @@ class Interest extends FSPost {
 		}
 	}
 
+  }
+  /**
+  * Do we have an index section?
+  */
+  public function hasIndexSection(){
+    return true;
+  }
+  /**
+  * The index section - this is the timeline for people and events. Could be linked posts for Interest
+  */
+  public function indexSection(){
+	$ev = $this->getEventCpost();
+	if ($ev){
+		return ($ev[0])->simpleLink();
+	}
+    return "";
   }
 
 }

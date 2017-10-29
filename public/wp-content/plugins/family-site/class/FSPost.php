@@ -8,6 +8,7 @@ class FSPost extends CPost {
 
   protected $taxes = [];
 
+  // this puts the custom tax values onto the post.
   public function xtags(){
     $m = [];
     foreach($this->taxes as $tax) {
@@ -148,14 +149,14 @@ class FSPost extends CPost {
   protected function matching_tag_slug($fromrequest = false){
 	if ($fromrequest){
 		//error_log("matching_tag_slug:: update request ".implode(", ",array_keys($_REQUEST)));
-		return $_REQUEST["post_name"];
+		if (isset($_REQUEST["post_name"])) return $_REQUEST["post_name"];
 	}
 	if (!$this->post) $this->post = get_post($this->postid);
 	return $this->post->post_name;
   }
   protected function matching_tag_title($fromrequest = false){
 	if ($fromrequest){
-		return $_REQUEST["post_title"];
+		if (isset($_REQUEST["post_title"])) return $_REQUEST["post_title"];
 	}
 	if (!$this->post) $this->post = get_post($this->postid);
 	return $this->post->post_title;
