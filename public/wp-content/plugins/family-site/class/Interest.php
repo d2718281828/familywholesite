@@ -58,12 +58,12 @@ class Interest extends FSPost {
 
   }
   /**
-  * Add the event to the normal xtags list just for interest items
+  * Add the event to the normal xtags list just for interest items, because we arent tagging by event, it's a custom field.
   */
   public function xtags(){
 	$m = parent::xtags();
 	$ev = $this->getEventCpost();
-	if ($ev) $m = array_merge($m,$ev);
+	if ($ev) $m[] = ["title"=>"Event", "tax"=>"event_tax", "list"=>$ev ];
     return $m;
   }
   /**
