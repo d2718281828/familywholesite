@@ -60,10 +60,13 @@ class EntLoader {
 	  
 	  // pre-filtering - fixing problems with the album nodes
 	  $this->get("violet")->setMale(false);
-	  $this->setAncs("paulinst");
+	  $this->setAncs("rowanst");
+	  $this->setAncs("brianhe");
 	  //$this->setDescs("violet",5);
-	  $this->setDescs("anc5",5);
-	  $this->setDescs("ans1",5);
+	  $this->setDescs("anc5",8);
+	  $this->setAncs("elaines");
+	  $this->setDescs("elaines",8);
+	  $this->setDescs("ans1",8);
 	  $this->setGenders();
 	  $this->wantedEvents();
 	  
@@ -399,7 +402,7 @@ class EntLoader {
   }
   // clean up input data
   protected function setGenders(){
-	  $males=["brianhe","alanmit","alex","benben","calebs","chrismit","danst","davben","edwardt","elijah","ericm","jackn","jakell",
+	  $males=["brianhe","alanmit","alex","benben","calebs","neils","chrismit","danst","davben","edwardt","elijah","ericm","jackn","jakell",
 	  "jamess","jimnay","joelst","johnbus","johnll","johns","johnst","jonathoh","kieran","laurben","markmac","maxn",
 	  "natll","nobu","philtur","tobben","torin","zadok"];
 	  

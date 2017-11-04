@@ -8,15 +8,17 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-Display event on post categories
 Brian H isnt there
 add the stephens's to wanted
 also mr & mrs lively
+elaine S children
 GOT TO SORT OUT weddngs/marriages PAUL STEPHENS - need to email Rowan
 Theme is really not working
 	remove the sidebar from single
 	on the home page some things are full width. Is the sidebar floated?
 	format timeline
+	timeline group by day
+	timeline into JS?
 	need next and prev for post single()
 	event slideshow
 neils is bens daughter. Even though he was male. saving him solved the problem.
