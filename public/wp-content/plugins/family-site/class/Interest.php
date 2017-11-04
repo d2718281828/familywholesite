@@ -72,17 +72,5 @@ class Interest extends FSPost {
   public function hasIndexSection(){
     return false;
   }
-  /**
-  * The index section - this is the timeline for people and events. Could be linked posts for Interest
-  */
-  public function indexSection(){
-	$ev = $this->getEventCpost();
-	if ($ev){
-		$m = '<div class="title">Event</div>';
-		$evob = $ev[0];
-		return $m.$evob->simpleLink();
-	}
-    return "";
-  }
 
 }
