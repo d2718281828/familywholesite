@@ -8,8 +8,6 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-Creating a new event saves a tag which relates to "Auto-Draft" - because the post title isnt known when the matching tag is saved maybe??
-	test whether this is also true for pperson and place - i guess it is.
 Display event on post categories
 Brian H isnt there
 add the stephens's to wanted

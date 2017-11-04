@@ -22,6 +22,10 @@ class Interest extends FSPost {
 	  $z = $this->getLinksViaTax("place_tax","fs_place");
 	  return array_merge($x,$y,$z);
   }
+  /**
+  * Return the CPost representing the event for this item
+  * For consistency with tags, return it in a list, although there can only be 0 or 1.
+  */
   protected function getEventCpost(){
 	  $ev = $this->get("event");
 	  if (WP_DEBUG) error_log("getEventCpost: found event number ".$ev);
@@ -54,10 +58,19 @@ class Interest extends FSPost {
 
   }
   /**
+  * Add the event to the normal xtags list just for interest items
+  */
+  public function xtags(){
+	$m = parent::xtags();
+	$ev = $this->getEventCpost();
+	if ($ev) $m = array_merge($m,$ev);
+    return $m;
+  }
+  /**
   * Do we have an index section?
   */
   public function hasIndexSection(){
-    return true;
+    return false;
   }
   /**
   * The index section - this is the timeline for people and events. Could be linked posts for Interest
