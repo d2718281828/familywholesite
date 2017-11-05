@@ -96,8 +96,8 @@ class Person extends FSPost {
   /** For a person, the matching tag will have the year of birth appended if it is before 1920
   */
   protected function matching_tag_title($fromrequest = false){
-	  $dob = $fromrequest ? $_REQUEST["date_birth"]: $this->get("date_birth");
-	  $title = $fromrequest ? $_REQUEST["post_title"]: $this->get("post_title");
+	  $dob = ($fromrequest && isset($_REQUEST["date_birth"])) ? $_REQUEST["date_birth"]: $this->get("date_birth");
+	  $title = ($fromrequest && isset($_REQUEST["post_title"])) ? $_REQUEST["post_title"]: $this->get("post_title");
 	  
 	  $app = ($dob && $dob<"1920") ? " (".substr($dob,0,4).")" : "";
 	  return $title.$app;

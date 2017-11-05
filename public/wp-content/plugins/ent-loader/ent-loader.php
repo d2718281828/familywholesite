@@ -130,7 +130,7 @@ class EntLoader {
 	  foreach ($posts as $post){
 		  $cp = CptHelper::make($post);
 		  $cp->destroy();
-		  $m.= ",".$post;
+		  $m.= ", ".$post;
 	  }
 	  return $m;
   }
@@ -266,7 +266,7 @@ class EntLoader {
 		$rc = $cp->create();
 		$m.= "<br/>Created ".$cp->get("post_title")." ".( $rc===false ? $cp->error_message : $rc);
 		
-		if ($pic = $this->set[$id]->getImageFile()){
+		if (if (isset($this->set[$id])) && $pic = $this->set[$id]->getImageFile()){
 			$pic = str_replace("//","/",$pic);
 			$m.=" Image=".$pic;
 			$id = $this->sideload($pic, 0);
@@ -285,7 +285,7 @@ class EntLoader {
 	  foreach($this->set as $id=>$ent) {
 		  if (!$ent->isWanted()) continue;
 		  $this->translatePlace($ent, "place_birth");
-		  $this->translPlace($ent, "place_death");
+		  $this->translatePlace($ent, "place_death");
 		  $this->translatePlace($ent, "place_wedding");
 	  }
 	  $this->report["makeplaces"] =  $this->listPlaces();

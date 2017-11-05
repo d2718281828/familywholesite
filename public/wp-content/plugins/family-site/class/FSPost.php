@@ -162,7 +162,6 @@ class FSPost extends CPost {
 	return $this->post->post_title;
   }
   
-//Strict Standards: Declaration of FamilySite\Person::matching_tag_title() should be compatible with FamilySite\FSPost::matching_tag_title($fromrequest = false) in /var/www/vhosts/dev.storkey.uk/html/public/wp-content/plugins/family-site/class/Person.php on line 154
   public function on_update($req = false){
 	  parent::on_update($req);
 	if (WP_DEBUG) error_log("FSpost::on_update for ".$this->postid.", ".($req?"REQ":"props"));
