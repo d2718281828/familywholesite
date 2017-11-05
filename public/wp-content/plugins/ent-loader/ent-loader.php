@@ -65,7 +65,10 @@ class EntLoader {
 	  //$this->setDescs("violet",5);
 	  $this->setDescs("anc5",8);
 	  $this->setAncs("elaines");
+	  $this->setAncs("paddyg");
+	  $this->setAncs("annettes");
 	  $this->setDescs("elaines",8);
+	  $this->setDescs("daphneg",8);
 	  $this->setDescs("ans1",8);
 	  $this->setGenders();
 	  $this->wantedEvents();
@@ -81,7 +84,7 @@ class EntLoader {
 	  
 	  $this->phase3();		// re-save and convert text in the descriptions
 	  
-	  $m.= "<p>Available reports: ".implode(",",array_keys($this->report));
+	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
 	  $m = $this->reports("loaded","phase1","phase2","phase3","placecode");
 	  return $m;
 	  
