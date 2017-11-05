@@ -28,7 +28,7 @@ class Ent  {
 	}
 	public function addFile($filename, $reldir = null, $fulldir = null){
 		// if it is the descriptor file, then save it, otherwise, save up the media file details
-		if (substr($filename,-4)==".txt") {
+		if (substr(strtolower($filename),-4)==".txt") {
 			$this->reldir = $reldir;
 			$this->sourcedir = $fulldir;
 			$this->getit($filename);

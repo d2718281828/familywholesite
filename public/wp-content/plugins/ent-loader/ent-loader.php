@@ -266,7 +266,7 @@ class EntLoader {
 		$rc = $cp->create();
 		$m.= "<br/>Created ".$cp->get("post_title")." ".( $rc===false ? $cp->error_message : $rc);
 		
-		if (if (isset($this->set[$id])) && $pic = $this->set[$id]->getImageFile()){
+		if ((isset($this->set[$id])) && $pic = $this->set[$id]->getImageFile()){
 			$pic = str_replace("//","/",$pic);
 			$m.=" Image=".$pic;
 			$id = $this->sideload($pic, 0);
