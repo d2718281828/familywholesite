@@ -54,6 +54,7 @@ class FamilySite {
     $this->setupCPTs();
 
     add_action("init", [$this, "init"]);
+    add_action("admin_init", [$this, "admin_init"]);
     add_action("wp_head", [$this, "wp_head"]);
 	register_activation_hook(__FILE__, [$this,"on_activation"]);
   }
@@ -63,6 +64,9 @@ class FamilySite {
   public function init(){
     $this->setupTaxes();
 	add_shortcode("a",[$this,"do_a"]);
+  }
+  public function admin_init(){
+    wp_enqueue_style( 'family-site-admin-css', plugin_dir_url( __FILE__ ).'css/admin.css' );
   }
   public function wp_head(){
     // if this is a single page set up the cpost which will be used in templates
