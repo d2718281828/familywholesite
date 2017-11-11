@@ -36,6 +36,8 @@ class EntLoader {
 	  // pictures we definitely dont want
 	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd","ewcndw4","ewcndw5","ewcndw6","ewcndw7",
 	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
+	  
+	  $this->picBatchSize = 18;
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
@@ -156,7 +158,7 @@ class EntLoader {
 	  
 	  $this->build();		// create cposts out of ents
 	  
-	  $testset = $this->nextBatch(4);
+	  $testset = $this->nextBatch($this->picBatchSize);
 	  if (!$testset) return "<p>No further pictures to load.".$this->reports("stats");
 	  echo "<p>Test set ".implode(", ",$testset);
 	  
