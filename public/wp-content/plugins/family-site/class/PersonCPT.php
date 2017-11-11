@@ -7,7 +7,7 @@ use CPTHelper\CPTSelectHelper;
 use CPTHelper\SelectHelper;
 use CPTHelper\UseridSelector;
 
-require_once("class/Marriages.php");
+require_once("Marriages.php");
 
 class PersonCPT extends FSCpt {
 
