@@ -7,6 +7,8 @@ use CPTHelper\CPTSelectHelper;
 use CPTHelper\SelectHelper;
 use CPTHelper\UseridSelector;
 
+require_once("class/Marriages.php");
+
 class PersonCPT extends FSCpt {
 
   public function setup(){
@@ -32,6 +34,7 @@ class PersonCPT extends FSCpt {
         ->addField(new UseridSelector("userid", "Login id", "Link to the person's login id, if they have one"))
         ->addField(new FieldHelper("email_address", "Email Address", "How to contact this person - not needed if the login id is set."))
         ->addField(new DateHelper("date_baptism", "Date of Baptism", "This features in a few geneological records"))
+        ->addField(new Marriages("prior_marriages", "Previous Marriages", "Previous marriage detais. This has to be added for both spouses."))
     ;
   }
   /**

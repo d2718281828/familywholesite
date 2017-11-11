@@ -45,6 +45,9 @@ class FieldHelper {
     {
         return '<label for="'.$this->id.'">'.$this->label.'</label>';
     }
+	/**
+	* Actually write out the input field in the meta-box
+	*/
     public function fieldDiv()
     {
         $id = $this->id;
@@ -54,6 +57,9 @@ class FieldHelper {
     {
         return '<div class="metabox-field-desc">'.$this->description.'</div>';
     }
+	/**
+	* Get the request value
+	*/
     public function rqValue(){
         return $_REQUEST[$this->id];
     }
