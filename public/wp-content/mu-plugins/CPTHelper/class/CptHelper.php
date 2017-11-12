@@ -382,7 +382,7 @@ class CptHelper {
 		$m.= "<option value='-1'>None</option>";
 		foreach($res as $item){
 			$sel = ($item["ID"]==$currentvalue) ? " selected" : "";
-			$m.= "<option value='".$res["ID"]."$sel'>".$res["post_title"]."</option>";
+			$m.= "<option value='".$item["ID"]."'$sel>".$item["post_title"]."</option>";
 		}
 		$m.= "</select>";
 		
