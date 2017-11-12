@@ -21,7 +21,7 @@ class Marriages extends MultiValued {
     public function rqValue(){
         $res = [];
         for ($k=0; $k<count($_REQUEST[$this->id."_ds"]); $k++){
-          if ($_REQUEST[$this->id."_sp"][$k]) {
+          if ($_REQUEST[$this->id."_ds"][$k]) {
 			  $vals = [];
 			  $vals["spouse"] = $_REQUEST[$this->id."_sp"][$k];
 			  $vals["date_start"] = $_REQUEST[$this->id."_ds"][$k];
