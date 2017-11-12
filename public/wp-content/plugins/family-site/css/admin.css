@@ -2,7 +2,9 @@
 /* Admin css ************** */
 .metasub_p {
   max-width: 200px;
+  margin-right: 8px;
 }
 .metasub_d {
-  max-width: 120px;
+  max-width: 180px;
+  margin-right: 8px;
 }

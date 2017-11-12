@@ -44,6 +44,7 @@ class CptHelper {
 
     // class variable to keep track of them all
     static protected $registrations = [];
+	static protected $allInstances = null;
 
     protected $slug;
     protected $labels;
@@ -364,6 +365,28 @@ class CptHelper {
         $class = $cpt->instanceClass;
 		$z = new $class($res[0]);
 		return $z;
+	}
+	/**
+	* Make an html select element for all objects of this type.
+	* Cache the db call in self::$allInstances in case of multiple calls.
+	*/
+	static function selector($name, $type,$currentvalue){
+		global $wpdb;
+		$res = self::$allInstances;
+		if ($res===null){
+			$s = "select ID, post_title from ".$wpdb->posts." where post_type=%s and post_status='publish' order by post_title;";
+			$res = $wpdb->get_results($wpdb->prepare($s,$type),ARRAY_A);
+			self::$allInstances = $res;
+		}
+		$m = "<select name='$name'>";
+		$m.= "<option value='-1'>None</option>";
+		foreach($res as $item){
+			$sel = ($item["ID"]==$currentvalue) ? " selected" : "";
+			$m.= "<option value='".$res["ID"]."$sel'>".$res["post_title"]."</option>";
+		}
+		$m.= "</select>";
+		
+		return $m;
 	}
 }
 
