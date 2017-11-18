@@ -13,8 +13,8 @@ Text Domain: familysite
 */
 /* HOME PAGE ********************************************** */
 #wp-custom-header img {    
-	-webkit-filter: sepia(70%); /* Safari 6.0 - 9.0 */
-    filter: sepia(70%);
+	-webkit-filter: sepia(100%); /* Safari 6.0 - 9.0 */
+    filter: sepia(100%);
 }
 /* POST ********************************************** */
 .posted-info {
@@ -56,7 +56,7 @@ Text Domain: familysite
   width: 100%;
   margin-bottom: 10px;
 }
-a.link-small-wrap{
+a.link-small-wrap:hover{
 	text-decoration: none;
 }
 .entry-footer .tagsets .tagset .link-small {
