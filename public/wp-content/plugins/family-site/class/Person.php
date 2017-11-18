@@ -54,7 +54,7 @@ class Person extends FSPost {
     $pers = new Person($z);
     return $pers->simpleLink();
   }
-  protected marriageList($prop){
+  protected function marriageList($prop){
     $z = $this->get($prop,true);		// get multiple
     if (!$z) return "";
 	$res = "<table>";
@@ -62,7 +62,7 @@ class Person extends FSPost {
 	$res.= "</table>";
     return $res;	  
   }
-  protected marriageOne($marriage){
+  protected function marriageOne($marriage){
 	  $mar = json_decode($marriage,true);
 	  $m = "<tr>";
 	  $spouse = new Person($mar["spouse"]);
