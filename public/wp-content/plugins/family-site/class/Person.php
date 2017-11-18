@@ -35,6 +35,7 @@ class Person extends FSPost {
 	else {
 		if ($z=$this->otherSpouseLink()) $m.= $this->infoBit("Spouse",$z);
 	}
+    if ($z=$this->marriageList("prior_marriages")) $m.= $this->infoBit("Previous Marriages",$z);
 	
 	// children
 	$kids = $this->getChildren();
@@ -52,6 +53,23 @@ class Person extends FSPost {
     if (!$z) return "";
     $pers = new Person($z);
     return $pers->simpleLink();
+  }
+  protected marriageList($prop){
+    $z = $this->get($prop,true);		// get multiple
+    if (!$z) return "";
+	$res = "<table>";
+	foreach($z as $marriage) $res.=$this->marriageOne($marriage);
+	$res.= "</table>";
+    return $res;	  
+  }
+  protected marriageOne($marriage){
+	  $mar = json_decode($marriage,true);
+	  $m = "<tr>";
+	  $spouse = new Person($mar["spouse"]);
+	  $m.= "<td>".$spouse->simpleLink()."</td>";
+	  $m.= "<td>".$mar["date_start"]."</td>";
+	  $m.= "<td>".$mar["date_end"]."</td>";
+	  return $m."</tr>";
   }
   /** 
   * make a simple link for father or mother or spouse

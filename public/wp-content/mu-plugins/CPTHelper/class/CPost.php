@@ -88,9 +88,10 @@ class CPost {
      * Get post property.
      * Dont use it for ID, type
      * In keeping with the lazy loading, if this isnt a post property we will just use get_postmeta
-     * @param $property
+     * @param $property string property name
+     * @param $multiple boolean optional true if you want to fetch multiple rows from post meta
      */
-    public function get($property){
+    public function get($property,$multiple = false){
         if ($this->is_error) return null;
 
         if (isset($this->props[$property])) return $this->props[$property];
@@ -109,7 +110,7 @@ class CPost {
         }
         $cph = $this->getCPH();
 
-        $val = get_post_meta($this->postid, $property, true);
+        $val = get_post_meta($this->postid, $property, !$multiple);
         // todo transform it
         $this->props[$property] = $val;
         return $val;
