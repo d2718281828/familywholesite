@@ -11,6 +11,11 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: familysite
 
 */
+/* HOME PAGE ********************************************** */
+#wp-custom-header img {    
+	-webkit-filter: sepia(70%); /* Safari 6.0 - 9.0 */
+    filter: sepia(70%);
+}
 /* POST ********************************************** */
 .posted-info {
   font-size: 12px;
@@ -50,6 +55,9 @@ Text Domain: familysite
   font-weight: bold;
   width: 100%;
   margin-bottom: 10px;
+}
+a.link-small-wrap{
+	text-decoration: none;
 }
 .entry-footer .tagsets .tagset .link-small {
   display: inline-block;

@@ -8,9 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-daphne
-GOT TO SORT OUT weddngs/marriages PAUL STEPHENS - need to email Rowan
-	how to model marriages/spouses. Possibly use wedding event. In the album just a simple spouse field.
+formatting for picture tags
 Theme is really not working
 	remove the sidebar from single
 	on the home page some things are full width. Is the sidebar floated?
@@ -20,7 +18,6 @@ Theme is really not working
 	need next and prev for post single()
 	event slideshow
 Add siblings to the person infobox siblings list - full and half
-formatting for picture tags
 is there any point tagging photos with events??
 
 Want to be able to add events like "Moved to <new place>", can then tag that event with the whole family. Will timeline handle that?
