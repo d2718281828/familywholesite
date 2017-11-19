@@ -20,6 +20,11 @@ Text Domain: familysite
 .posted-info {
   font-size: 12px;
 }
+/* EDIT BUTTON  ***************************************** */
+.fs_edit_marker {
+	width: 18px;
+	height: 18px;
+}
 /* INFO BOX ***************************************** */
 .info-box {
   border: solid 1px #555;
