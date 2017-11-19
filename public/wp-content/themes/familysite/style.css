@@ -62,7 +62,8 @@ Text Domain: familysite
   margin-bottom: 10px;
 }
 a.link-small-wrap:hover{
-	text-decoration: none;
+	box-shadow: none;
+	color: red;
 }
 .entry-footer .tagsets .tagset .link-small {
   display: inline-block;
@@ -72,28 +73,26 @@ a.link-small-wrap:hover{
   text-transform: uppercase;
   font-size: 11px;
   font-family: "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
+  color: white;
+}
+.entry-footer .tagsets .tagset .link-small:hover {
+  color: #ffa;
 }
 .entry-footer .tagsets .tagset .link-small.fs_person {
-  color: #eee;
   background-color: #525;
 }
 .entry-footer .tagsets .tagset .link-small.fs_place {
-  color: #eee;
   background-color: #543;
 }
 .entry-footer .tagsets .tagset .link-small.fs_event {
-  color: #eee;
   background-color: #351;
 }
 .entry-footer .tagsets .tagset .link-small.fs_person:hover {
-  color: white;
   background-color: #636;
 }
 .entry-footer .tagsets .tagset .link-small.fs_place:hover {
-  color: white;
   background-color: #654;
 }
 .entry-footer .tagsets .tagset .link-small.fs_event:hover {
-  color: white;
   background-color: #462;
 }
