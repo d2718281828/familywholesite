@@ -17,7 +17,7 @@ class TimeLine {
 	$sql.= " order by event_date desc;";
     $res = $wpdb->get_results($sql, ARRAY_A);
 
-    $m = "";
+    $m = "<class='timeline-wrap'>";
     foreach($res as $event) {
       $source = \CPTHelper\CPTHelper::make($event["source"],$event["source_type"]);
       $evdate = new \DateTime($event["event_date"]);
@@ -44,6 +44,7 @@ class TimeLine {
 	  }
 	  $m.= '</div>';
     }
+	$m.="</div>";
     return $m;
   }
   /* timeline types

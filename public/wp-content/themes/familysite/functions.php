@@ -18,6 +18,9 @@ add_action( 'wp_enqueue_scripts', 'my_theme_enqueue_styles' );
 
 include("inc/template-tags.php");
 
+/**
+* Much nicer edit function, with pencil, which can also be used in multiple places in the page.
+*/
 function fs_edit_post($postid = null){
 	global $post;
 	if (current_user_can("edit_posts")){
@@ -25,7 +28,7 @@ function fs_edit_post($postid = null){
 		$site = get_site_url();
 		$template = get_stylesheet_directory_uri();
 		$url = "http://dev.storkey.uk/wp-admin/post.php?post=$postid&action=edit";
-		echo "<a href='$url'><div class='fs_edit_marker'><img src = '$template/assets/2000px-Blue_pencil.svg.png'></div></a>";
+		echo "<a href='$url' target='fs_edit_tab' alt='edit'><div class='fs_edit_marker'><img src = '$template/assets/2000px-Blue_pencil.svg.png'></div></a>";
 	}
 }
 ?>

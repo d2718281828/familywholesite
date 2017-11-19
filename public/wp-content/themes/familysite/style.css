@@ -52,6 +52,12 @@ Text Domain: familysite
   width: 70%;
 }
 /* TIMELINE ========================================== */
+.timeline-wrap {
+	width: 100%;
+	max-width: 760px;
+	margin-left: auto;
+	margin-right: auto;
+}
 .timeline-link .timeline-date {
 	margin-top: 10px;
 	background-color: #e7e7e7;
