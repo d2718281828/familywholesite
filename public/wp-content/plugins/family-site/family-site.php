@@ -8,7 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-formatting for picture tags
+!! event slideshow
 Theme is really not working
 	remove the sidebar from single
 	on the home page some things are full width. Is the sidebar floated?
@@ -16,13 +16,18 @@ Theme is really not working
 	timeline group by day
 	timeline into JS?
 	need next and prev for post single()
-	event slideshow
+Improved the edit - just a pencil
 Add siblings to the person infobox siblings list - full and half
 is there any point tagging photos with events??
+jQuery table controls on the people table
 
 Want to be able to add events like "Moved to <new place>", can then tag that event with the whole family. Will timeline handle that?
 test duplicate person
 
+maps
+family tree
+birthdays calendar
+anniversaries calendar
 */
 namespace FamilySite;
 use CPTHelper\CptHelper;
