@@ -30,11 +30,11 @@ global $cpost;
 		};
 
 		if ( is_single() ) {
-			the_title( '<h1 class="entry-title">', '</h1>' );
+			the_title( '<h1 class="entry-title">', fs_edit_post().'</h1>' );
 		} elseif ( is_front_page() && is_home() ) {
-			the_title( '<h3 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h3>' );
+			the_title( '<h3 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a>'.fs_edit_post().'</h3>' );
 		} else {
-			the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
+			the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a>'.fs_edit_post().'</h2>' );
 		}
 		if ($cpost && $cpost->showPosted()){
 			echo '<div class="posted-info">';
