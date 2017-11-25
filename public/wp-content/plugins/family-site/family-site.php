@@ -9,14 +9,18 @@ Author URI:
 */
 /* TODOs
 !! event slideshow
-Theme is really not working
-	remove the sidebar from single
+change 'leave a reply to 'make a comment
+login status in main nav
+timeline things in next column
 	on the home page some things are full width. Is the sidebar floated?
 	format timeline
+More person info = pull contact info from user profile
+
+--after release
+Theme is really not working
 	timeline group by day
 	timeline into JS?
 	need next and prev for post single()
-Improved the edit - just a pencil
 Add siblings to the person infobox siblings list - full and half
 is there any point tagging photos with events??
 jQuery table controls on the people table

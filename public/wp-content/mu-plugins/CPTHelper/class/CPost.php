@@ -227,7 +227,7 @@ class CPost {
       $m = '<div class="title">'.$this->get("post_title").'</div>';
       $img = get_the_post_thumbnail($this->postid);
       $m.= '<div class="thumb">'.$img.'</div>';
-      $m = '<a href="'.$url.'">'.$m.'</div>';
+      $m = '<a href="'.$url.'">'.$m.'</a>';
       return $m;
     }
     /**

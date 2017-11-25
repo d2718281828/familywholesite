@@ -40,11 +40,11 @@ class TimeLine {
 		}
 		break;
 		default:
-		$m.= '<div class="timeline-pic">'.$source->link().'</div>';
+		$m.= '<div class="timeline-pic">'.$source->link().'</div><!-- end timeline-pic --->';
 	  }
-	  $m.= '</div>';
+	  $m.= '</div><!-- end timeline-link --->';
     }
-	$m.="</div>";
+	$m.="</div><!-- end timeline-wrap --->";
     return $m;
   }
   /* timeline types
