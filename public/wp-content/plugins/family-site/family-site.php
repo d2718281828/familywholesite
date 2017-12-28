@@ -11,9 +11,6 @@ Author URI:
 !! event slideshow
 change 'leave a reply to 'make a comment
 login status in main nav
-timeline things in next column
-	on the home page some things are full width. Is the sidebar floated?
-	format timeline
 More person info = pull contact info from user profile
 
 --after release
