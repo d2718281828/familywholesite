@@ -1,7 +1,7 @@
 <?php
-global $showsides;
+global $showside;
 
-$showsides = false;
+$showside = false;
 
 function my_theme_enqueue_styles() {
 

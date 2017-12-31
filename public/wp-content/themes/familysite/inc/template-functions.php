@@ -1,5 +1,5 @@
 <?php
-
+error_log("doing template functions");
 /**
  * Adds custom classes to the array of body classes.
  *
@@ -8,6 +8,7 @@
  */
 function twentyseventeen_body_classes( $classes ) {
 	global $showside;
+error_log("modified body classes ".($showside ? "true" : "false"));
 	
 	// Add class of group-blog to blogs with more than 1 published author.
 	if ( is_multi_author() ) {
