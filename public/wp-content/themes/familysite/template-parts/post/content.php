@@ -70,9 +70,9 @@ global $cpost;
 				the_excerpt();
 			}
 
-		<?php if (is_single() && $cpost && ($slides = $cpost->slideShow())){
+		if (is_single() && $cpost && ($slides = $cpost->slideShow())){
 			slick_slider_query(1, $slides, 'template-parts/post/content', 'slide');
-		} ?>
+		}
 
 		wp_link_pages( array(
 			'before'      => '<div class="page-links">' . __( 'Pages:', 'twentyseventeen' ),
