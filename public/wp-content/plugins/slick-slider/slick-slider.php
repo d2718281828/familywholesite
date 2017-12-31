@@ -12,6 +12,7 @@ License:
 
 // this is designed to be a framework to change - it isnt a bells and whistles customisable thing.
 // It will certainly be necessary to adjust the responsive breaks and parameters.
+// change the settings from here: http://kenwheeler.github.io/slick/
 function slikslid_make_inline_scroller($id){
     $script = '(function($){
 
@@ -20,9 +21,11 @@ function slikslid_make_inline_scroller($id){
             prevArrow: ".arrow.prev.arrow-number-'.$id.'",
             nextArrow: ".arrow.next.arrow-number-'.$id.'",
             infinite: true,
-            slidesToShow: 2,
-            slidesToScroll: 2,
-            centerMode: true,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            centerMode: false,
+			autoplay: true,
+			autoplaySpeed: 2000,
             adaptiveHeight: true,
              responsive: [
                 {
@@ -69,6 +72,7 @@ function slick_slider_query($id, $queryargs, $slug, $name){
 	echo slikslid_make_inline_scroller($id);
     echo "<div class='slider-container'>";
     echo "<div class='arrow prev arrow-number-$id'>&lt;</div>";
+	echo "<div class='arrow next arrow-number-$id'>&gt;</div>";
     echo "<div class='slider-slide horiz-scroller-$id'>";
 	
 	$wpq = new WP_Query($queryargs);
@@ -80,7 +84,6 @@ function slick_slider_query($id, $queryargs, $slug, $name){
 	}
 	
 	echo "</div>";
-	echo "<div class='arrow next arrow-number-$id'>&gt;</div>";
 	echo "</div>";
 	wp_reset_query();
 }
