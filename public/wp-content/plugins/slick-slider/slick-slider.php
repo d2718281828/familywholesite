@@ -12,7 +12,7 @@ License:
 
 // this is designed to be a framework to change - it isnt a bells and whistles customisable thing.
 // It will certainly be necessary to adjust the responsive breaks and parameters.
-// change the settings from here: http://kenwheeler.github.io/slick/
+// settings described here: http://kenwheeler.github.io/slick/
 function slikslid_make_inline_scroller($id){
     $script = '(function($){
 
@@ -25,7 +25,7 @@ function slikslid_make_inline_scroller($id){
             slidesToScroll: 1,
             centerMode: false,
 			autoplay: true,
-			autoplaySpeed: 2000,
+			autoplaySpeed: 3000,
             adaptiveHeight: true,
              responsive: [
                 {

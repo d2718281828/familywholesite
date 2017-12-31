@@ -31,4 +31,7 @@ function fs_edit_post($postid = null){
 		echo "<a href='$url' target='fs_edit_tab' alt='edit'><div class='fs_edit_marker'><img src = '$template/assets/2000px-Blue_pencil.svg.png'></div></a>";
 	}
 }
+function twentyseventeen_entry_footer(){
+	return "";
+}
 ?>

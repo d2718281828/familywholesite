@@ -70,6 +70,10 @@ global $cpost;
 				the_excerpt();
 			}
 
+		<?php if (is_single() && $cpost && ($slides = $cpost->slideShow())){
+			slick_slider_query(1, $slides, 'template-parts/post/content', 'slide');
+		} ?>
+
 		wp_link_pages( array(
 			'before'      => '<div class="page-links">' . __( 'Pages:', 'twentyseventeen' ),
 			'after'       => '</div>',
@@ -88,9 +92,6 @@ global $cpost;
 	  echo '<div class="index-section">';
 	  echo $cpost->indexSection();
 	  echo '</div>';
-	} ?>
-	<?php if (is_single() && $cpost && ($slides = $cpost->slideShow())){
-	  slick_slider_query(1, $slides, 'template-parts/post/content', 'slide');
 	} ?>
 
 </article><!-- #post-## -->
