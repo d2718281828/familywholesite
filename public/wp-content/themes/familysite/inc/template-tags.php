@@ -37,7 +37,7 @@ function twentyseventeen_entry_footer() {
 				}
 			}
 
-      twentyseventeen_edit_link();
+      //twentyseventeen_edit_link();
       echo '</div>';
 
       if ($cpost){
