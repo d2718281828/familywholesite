@@ -89,6 +89,8 @@ global $cpost;
 	  echo $cpost->indexSection();
 	  echo '</div>';
 	} ?>
-
+	<?php if (is_single() && $cpost && ($slides = $cpost->slideShow())){
+	  slick_slider_query(1, $slides, 'template-parts/post/content', 'slide');
+	} ?>
 
 </article><!-- #post-## -->

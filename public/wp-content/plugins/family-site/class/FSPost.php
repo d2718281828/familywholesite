@@ -222,6 +222,12 @@ class FSPost extends CPost {
 	public function showPosted(){
 		return true;
 	}
+	/**
+	* Return a WP_Query argument for the posts to show in a slide show, on the single page of this cpost, or null
+	*/
+	public function slideShow(){
+		return null;
+	}
 }
 
 

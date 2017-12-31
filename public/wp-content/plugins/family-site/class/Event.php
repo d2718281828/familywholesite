@@ -37,6 +37,7 @@ class Event extends FSPost {
   * The index section - this is the timeline for people and events. Could be linked posts for Interest
   */
   public function indexSection(){
+	return "pix";
     require_once("TimeLine.php");
     $tl = new TimeLine($this);
     return $tl->html();
@@ -46,5 +47,11 @@ class Event extends FSPost {
   }
 	public function showPosted(){
 		return false;
+	}
+	public function slideShow(){
+		return array(
+			'meta_key'   => 'event',
+			'meta_value' => $this->ID
+		);
 	}
 }
