@@ -12,6 +12,6 @@
 ?>
 <div class="slick-slide">
 	<a href="<?php echo esc_url( get_permalink() ) ?>">
-		<?php the_post_thumbnail( 'twentyseventeen-featured-image' ); ?>
+		<?php the_post_thumbnail( ); ?>
 	</a>
 </div>
