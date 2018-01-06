@@ -20,7 +20,7 @@ function login_widget_current_url($uri=false) {
 	return $z; 
 }
 function login_widget_the_widget(){
-	$redirect = login_widget_current_url();
+	$redirect = login_widget_current_url(true);
 	if (is_user_logged_in()){
 		$me = wp_get_current_user();
 		$m = '<a href="'.wp_logout_url( $redirect ).'">Logout '.$me->user_firstname.'</a>';
