@@ -26,10 +26,10 @@ function login_widget_the_widget(){
 	$redirect = home_url('/wp-admin');
 	if (is_user_logged_in()){
 		$me = wp_get_current_user();
-		$m = '<a href="'.wp_logout_url( $redirect ).'" target="'.($wpadmin_tab_name ?: '_blank').'">Logout '.$me->user_firstname.'</a>';
+		$m = '<a href="'.wp_logout_url( login_widget_current_url(true) ).'">Logout '.$me->user_firstname.'</a>';
 		return $m;
 	}
-	$m = '<a href="'.wp_login_url( ).'">Login</a>';
+	$m = '<a href="'.wp_login_url($redirect ).'" target="'.($wpadmin_tab_name ?: '_blank').'">Login</a>';
 	return $m;
 }
 
