@@ -2,13 +2,14 @@
 /*
 Plugin Name: Login widget
 Plugin URI: 
-Description: Provides a login/out link in the nav bar, replaces item with class login-widget
+Description: Provides a login/out link in the nav bar, adds to the end
 Author: Derek Storkey
 Author URI:
 Version: 0.1
 Text Domain: loginwidget
 License:
 */
+// TODO change so that it looks for an item with text '[login-widget]' and replaces just that item
 function login_widget_current_url($uri=false) { 
 	$s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : ""; // an s if it is https 
 	$p=explode("/",strtolower($_SERVER["SERVER_PROTOCOL"])); 
@@ -20,13 +21,15 @@ function login_widget_current_url($uri=false) {
 	return $z; 
 }
 function login_widget_the_widget(){
-	$redirect = login_widget_current_url(true);
+	global $wpadmin_tab_name;
+	//$redirect = login_widget_current_url(true);
+	$redirect = home_url('/wp-admin');
 	if (is_user_logged_in()){
 		$me = wp_get_current_user();
-		$m = '<a href="'.wp_logout_url( $redirect ).'">Logout '.$me->user_firstname.'</a>';
+		$m = '<a href="'.wp_logout_url( $redirect ).'" target="'.($wpadmin_tab_name ?: '_blank').'">Logout '.$me->user_firstname.'</a>';
 		return $m;
 	}
-	$m = '<a href="'.wp_login_url( $redirect ).'">Login</a>';
+	$m = '<a href="'.wp_login_url( ).'">Login</a>';
 	return $m;
 }
 

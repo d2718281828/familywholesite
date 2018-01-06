@@ -8,9 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-!! event slideshow
 change 'leave a reply to 'make a comment
-login status in main nav
 More person info = pull contact info from user profile
 
 --after release
@@ -151,7 +149,8 @@ class FamilySite {
   }
 
 }
-
+global $wpadmin_tab_name;
+$wpadmin_tab_name = 'family_site_edit';
 $family_site = new FamilySite();
 
  ?>
