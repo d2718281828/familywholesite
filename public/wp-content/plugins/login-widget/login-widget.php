@@ -9,10 +9,18 @@ Version: 0.1
 Text Domain: loginwidget
 License:
 */
-
+function login_widget_current_url($uri=false) { 
+	$s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : ""; // an s if it is https 
+	$p=explode("/",strtolower($_SERVER["SERVER_PROTOCOL"])); 
+	$protocol = $p[0].$s; 
+	$port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]); 
+	if ($s && $_SERVER["SERVER_PORT"]==443) $port = ""; 
+	$z=$protocol."://".$_SERVER['SERVER_NAME'].$port; 
+	if ($uri) return $z.$_SERVER['REQUEST_URI']; 
+	return $z; 
+}
 function login_widget_the_widget(){
-	global $wp;
-	$redirect = home_url(add_query_arg(array(),$wp->request));
+	$redirect = login_widget_current_url();
 	if (is_user_logged_in()){
 		$me = wp_get_current_user();
 		$m = '<a href="'.wp_logout_url( $redirect ).'">Logout '.$me->user_firstname.'</a>';
