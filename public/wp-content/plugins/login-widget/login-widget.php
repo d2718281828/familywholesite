@@ -15,8 +15,7 @@ function login_widget_the_widget(){
 	$redirect = home_url(add_query_arg(array(),$wp->request));
 	if (is_user_logged_in()){
 		$me = wp_get_current_user();
-		$m = $me->user_firstname." " ;
-		$m.= '<a href="'.wp_logout_url( $redirect ).'">Logout</a>';
+		$m = '<a href="'.wp_logout_url( $redirect ).'">Logout '.$me->user_firstname.'</a>';
 		return $m;
 	}
 	$m = '<a href="'.wp_login_url( $redirect ).'">Login</a>';
