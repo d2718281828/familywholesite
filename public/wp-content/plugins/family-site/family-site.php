@@ -10,6 +10,8 @@ Author URI:
 /* TODOs
 change 'leave a reply to 'make a comment
 More person info = pull contact info from user profile
+if person is deceased, would like to pull out the dates as a subheading
+maybe an edit function to pulll out the shortcodes for all tagged people and drop them into the text
 
 --after release
 Theme is really not working
