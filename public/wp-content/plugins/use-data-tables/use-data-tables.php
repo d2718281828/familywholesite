@@ -15,7 +15,9 @@ function use_data_tables_enqueue_style() {
 }
 
 function use_data_tables_enqueue_script() {
+	$dir = plugin_dir_url(__FILE__);
 	wp_enqueue_script( 'use_data_tables_cdn_js', '//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js', ["jquery"] );
+	wp_enqueue_script( 'use_data_tables_cdn_js', $dir.'/js/use-data-tables.js', ["use_data_tables_cdn_js"] );
 }
 
 add_action( 'wp_enqueue_scripts', 'use_data_tables_enqueue_style' );
