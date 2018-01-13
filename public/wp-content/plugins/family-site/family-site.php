@@ -8,9 +8,12 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
+chris patrick isnt being imported
+add jQuery table to the big lists
+add a stats counter. Link in the author pages?
 change 'leave a reply to 'make a comment
 More person info = pull contact info from user profile
-if person is deceased, would like to pull out the dates as a subheading
+if person is deceased, would like to display the dates as a subheading
 maybe an edit function to pulll out the shortcodes for all tagged people and drop them into the text
 
 --after release
