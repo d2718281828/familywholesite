@@ -307,12 +307,12 @@ class CptHelper {
 		$s = "select * from ".$wpdb->posts." where post_type=%s and post_status='publish';";
 		$res = $wpdb->get_results($wpdb->prepare($s, $this->posttype()));
 		$m = "<table class='use-data-tables'>";
-		$m.= "<tr>".$this->list_heading()."</tr>";
+		$m.= "<thead><tr>".$this->list_heading()."</tr></thead><tbody>";
 		foreach($res as $post) {
 			$cpost = self::make($post);
 			$m.="<tr>".$this->list_row($cpost)."</tr>";
 		}
-		$m.= "</table>";
+		$m.= "</tbody></table>";
 		return $m;
 	}
 	protected function list_heading(){
