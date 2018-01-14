@@ -496,7 +496,9 @@ class EntLoader {
   }
   public function wantedEvents(){
 	  $events = ["slub","vvcaleb","wedpsan","vvwpedor","vvwmarhe","vvwjonpa","vvwaldor",];
-	  foreach ($events as $m) $this->get($m)->setWanted();
+	  foreach ($events as $m) {
+		  if ($v=$this->get($m)) $v->setWanted();
+	  }
   }
   public function sideload($fullfile, $post_id, $description=null){
 	// Need to require these files
@@ -542,7 +544,7 @@ class EntLoader {
   }
   protected function setDescs($who,$depth){
 	  $anc = $this->get($who);
-	  if (!$person) return;
+	  if (!$anc) return;
 	  $spo=$this->spouseOf($anc);
 	  error_log("Spouse of $who is $spo");
 	  if ($spo){
