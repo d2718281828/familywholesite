@@ -61,7 +61,7 @@ class EntLoader {
 	  $this->reportLoad();
 	  
 	  // pre-filtering - fixing problems with the album nodes
-	  $this->get("violet")->setMale(false);
+	  if ($vio=$this->get("violet")) $vio->setMale(false);
 	  $this->setAncs("rowanst");
 	  $this->setAncs("brianhe");
 	  //$this->setDescs("violet",5);
@@ -417,8 +417,12 @@ class EntLoader {
 	  "laurapk","maja","marina","mollyn","rhians","yvonne",];
 	  
 	  
-	  foreach ($males as $m) $this->get($m)->setMale(true);
-	  foreach ($females as $f) $this->get($f)->setMale(false);
+	  foreach ($males as $m) {
+		  if ($x=$this->get($m)) $x->setMale(true);
+	  }
+	  foreach ($females as $f) {
+		if ($x=$this->get($m)) $x->setMale(false);  
+	  }
   }
   /**
   * Determine whether a picture is wanted.
@@ -538,6 +542,7 @@ class EntLoader {
   }
   protected function setDescs($who,$depth){
 	  $anc = $this->get($who);
+	  if (!$person) return;
 	  $spo=$this->spouseOf($anc);
 	  error_log("Spouse of $who is $spo");
 	  if ($spo){
@@ -570,6 +575,7 @@ class EntLoader {
   }
   protected function setAncs($who){
 	  $person = $this->get($who);
+	  if (!$person) return;
 	  $person->setWanted();
 	  if ($mum=$person->get("mother")) {
 		  error_log("mother of ".$who." is ".$mum);
