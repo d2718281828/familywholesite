@@ -33,6 +33,7 @@ class EntLoader {
 	  $this->input = $up["basedir"]."/nodes";
 	  $this->testset = ["neils","marians","joans","rhians","20-raglan-st-lowestoft-suffolk",
 	  "euston-thetford-norfolk","58a-robson-avenue-willesden-london-nw10","bens","violet","markmac"];
+	  $this->wantedPeople = [["chrisx","M"]];		// anyone not pulled in by the setAncs and setDescs
 	  // pictures we definitely dont want
 	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd","ewcndw4","ewcndw5","ewcndw6","ewcndw7",
 	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
@@ -73,6 +74,7 @@ class EntLoader {
 	  $this->setDescs("daphneg",8);
 	  $this->setDescs("ans1",8);
 	  $this->setGenders();
+	  $this->setWantedPeople();
 	  $this->wantedEvents();
 	  
 	  foreach($this->set as $id=>$obj) $obj->reorg();
@@ -87,7 +89,7 @@ class EntLoader {
 	  $this->phase3();		// re-save and convert text in the descriptions
 	  
 	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m = $this->reports("loaded","phase1","phase2","phase3","placecode");
+	  $m.= $this->reports("loaded","phase1","phase2","phase3","placecode");
 	  return $m;
 	  
   }
@@ -421,7 +423,7 @@ class EntLoader {
 		  if ($x=$this->get($m)) $x->setMale(true);
 	  }
 	  foreach ($females as $f) {
-		if ($x=$this->get($m)) $x->setMale(false);  
+		if ($x=$this->get($f)) $x->setMale(false);  
 	  }
   }
   /**
@@ -498,6 +500,14 @@ class EntLoader {
 	  $events = ["slub","vvcaleb","wedpsan","vvwpedor","vvwmarhe","vvwjonpa","vvwaldor",];
 	  foreach ($events as $m) {
 		  if ($v=$this->get($m)) $v->setWanted();
+	  }
+  }
+  public function setWantedPeople(){
+	  foreach ($this->wantedPeople as $pp) {
+		  if ($v=$this->get($pp[0])) {
+			  $v->setWanted();
+			  $v->setMale($pp[1]=="M");
+		  }
 	  }
   }
   public function sideload($fullfile, $post_id, $description=null){

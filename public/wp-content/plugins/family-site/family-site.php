@@ -9,12 +9,11 @@ Author URI:
 */
 /* TODOs
 chris patrick isnt being imported
-add jQuery table to the big lists
 add a stats counter. Link in the author pages?
 change 'leave a reply to 'make a comment
 More person info = pull contact info from user profile
 if person is deceased, would like to display the dates as a subheading
-maybe an edit function to pulll out the shortcodes for all tagged people and drop them into the text
+maybe an edit function to pull out the shortcodes for all tagged people and drop them into the text
 
 --after release
 Theme is really not working
@@ -70,6 +69,7 @@ class FamilySite {
   public function init(){
     $this->setupTaxes();
 	add_shortcode("a",[$this,"do_a"]);
+	add_shortcode("stats",[$this,"do_stats"]);
   }
   public function admin_init(){
     wp_enqueue_style( 'family-site-admin-css', plugin_dir_url( __FILE__ ).'css/admin.css' );
@@ -151,6 +151,19 @@ class FamilySite {
 		  return $cp->simpleLink($text);
 	  }
 	  return "";
+  }
+  public function do_stats($att,$content,$tag){
+	  global $wpdb;
+	  $s = "select post_type, count(*) as num from ".$wpdb->posts." where post_type like 'fs%' and post_status='publish';";
+	  $res = $wpdb->get_results($s);
+	  $m ="<table><thead>";
+	  $m.="<tr><td>type</td><td>number</td></tr>";
+	  $m.="</thead><tbody>";
+	  for ($k=0; $k<count($res); $k++){
+		$m.="<tr><td>".$res[$k]['post_type']."</td><td>".$res[$k]['num']."</td></tr>";  
+	  }
+	  $m.="</tbody></table>";
+	  return $m;
   }
 
 }
