@@ -154,13 +154,22 @@ class FamilySite {
   }
   public function do_stats($att,$content,$tag){
 	  global $wpdb;
-	  $s = "select post_type, count(*) as num from ".$wpdb->posts." where post_type like 'fs%' and post_status='publish';";
+	  $s = "select post_type, count(*) as num from ".$wpdb->posts." where post_type like 'fs%' and post_status='publish' group by post_type;";
 	  $res = $wpdb->get_results($s,ARRAY_A);
 	  $m ="<table><thead>";
 	  $m.="<tr><td>type</td><td>number</td></tr>";
 	  $m.="</thead><tbody>";
 	  for ($k=0; $k<count($res); $k++){
-		$m.="<tr><td>".$res[$k]['post_type']."</td><td>".$res[$k]['num']."</td></tr>";  
+		  switch($res[$k]['post_type']){
+			  case 'fs_event': $tt = "Events";
+			  break;
+			  case 'fs_person': $tt = "People";
+			  break;
+			  case 'fs_place': $tt = "Places";
+			  break;
+			  default: $tt = "Posts";
+		  }
+		$m.="<tr><td>".$tt."</td><td>".$res[$k]['num']."</td></tr>";  
 	  }
 	  $m.="</tbody></table>";
 	  return $m;
