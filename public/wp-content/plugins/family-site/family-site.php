@@ -169,7 +169,7 @@ class FamilySite {
 			  break;
 			  case 'fs_place': $tt = "Places";
 			  break;
-			  default: $tt = "Posts";
+			  default: $tt = "Photos etc.";
 		  }
 		$m.="<tr><td>".$tt."</td><td>".$res[$k]['num']."</td></tr>";  
 	  }
