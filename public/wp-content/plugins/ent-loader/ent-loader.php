@@ -247,7 +247,7 @@ class EntLoader {
 		  $this->report["buildplaces"] = $m;
 	  }
 	  $m = "<h2>Sample of Built items</h2>";
-	  $sample = ["violet","dscn7225"];
+	  $sample = ["violet","dscn7225","shubil20","alelnl17","herinl16"];
 	  foreach($sample as $item){
 		  if (!isset($this->cposts[$item])) continue;
 		  $m.="<h3>".$item."</h3>";
