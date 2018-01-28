@@ -155,7 +155,7 @@ class FamilySite {
   public function do_stats($att,$content,$tag){
 	  global $wpdb;
 	  $s = "select post_type, count(*) as num from ".$wpdb->posts." where post_type like 'fs%' and post_status='publish';";
-	  $res = $wpdb->get_results($s);
+	  $res = $wpdb->get_results($s,ARRAY_A);
 	  $m ="<table><thead>";
 	  $m.="<tr><td>type</td><td>number</td></tr>";
 	  $m.="</thead><tbody>";
