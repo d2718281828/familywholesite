@@ -275,17 +275,74 @@ class EntLoader {
 		
 		if ((isset($this->set[$id])) && $pic = $this->set[$id]->getImageFile()){
 			$pic = str_replace("//","/",$pic);
-			$m.=" Image=".$pic;
+			$mtype = $this->mediaType($pic);		// img, pdf, vid, sou, unk
+			$m.=" Media ".$mtype."=".$pic;
 			$id = $this->sideload($pic, 0);
 			if ( is_wp_error($id)) $m.="<br />Error loading image ".implode("<br/>",$id->get_error_messages());
 			else {
-				$m.=" Loaded image into item ".$id;
-				set_post_thumbnail($cp->postid, $id);
+				switch($mtype){
+					case "img":
+						$m.=" Loaded image into item ".$id;
+						set_post_thumbnail($cp->postid, $id);
+						break;
+					case "pdf":
+						$m.=" Loaded PDF into item ".$id;
+						update_post_meta($cp->postid, "featured_pdf", $id);
+						break;
+					case "sou":
+						$m.=" Loaded sound recoording into item ".$id;
+						update_post_meta($cp->postid, "featured_recording", $id);
+						break;
+					case "vid":
+						$m.=" Loaded video into item ".$id;
+						update_post_meta($cp->postid, "featured_video", $id);
+						break;
+					default:		// unk
+						update_post_meta($cp->postid, "featured_media", $id);
+						break;
+				}
 			}
 		}
 	  }
 	  $this->report["phase1"] = $m;
 	  return $m;
+  }
+  /**
+  * Classify the type of file based on the filetype
+  * return strings: img, pdf, vid, sou, unk
+  */
+  protected function mediaType($fname){
+	  $dot = strrpos($fname,".");
+	  if ($dot===false) return "unk";
+	  $ext = strtolower(substr($fname,$dot+1));
+	  switch($ext){
+		  case "jpg":
+		  case "jpeg":
+		  case "png":
+		  case "gif":
+		  case "jpeg":
+		  return "img";
+		  
+		  case "pdf":
+		  return "pdf";
+		  
+		  case "mov":
+		  case "mp4":
+		  echo "<br>   ---- note, found video ";
+		  return "vid";
+		  
+		  case "mp3":
+		  case "ogg":
+		  case "wav":
+		  echo "<br>   ---- note, found sound";
+		  return "sou";
+		  
+		  default:
+		  echo "<br>WARNING: Unknown filetype ".$ext." in ".$fname;
+		  return "unk";
+	  }
+	  return "unk";
+	  
   }
   protected function makePlaces(){
 	  $m = "<h2>Making places</h2>";
