@@ -10,6 +10,10 @@ class EntCPost  {
 	protected $entloader;
 		
 	public function __construct($loader){
+		$this->exifFields = ["ApertureFNumber","camera_make","camera_model","Orientation","fnumber",
+			"iso","exposure","flash","focal_length","max_aperture"
+		];
+		
 		$this->entloader = $loader;
 	}
 	/**
@@ -61,7 +65,13 @@ class EntCPost  {
 			case "post":
 			$new["post_name"] = self::makeName($ent->get("title"));
 			$new["uploader_ref"] = $ent->key();
-			// what about all the camera fields?
+			
+			// all the EXIF camera fields
+			foreach($this->exifFields as $ex){
+				$val = $ent->get($ex);
+				if ($val) $new["exif"][$ex] = $val;				
+			}
+			
 			$this->cpDate($new, "actual_date" , $ent, "date_created");
 			break;
 		}
