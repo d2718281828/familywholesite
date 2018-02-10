@@ -29,13 +29,15 @@ class InterestCPT extends FSCpt {
 		$mldoc = get_post_meta($postid,"featured_pdf",true);
 		if ($mldoc){
 			$pdf = wp_get_attachment_url($mldoc);
+			// Could support other pdf plugins potentially
 			if (class_exists("core_pdf_embedder")){
-			$section = '[pdf-embedder url='.$pdf.']';
-			//$section = $pdf;
-			$content.='<div class="pdf-wrapper">'.$section.'</div>';
+				$section = '[pdf-embedder url='.$pdf.']';
+				$content.='<div class="pdf-wrapper">'.$section.'</div>';
+			} else {
+				$section = "<p><a href='$pdf'>PDF</a></p>";
 			}
+			$content.=$section;
 		}
-		  
 	  }
 	  return $content;
   }
