@@ -31,8 +31,7 @@ class InterestCPT extends FSCpt {
 			$pdf = wp_get_attachment_url($mldoc);
 			// Could support other pdf plugins potentially
 			if (class_exists("core_pdf_embedder")){
-				$section = '[pdf-embedder url='.$pdf.']';
-				$content.='<div class="pdf-wrapper">'.$section.'</div>';
+				$section = '<div class="pdf-wrapper">[pdf-embedder url='.$pdf.']</div>';
 			} else {
 				$section = "<p><a href='$pdf'>PDF</a></p>";
 			}
