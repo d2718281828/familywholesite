@@ -121,7 +121,7 @@ class InterestCPT extends FSCpt {
 	  if (!$post || !is_single()) return '';
 	  $postid = $post->ID;
 	  
-	  $mldoc = get_post_meta($postid,"exif",true);
+	  $exif = get_post_meta($postid,"exif",true);
 	  if (!$exif) return '';
 	  
 	  $m = "";
