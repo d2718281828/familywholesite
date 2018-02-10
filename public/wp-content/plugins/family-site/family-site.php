@@ -70,9 +70,19 @@ class FamilySite {
     $this->setupTaxes();
 	add_shortcode("a",[$this,"do_a"]);
 	add_shortcode("stats",[$this,"do_stats"]);
+	
+	// change the reply text
+	add_filter( 'comment_reply_link', [$this, 'change_comment'] );
   }
   public function admin_init(){
     wp_enqueue_style( 'family-site-admin-css', plugin_dir_url( __FILE__ ).'css/admin.css' );
+  }
+  /**
+  * I just want to 'leave a comment', not a reply
+  */
+  public function change_comment($title){
+	  return str_replace("Reply","Comment",$title);
+	  return $title;
   }
   public function wp_head(){
     // if this is a single page set up the cpost which will be used in templates

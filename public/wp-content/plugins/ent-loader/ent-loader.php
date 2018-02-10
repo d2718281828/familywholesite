@@ -275,31 +275,14 @@ class EntLoader {
 		
 		if ((isset($this->set[$id])) && $pic = $this->set[$id]->getImageFile()){
 			$pic = str_replace("//","/",$pic);
-			$mtype = $this->mediaType($pic);		// img, pdf, vid, sou, unk
-			$m.=" Media ".$mtype."=".$pic;
 			$id = $this->sideload($pic, 0);
 			if ( is_wp_error($id)) $m.="<br />Error loading image ".implode("<br/>",$id->get_error_messages());
 			else {
-				switch($mtype){
-					case "img":
-						$m.=" Loaded image into item ".$id;
-						set_post_thumbnail($cp->postid, $id);
-						break;
-					case "pdf":
-						$m.=" Loaded PDF into item ".$id;
-						update_post_meta($cp->postid, "featured_pdf", $id);
-						break;
-					case "sou":
-						$m.=" Loaded sound recoording into item ".$id;
-						update_post_meta($cp->postid, "featured_recording", $id);
-						break;
-					case "vid":
-						$m.=" Loaded video into item ".$id;
-						update_post_meta($cp->postid, "featured_video", $id);
-						break;
-					default:		// unk
-						update_post_meta($cp->postid, "featured_media", $id);
-						break;
+				if ($this->is_image($pic)){
+					$m.=" Loaded image ".$id;
+					set_post_thumbnail($cp->postid, $id);					
+				} else {
+					update_post_meta($cp->postid, "featured_media", $id);					
 				}
 			}
 		}
@@ -308,40 +291,37 @@ class EntLoader {
 	  return $m;
   }
   /**
-  * Classify the type of file based on the filetype
-  * return strings: img, pdf, vid, sou, unk
+  * is it an image based on the filetype?
   */
-  protected function mediaType($fname){
+  protected function is_image($fname){
 	  $dot = strrpos($fname,".");
-	  if ($dot===false) return "unk";
+	  if ($dot===false) return false;
 	  $ext = strtolower(substr($fname,$dot+1));
 	  switch($ext){
 		  case "jpg":
 		  case "jpeg":
 		  case "png":
 		  case "gif":
-		  case "jpeg":
-		  return "img";
+		  return true;
 		  
+		  // this stuff is just to write out a warning if we dont recognise the type at all
 		  case "pdf":
-		  return "pdf";
+		  
+		  case "ppt":
+		  case "doc":
+		  case "docx":
 		  
 		  case "mov":
 		  case "mp4":
-		  echo "<br>   ---- note, found video ";
-		  return "vid";
 		  
 		  case "mp3":
 		  case "ogg":
 		  case "wav":
-		  echo "<br>   ---- note, found sound";
-		  return "sou";
+		  return false;
 		  
-		  default:
-		  echo "<br>WARNING: Unknown filetype ".$ext." in ".$fname;
-		  return "unk";
 	  }
-	  return "unk";
+	  echo "<p>WARNING unknown file extension $ext on file $fname";
+	  return false;
 	  
   }
   protected function makePlaces(){
