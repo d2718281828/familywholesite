@@ -96,7 +96,7 @@ class TimeLine {
 	global $wpdb;
 	$timeline = $wpdb->prefix . "timeline";
 	$del = "delete from $timeline";
-	$rc = $wpdb->query($del));
+	$rc = $wpdb->query($del);
   }
   static function addEntry($event_date, $sid, $stype, $ev, $oid, $otype, $place, $event, $o2=null, $o2type=null ){
 	global $wpdb;

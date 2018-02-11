@@ -16,7 +16,6 @@ use CPTHelper\CPTSelectHelper;
 use CPTHelper\SelectHelper;
 require_once("class/Ent.php");
 require_once("class/EntCPost.php");
-require_once("class/TimeLine.php");
 
 class EntLoader {
 	
@@ -140,7 +139,7 @@ class EntLoader {
 		  $cp->destroy();
 		  $m.= ", ".$post;
 	  }
-	  TimeLine::clearAll();
+	  \FamilySite\TimeLine::clearAll();
 	  return $m;
   }
   /**
