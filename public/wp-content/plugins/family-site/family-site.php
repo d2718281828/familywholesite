@@ -13,6 +13,7 @@ change 'leave a reply to 'make a comment
 More person info = pull contact info from user profile
 if person is deceased, would like to display the dates as a subheading
 maybe an edit function to pull out the shortcodes for all tagged people and drop them into the text
+date_within is not supported in the import or the timeline
 
 --after release
 Theme is really not working
