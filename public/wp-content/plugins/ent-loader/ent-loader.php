@@ -90,7 +90,7 @@ class EntLoader {
 	  $this->phase3();		// re-save and convert text in the descriptions
 	  
 	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m.= $this->reports("loaded","phase1","phase2","phase3","placecode");
+	  $m.= $this->reports("builtsample","phase1","phase2","phase3","placecode");
 	  return $m;
 	  
   }
@@ -249,7 +249,7 @@ class EntLoader {
 		  $this->report["buildplaces"] = $m;
 	  }
 	  $m = "<h2>Sample of Built items</h2>";
-	  $sample = ["violet","dscn7225","shubil20","alelnl17","herinl16"];
+	  $sample = ["vvbjwav","dscn7225","shubil20","alelnl17","herinl16"];
 	  foreach($sample as $item){
 		  if (!isset($this->cposts[$item])) continue;
 		  $m.="<h3>".$item."</h3>";

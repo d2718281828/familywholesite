@@ -26,6 +26,8 @@ class EntCPost  {
 		$enttype = $ent->get("type");
 		$new["post_type"] = $this->xlateType($enttype);
 		$new["post_title"] = $ent->get("title");
+		if ($ent->key()=="slub") $new["post_title"] = "Derek and Anna's wedding";
+		
 		// this will need to be translated when all the cposts are in.
 		$new["post_content"] = "pending";
 		$new["ent_curly_desc"] = $ent->get("description");		// for subsequent translation, after everything is loaded.
