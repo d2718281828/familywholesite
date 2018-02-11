@@ -92,6 +92,12 @@ class TimeLine {
 	$del = "delete from $timeline where source=%d";
 	$rc = $wpdb->query($wpdb->prepare($del,$id));
   }
+  static function clearAll(){
+	global $wpdb;
+	$timeline = $wpdb->prefix . "timeline";
+	$del = "delete from $timeline";
+	$rc = $wpdb->query($del));
+  }
   static function addEntry($event_date, $sid, $stype, $ev, $oid, $otype, $place, $event, $o2=null, $o2type=null ){
 	global $wpdb;
 	$timeline = $wpdb->prefix . "timeline";
