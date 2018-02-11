@@ -33,7 +33,7 @@ class InterestCPT extends FSCpt {
   public function loaderRef(){
 	  global $post;
 	  if (!$post || !is_single()) return '';
-	  if ($x = get_post_meta($postid,"uploader_ref",true)){
+	  if ($x = get_post_meta($post->ID,"uploader_ref",true)){
 		return '<div class="loader-reference">Poster\'s reference: '.$x.'</div>';
 	  }
 	  return '';
