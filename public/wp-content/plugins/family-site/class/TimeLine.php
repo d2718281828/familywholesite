@@ -69,6 +69,7 @@ class TimeLine {
 	  $create = "CREATE TABLE IF NOT EXISTS $tname (
 		ID  bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 		event_date DATE NOT NULL,
+		date_within INTEGER default 0,
 		source bigint(20)  NOT NULL,
 		source_type  varchar(20) COLLATE utf8mb4_unicode_ci  NOT NULL,
 		event_type char(10) NOT NULL,
@@ -98,23 +99,34 @@ class TimeLine {
 	$del = "delete from $timeline";
 	$rc = $wpdb->query($del);
   }
-  static function addEntry($event_date, $sid, $stype, $ev, $oid, $otype, $place, $event, $o2=null, $o2type=null ){
+  static function addEntry($event_date, $sid, $stype, $ev, $oid, $otype, $place, $event, $o2=null, $o2type=null, $within=0 ){
 	global $wpdb;
 	$timeline = $wpdb->prefix . "timeline";
-	$ins = "insert into  $timeline(event_date, source, source_type,event_type, object, object_type, event, place, object2, object2_type) values(%s,%d,%s,%s,%d,%s,%d,%d,%d,%s);";
-	$ins2 = "insert into  $timeline(event_date, source, source_type,event_type, object, object_type,event, place) values(%s, %d,%s,%s,%d,%s,%d,%d);";
+	$ins = "insert into  $timeline(event_date, date_within, source, source_type,event_type, object, object_type, event, place, object2, object2_type) values(%s,%d, %d,%s,%s,%d,%s,%d,%d,%d,%s);";
+	$ins2 = "insert into  $timeline(event_date, date_within, source, source_type,event_type, object, object_type,event, place) values(%s, %d, %d,%s,%s,%d,%s,%d,%d);";
 	
-	$cd = self::correctDate($event_date);
-	if ($o2===null) $sql = $wpdb->prepare($ins2,$cd,$sid, $stype,$ev,$oid, $otype, $place, $event);
-	else $sql = $wpdb->prepare($ins,$cd,$sid, $stype,$ev, $oid, $otype, $place, $event, $o2, $o2type);
+	list($cd,$dwithin) = self::correctDate($event_date,$within);
+	if ($o2===null) $sql = $wpdb->prepare($ins2,$cd,$dwithin, $sid, $stype,$ev,$oid, $otype, $place, $event);
+	else $sql = $wpdb->prepare($ins,$cd,$dwithin,$sid, $stype,$ev, $oid, $otype, $place, $event, $o2, $o2type);
 	
 	$rc = $wpdb->query($sql);
 	  
   }
-  static function correctDate($dt){
-	  if (strlen($dt)==4) return $dt."/06/30";
-	  if (strlen($dt)==7) return $dt."/15";
-	  return $dt;
+  /**
+  * This is to cope with dates which are not days. we will accept yyyy and yyyy/mm.
+  * if we are given yyyy then we return yyyy/06/30 (half way through the year) and a date within not less than 182 (half a year). etc for months.
+  * @return two element list, the date, and the date within day count.
+  */
+  static function correctDate($dt,$within){
+	  if (strlen($dt)==4) {
+		  if ($within<182) $within=182;
+		  return [$dt."/06/30", $within];
+	  }
+	  if (strlen($dt)==7) {
+		  if ($within<15) $within=15;
+		  return [$dt."/15", $within];
+	  }
+	  return [$dt, $within];
   }
   /** Birth or death of a single person, evtype is BORN or DIED
   */

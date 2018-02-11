@@ -63,6 +63,7 @@ class EntCPost  {
 			case "fs_event":
 			$new["post_name"] = self::makeName($ent->get("title"));
 			$this->cpDate($new, "actual_date" , $ent, "date_created");
+			$this->    cp($new, "date_within" , $ent, "date_within");
 			break;
 			
 			case "post":
@@ -75,8 +76,8 @@ class EntCPost  {
 				if ($val) $new["exif"][$ex] = $val;				
 			}
 			
-			// everything should get the date
 			$this->cpDate($new, "actual_date" , $ent, "date_created");
+			$this->    cp($new, "date_within" , $ent, "date_within");
 			break;
 		}
 		

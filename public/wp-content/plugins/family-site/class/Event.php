@@ -16,7 +16,8 @@ class Event extends FSPost {
 
   public function infoBox(){
     $m = "";
-    $m.=$this->infoBit("Date",$this->get("actual_date"));
+	$w = ($x = $this->get("date_within")) ? " +/- ".$x." days" : "";
+    $m.=$this->infoBit("Date",$this->get("actual_date").$w);
     if ($dur=$this->get("duration")){
       $m.=$this->infoBit("Duration",$dur." days");
     }
