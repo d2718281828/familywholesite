@@ -72,6 +72,7 @@ class EntCPost  {
 				if ($val) $new["exif"][$ex] = $val;				
 			}
 			
+			// everything should get the date
 			$this->cpDate($new, "actual_date" , $ent, "date_created");
 			break;
 		}

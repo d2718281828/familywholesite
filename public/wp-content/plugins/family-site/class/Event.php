@@ -1,7 +1,7 @@
 <?php
 namespace FamilySite;
 
-// represents an instance of the Person CPT
+// represents an instance of the Event CPT
 class Event extends FSPost {
 
   protected $taxes = [];

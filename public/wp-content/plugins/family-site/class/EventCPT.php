@@ -19,7 +19,7 @@ class EventCPT extends FSCpt {
         ->addField(new CPTSelectHelper("event_place", "Place of the event", "Place where the event occurred", ["posttype"=>"fs_place"]))
     ;
   }
-  public function on_save($post_id, $post){
+  public function on_save_obs($post_id, $post){
     if (WP_DEBUG) error_log("in FamilySite::EventCPT::on_save method");
 	parent::on_save($post_id, $post);
 
