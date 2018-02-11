@@ -104,11 +104,17 @@ class TimeLine {
 	$ins = "insert into  $timeline(event_date, source, source_type,event_type, object, object_type, event, place, object2, object2_type) values(%s,%d,%s,%s,%d,%s,%d,%d,%d,%s);";
 	$ins2 = "insert into  $timeline(event_date, source, source_type,event_type, object, object_type,event, place) values(%s, %d,%s,%s,%d,%s,%d,%d);";
 	
-	if ($o2===null) $sql = $wpdb->prepare($ins2,$event_date,$sid, $stype,$ev,$oid, $otype, $place, $event);
-	else $sql = $wpdb->prepare($ins,$event_date,$sid, $stype,$ev, $oid, $otype, $place, $event, $o2, $o2type);
+	$cd = self::correctDate($event_date);
+	if ($o2===null) $sql = $wpdb->prepare($ins2,$cd,$sid, $stype,$ev,$oid, $otype, $place, $event);
+	else $sql = $wpdb->prepare($ins,$cd,$sid, $stype,$ev, $oid, $otype, $place, $event, $o2, $o2type);
 	
 	$rc = $wpdb->query($sql);
 	  
+  }
+  static function correctDate($dt){
+	  if (strlen($dt)==4) return $dt."/06/30";
+	  if (strlen($dt)==7) return $dt."/15";
+	  return $dt;
   }
   /** Birth or death of a single person, evtype is BORN or DIED
   */
