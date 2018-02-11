@@ -28,7 +28,15 @@ class InterestCPT extends FSCpt {
   * @return {string} Post content
   */
   public function add_final_content($content){
-	  return $content.$this->exif().$this->featured_media();
+	  return $content.$this->exif().$this->loaderRef().$this->featured_media();
+  }
+  public function loaderRef(){
+	  global $post;
+	  if (!$post || !is_single()) return '';
+	  if ($x = get_post_meta($postid,"uploader_ref",true)){
+		return '<div class="loader-reference">Poster\'s reference: '.$x.'</div>';
+	  }
+	  return '';
   }
   /**
   * Add the featured media link, or whole viewer if a PDF embedder is active, to the end of the post, if one is present.
@@ -65,6 +73,7 @@ class InterestCPT extends FSCpt {
 		  
 		  case "mov":
 		  case "mp4":
+		  case "mpg":
 		  
 		  case "mp3":
 		  case "ogg":

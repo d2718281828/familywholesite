@@ -8,8 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-chris patrick isnt being imported
-add a stats counter. Link in the author pages?
+timeline entries arent being deleted when post is deleted
 change 'leave a reply to 'make a comment
 More person info = pull contact info from user profile
 if person is deceased, would like to display the dates as a subheading
@@ -22,7 +21,6 @@ Theme is really not working
 	need next and prev for post single()
 Add siblings to the person infobox siblings list - full and half
 is there any point tagging photos with events??
-jQuery table controls on the people table
 
 Want to be able to add events like "Moved to <new place>", can then tag that event with the whole family. Will timeline handle that?
 test duplicate person

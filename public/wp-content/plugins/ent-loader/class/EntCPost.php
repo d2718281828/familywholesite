@@ -11,7 +11,7 @@ class EntCPost  {
 		
 	public function __construct($loader){
 		$this->exifFields = ["ApertureFNumber","camera_make","camera_model","Orientation","fnumber",
-			"iso","exposure","flash","focal_length","max_aperture"
+			"iso","exposure","flash","focal_length","max_aperture","width","height",
 		];
 		
 		$this->entloader = $loader;

@@ -148,8 +148,8 @@ class EntLoader {
 	  $up = wp_upload_dir();
 	  $this->input = $up["basedir"]."/album";
 	  
-	  //$testset = ["dscn7218"];
-	  //$testset = null;
+	  $justThese = null;
+	  //$justThese = ["dscn7229"];
 
 	  $this->load();
 	  
@@ -160,7 +160,7 @@ class EntLoader {
 	  
 	  $this->build();		// create cposts out of ents
 	  
-	  $testset = $this->nextBatch($this->picBatchSize);
+	  $testset = $justThese ?: $this->nextBatch($this->picBatchSize);
 	  if (!$testset) return "<p>No further pictures to load.".$this->reports("stats");
 	  echo "<p>Test set ".implode(", ",$testset);
 	  
@@ -534,7 +534,10 @@ class EntLoader {
 	  return $cp;
   }
   public function wantedEvents(){
-	  $events = ["slub","vvcaleb","wedpsan","vvwpedor","vvwmarhe","vvwjonpa","vvwaldor",];
+	  $events = ["slub","vvcaleb","wedpsan","vvwpedor","vvwmarhe","vvwjonpa","vvwaldor",
+	  "w0020713","vvcoln02","vvcot05","w0070707","vvbjwav4","vvbikl13","vvbikl13","vvbjwav4","vvbjwav",
+	  "vvcoln00","vvcoln02","vvcoln04","vvcot05","vvcot06","vvhook02","vvhook03","vvhook05","vvware99",
+	  ];
 	  foreach ($events as $m) {
 		  if ($v=$this->get($m)) $v->setWanted();
 	  }
