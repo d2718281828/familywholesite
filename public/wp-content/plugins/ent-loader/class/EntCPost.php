@@ -62,6 +62,7 @@ class EntCPost  {
 			
 			case "fs_event":
 			$new["post_name"] = self::makeName($ent->get("title"));
+			$this->cpDate($new, "actual_date" , $ent, "date_created");
 			break;
 			
 			case "post":
