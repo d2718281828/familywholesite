@@ -36,4 +36,7 @@ function fs_edit_post($postid = null){
  */
 require get_theme_file_path( '/inc/template-functions.php' );
 
+add_image_size( 'fs-featured-image', 527, 316, true );
+
+
 ?>

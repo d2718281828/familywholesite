@@ -27,7 +27,7 @@ class TimeLine {
 		$m.= '<div class="timeline-body">Born</div>';
 		break;
 		case "DIED":
-		$m.= '<div class="timeline-body">Died</div>';
+		$m.= '<div class="timeline-body">Passed away</div>';
 		break;
 		case "SON":
 		case "DAUGHTER":
