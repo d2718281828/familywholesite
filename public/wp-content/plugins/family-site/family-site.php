@@ -8,8 +8,8 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-private data type
-images on front page are full size. need 524 x 314, for any width over 920
+bug for john story talyor http://dev.storkey.uk/fs_person/john-storkeytaylor/
+private data attribute on import
 need to store the type of media for interest
 timeline entries arent being deleted when post is deleted
 change 'leave a reply to 'make a comment
