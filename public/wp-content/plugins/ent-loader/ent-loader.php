@@ -479,12 +479,14 @@ class EntLoader {
 		  }
 		  // if the index is a tag for any known node
 		  // except for the immediate family.
+		  if ($ix){
 		  foreach($ix as $ixentry){
 			  if ($cpost=$this->get_cpost_by_entref($ixentry[0])){
 				$eid = $ixentry[0];
 				if ($eid!="derek" && $eid!="anna" && $eid!="maja" && $eid!="alex" && $eid!="yvonne") $ent->setWanted();
 				$ent->tagWith($cpost);
 			  }
+		  }
 		  }
 		  // if the picture is on the same date as an existing event (only if exactly one event)
 		  if ($theevent=$this->getEventWithDate($picdate)){
