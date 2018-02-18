@@ -127,19 +127,36 @@ class EntCPost  {
 				$including = true;
 				break;
 				case "a":
-				$args = self::get_postname_by_entref($pair[1][0]);
+				$name_type = self::get_postdata_by_entref($pair[1][0]);
+				$args = $name_type[0];
 				if (count($pair[1])>1) {
 					$args.=" ";
 					if (strpos($pair[1][1]," ")!==false) $args.='"'.$pair[1][1].'"';
 					else $args.=$pair[1][1];
 				} 
-				if ($including) $o.="[".$pair[0]." ".$args."]";
+				if ($including) $o.="[".$this->cpostName($name_type[1])." ".$args."]";
 				break;
 				default:
 				if ($including) $o.="[".$pair[0]." ".$pair[1]."]";
 			}
 		}
 		return $o;
+	}
+	/**
+	* return the name of the [a] tag for a given post type.
+	*/
+	public function cpostName($posttype){
+		switch($posttype){
+			case 'fs_person':
+				return 'person';
+			case 'fs_event':
+				return 'event';
+			case 'fs_place':
+				return 'place';
+			default:
+				return 'interest';
+		}
+		return 'interest';
 	}
 	/**
 	* Convert the description and resave
@@ -211,12 +228,20 @@ class EntCPost  {
 		  return $pid;
 	  }
 	  static function get_postname_by_entref($entref){
+		  $pdata = self::get_postdata_by_entref($entref);
+		  if ($pdata) return $pdata[0];
+		  return null;
+	  }
+	  /**
+	  * @return two element array or nothing
+	  */
+	  static function get_postdata_by_entref($entref){
 		  global $wpdb;
-		  $s = "select post_name from ".$wpdb->postmeta." PM,
+		  $s = "select post_name, post_type from ".$wpdb->postmeta." PM,
 			".$wpdb->posts." P 
 			where P.ID = PM.post_id and P.post_status = 'publish' and 
 			meta_key = 'ent_ref' and meta_value=%s;";
-		  $pid = $wpdb->get_var($wpdb->prepare($s,$entref));
+		  $pid = $wpdb->get_row($wpdb->prepare($s,$entref),ARRAY_N);
 		  return $pid;
 	  }
 
