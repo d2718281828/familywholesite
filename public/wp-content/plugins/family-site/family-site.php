@@ -72,7 +72,6 @@ class FamilySite {
   }
   public function init(){
     $this->setupTaxes();
-	//add_shortcode("a",[$this,"do_a"]);
 	add_shortcode("stats",[$this,"do_stats"]);
 	
 	// change the reply text

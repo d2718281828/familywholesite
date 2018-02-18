@@ -179,7 +179,7 @@ class CptHelper {
     }
 	  public function do_shc($att,$content,$tag){
 		  if (isset($att[0]) && $att[0]){
-			  $cp = self::makeByName($att[0]);
+			  $cp = self::makeByName($att[0],$this->posttype());
 			  if ($cp===null) return "-".$att[0]." not known-";
 			  if ($content) $text = do_shortcode($content);
 			  elseif (isset($att[1]) && $att[1]) $text = $att[1];
@@ -371,12 +371,17 @@ class CptHelper {
         }
         return null;
     }
-	static function makeByName($name){
+	static function makeByName($name,$posttype = null){
 		global $wpdb;
-		error_log("static make by name class=".__CLASS__);
-		$s = "select * from ".$wpdb->posts." where post_name=%s and post_status='publish';";
-		$res = $wpdb->get_results($wpdb->prepare($s,$name));	// return object
+		if ($posttype){
+			$s = "select * from ".$wpdb->posts." where post_name=%s and post_status='publish' and post_type=%s;";
+			$res = $wpdb->get_results($wpdb->prepare($s,$name, $posttype));	// return object
+		} else {
+			$s = "select * from ".$wpdb->posts." where post_name=%s and post_status='publish';";
+			$res = $wpdb->get_results($wpdb->prepare($s,$name));	// return object
+		}
 		if (count($res)==0) return null;
+		if (count($res)>1) error_log("WARNING search for $name returned more than 1 post");
 		$cpt = self::get($res[0]->post_type);
 		if (!$cpt) return null;
         $class = $cpt->instanceClass;
