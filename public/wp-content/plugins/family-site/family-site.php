@@ -9,6 +9,8 @@ Author URI:
 */
 /* TODOs
 bug for john story talyor http://dev.storkey.uk/fs_person/john-storkeytaylor/
+	unfortunately it is a deep one. the post name is not unique in wordpress. I still think it is unique within a post type.
+	so the solution is to have instead of [a ] we need [person ].
 private data attribute on import
 need to store the type of media for interest
 timeline entries arent being deleted when post is deleted
@@ -70,7 +72,7 @@ class FamilySite {
   }
   public function init(){
     $this->setupTaxes();
-	add_shortcode("a",[$this,"do_a"]);
+	//add_shortcode("a",[$this,"do_a"]);
 	add_shortcode("stats",[$this,"do_stats"]);
 	
 	// change the reply text
@@ -153,7 +155,8 @@ class FamilySite {
 
     ]);
   }
-  public function do_a($att,$content,$tag){
+  // obsolete
+  public function do_a_obs($att,$content,$tag){
 	  if (isset($att[0]) && $att[0]){
 		  $cp = CptHelper::makeByName($att[0]);
 		  if ($cp===null) return "-".$att[0]." not known-";

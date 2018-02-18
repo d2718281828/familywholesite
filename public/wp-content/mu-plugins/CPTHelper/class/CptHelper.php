@@ -86,6 +86,7 @@ class CptHelper {
               register_activation_hook( $pluginfile, [$this,'flush'] );
               register_deactivation_hook( $pluginfile, [$this,'flush'] );
             }
+			$this->shcName = str_replace(" ","_",strtolower($name));	// for the shortcode
         }
         add_action( 'init', [$this,'register'] );
 
@@ -137,8 +138,11 @@ class CptHelper {
             }
             if ($this->metaFields) $optslist["supports"][] = 'custom_fields';
 
-            if (TRACEIT) traceit("!!!!!!!!actually registering the post type ".print_r($optslist,true));
+            //if (TRACEIT) traceit("!!!!!!!!actually registering the post type ".print_r($optslist,true));
             $cpt = register_post_type($this->posttype(), $optslist);
+
+			add_shortcode($this->shcName,[$this,"do_shc"]);
+
 
             if ($this->showInQueries){
                 add_action( 'pre_get_posts', [$this,'add_to_query'] );
@@ -173,6 +177,17 @@ class CptHelper {
 	  $cp->on_update(true);
       //$this->on_save($post_id,$post);
     }
+	  public function do_shc($att,$content,$tag){
+		  if (isset($att[0]) && $att[0]){
+			  $cp = self::makeByName($att[0]);
+			  if ($cp===null) return "-".$att[0]." not known-";
+			  if ($content) $text = do_shortcode($content);
+			  elseif (isset($att[1]) && $att[1]) $text = $att[1];
+			  else $text = null;
+			  return $cp->simpleLink($text);
+		  }
+		  return "";
+	  }
 	/**
 	* This function is callable directly when a post is created by wp_insert_post instead of in an online save
 	* @param $data array/null If called directly then this is for an array of custom field values.
@@ -358,10 +373,12 @@ class CptHelper {
     }
 	static function makeByName($name){
 		global $wpdb;
-		$s = "select * from ".$wpdb->posts." where post_name=%s;";
+		error_log("static make by name class=".__CLASS__);
+		$s = "select * from ".$wpdb->posts." where post_name=%s and post_status='publish';";
 		$res = $wpdb->get_results($wpdb->prepare($s,$name));	// return object
 		if (count($res)==0) return null;
 		$cpt = self::get($res[0]->post_type);
+		if (!$cpt) return null;
         $class = $cpt->instanceClass;
 		$z = new $class($res[0]);
 		return $z;
