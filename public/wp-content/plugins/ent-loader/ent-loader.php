@@ -482,7 +482,7 @@ class EntLoader {
 		  if ($ix){
 		  foreach($ix as $ixentry){
 			  if ($cpost=$this->get_cpost_by_entref($ixentry[0])){
-				$eid = $ixentry[0];
+				$eid = strtolower($ixentry[0]);
 				if ($eid!="derek" && $eid!="anna" && $eid!="maja" && $eid!="alex" && $eid!="yvonne") $ent->setWanted();
 				$ent->tagWith($cpost);
 			  }
