@@ -26,6 +26,7 @@ class EntLoader {
 	protected $report = "";
 	protected $newplaces = [];
 	protected $knownEnts = [];
+	protected $thisSite = "familysite";
 
   public function __construct(){
 	  add_action("init", [$this,"init"]);
@@ -489,14 +490,21 @@ class EntLoader {
 		  }
 		  }
 		  // if the picture is on the same date as an existing event (only if exactly one event)
-		  if ($theevent=$this->getEventWithDate($picdate)){
+		  // I have decided to take this off, i think it is pulling in a lot of un-necessary stuff
+		  if (false && $theevent=$this->getEventWithDate($picdate)){
 			  $ent->setWanted();
 			  $ent->set("event",$theevent);			  
 		  }
 	  }
-	  // go through again, chcking against the blaclist
+	  // go through again, checking against the blacklist
+	  // and also check the public attribute 
 	  foreach($this->set as $id=>$ent){
 		  if (in_array($id,$this->blackPix)) $ent->setWanted(false);
+		  $pub = $ent->getPublic($this->thisSite);
+		  // override all of the above
+		  if ($pub=="n") $ent->setWanted(false);
+		  if ($pub=="y") $ent->setWanted(true);
+		  if ($pub) echo "<br />NOTE new public attribute set for ".$id." to ".$pub;
 	  }
   }
   protected function isImageFor($entid){
