@@ -117,6 +117,7 @@ class Ent  {
 	* @return lowercase y, n or null;
 	*/
 	public function getpublic($publication){
+		if (!isset($this->props["public"])) return null;
 		foreach ($this->props["public"] as $pub) {
 			if (strtolower($pub[0])==$publication){
 				$val = strtolower($pub[1]);
