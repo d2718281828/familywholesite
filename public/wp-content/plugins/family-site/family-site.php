@@ -8,6 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
+Have to close off JSON access from the veil, and XMLRPC
 private data attribute on import
 need to store the type of media for interest
 timeline entries arent being deleted when post is deleted
