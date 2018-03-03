@@ -27,7 +27,8 @@ function fs_edit_post($postid = null){
 		$postid = $postid ?: $post->ID;
 		$site = get_site_url();
 		$template = get_stylesheet_directory_uri();
-		$url = "http://dev.storkey.uk/wp-admin/post.php?post=$postid&action=edit";
+		$site = site_url();
+		$url = "$site/wp-admin/post.php?post=$postid&action=edit";
 		echo "<a href='$url' target='".($wpadmin_tab_name ?: "_blank")."' alt='edit'><div class='fs_edit_marker'><img src = '$template/assets/2000px-Blue_pencil.svg.png'></div></a>";
 	}
 }

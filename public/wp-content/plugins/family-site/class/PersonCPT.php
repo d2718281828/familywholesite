@@ -76,7 +76,7 @@ class PersonCPT extends FSCpt {
 		$url = $cpost->permalink();
 		$m = '<td><a href="'.$url.'">'.$cpost->get("post_title").'</a></td>';
 		$m.= '<td>'.$cpost->get("date_birth").'</td>';
-		$m.= '<td>[a '.$cpost->get("post_name").']</td>';
+		$m.= '<td>[person '.$cpost->get("post_name").']</td>';
 		return $m;
 	}
 }

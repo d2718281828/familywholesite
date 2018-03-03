@@ -8,9 +8,6 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-bug for john story talyor http://dev.storkey.uk/fs_person/john-storkeytaylor/
-	unfortunately it is a deep one. the post name is not unique in wordpress. I still think it is unique within a post type.
-	so the solution is to have instead of [a ] we need [person ].
 private data attribute on import
 need to store the type of media for interest
 timeline entries arent being deleted when post is deleted
