@@ -20,6 +20,13 @@ class mediaType extends MediaSelector2 {
 		return $res;
 	}
 	/**
+	* additional actions for when the value is set - add the type variable
+	*/
+	protected function updateAction($post_id,$v){
+		if (!isset($this->options["typefield"])) return;
+		update_post_meta($post_id, $this->options["typefield"], $this->typeOfFile($v));
+	}
+	/**
 	* Return a 3 character file type: img for image, pdf, vid, aud, doc, htm, txt etc
 	* It should relate to how the featured media can be shown. 
 	*/
@@ -49,6 +56,12 @@ class mediaType extends MediaSelector2 {
 			
 			case 'txt':
 			return 'txt';
+			
+			case 'doc':
+			case 'ppt':
+			case 'docx':
+			case 'pptx':
+			return 'doc';
 			
 			default:
 			return 'unk';
