@@ -24,9 +24,9 @@ class mediaType extends MediaSelector2 {
 	* It should relate to how the featured media can be shown. 
 	*/
 	protected function typeOfFile($fname){
-		$p = strrpos(".",$fname);
+		$p = strrpos($fname,".");
 		if ($p===false) return "unk";
-		$t = strtolower(substr($list[$k][1],$p+1));
+		$t = strtolower(substr($fname,$p+1));
 		switch($t){
 			case 'jpg':
 			case 'jpeg':
