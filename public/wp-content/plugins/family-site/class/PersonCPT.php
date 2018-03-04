@@ -18,7 +18,7 @@ class PersonCPT extends FSCpt {
         ->setClass("FamilySite\Person")
         ->addField(new DateHelper("date_birth", "Date of Birth", "Date the person was born"))
         ->addField(new CPTSelectHelper("place_birth", "Place of Birth", "Place the person was living in immediately after birth", ["posttype"=>"fs_place"]))
-        ->addField(new DateHelper("date_death", "Date of Death", "Date the person was born"))
+        ->addField(new DateHelper("date_death", "Date of Death", "Date the person died"))
         ->addField(new CPTSelectHelper("place_death", "Place of Death", "Place the person was living when they died", ["posttype"=>"fs_place"]))
         ->addField(new CPTSelectHelper("father", "Father", "", ["posttype"=>"fs_person"]))
         ->addField(new CPTSelectHelper("mother", "Mother", "", ["posttype"=>"fs_person"]))

@@ -8,9 +8,8 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-Have to close off JSON access from the veil, and XMLRPC
-private data attribute on import
 need to store the type of media for interest
+judith dob not showing
 timeline entries arent being deleted when post is deleted
 change 'leave a reply to 'make a comment
 More person info = pull contact info from user profile
@@ -33,6 +32,9 @@ maps
 family tree
 birthdays calendar
 anniversaries calendar
+
+New <public> attribute:
+<public>familysite<x>y
 */
 namespace FamilySite;
 use CPTHelper\CptHelper;
