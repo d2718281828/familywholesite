@@ -280,11 +280,13 @@ class EntLoader {
 			$id = $this->sideload($pic, 0);
 			if ( is_wp_error($id)) $m.="<br />Error loading image ".implode("<br/>",$id->get_error_messages());
 			else {
-				if ($this->is_image($pic)){
+				$mtype = $this->typeOfFile($pic);
+				if ($mtype == "img"){
 					$m.=" Loaded image ".$id;
 					set_post_thumbnail($cp->postid, $id);					
 				} else {
 					update_post_meta($cp->postid, "featured_media", $id);					
+					update_post_meta($cp->postid, "featured_media_type", $mtype);					
 				}
 			}
 		}
@@ -292,10 +294,48 @@ class EntLoader {
 	  $this->report["phase1"] = $m;
 	  return $m;
   }
+  // this is copied from mediaType
+	protected function typeOfFile($fname){
+		$p = strrpos($fname,".");
+		if ($p===false) return "unk";
+		$t = strtolower(substr($fname,$p+1));
+		switch($t){
+			case 'jpg':
+			case 'jpeg':
+			case 'png':
+			case 'gif':
+			case 'bmp':
+			return 'img';
+			
+			case 'pdf':
+			return 'pdf';
+			
+			case 'htm':
+			case 'html':
+			return 'htm';
+			
+			case 'mp3':
+			case 'ogg':
+			case 'wav':
+			return 'aud';
+			
+			case 'txt':
+			return 'txt';
+			
+			case 'doc':
+			case 'ppt':
+			case 'docx':
+			case 'pptx':
+			return 'doc';
+			
+			default:
+			return 'unk';
+		}
+	}
   /**
   * is it an image based on the filetype?
   */
-  protected function is_image($fname){
+  protected function is_image_Obs($fname){
 	  $dot = strrpos($fname,".");
 	  if ($dot===false) return false;
 	  $ext = strtolower(substr($fname,$dot+1));
@@ -579,6 +619,7 @@ class EntLoader {
 
 	// If error storing permanently, unlink
 	if ( is_wp_error($id) ) {
+		// this doesnt work, file permissionss
 		@unlink($file_array['tmp_name']);
 		error_log("Error sideloading ".$fullfile." ".$id->get_error_message());
 		return $id;
