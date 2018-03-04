@@ -24,7 +24,8 @@ class mediaType extends MediaSelector2 {
 	*/
 	protected function updateAction($post_id,$v){
 		if (!isset($this->options["typefield"])) return;
-		update_post_meta($post_id, $this->options["typefield"], $this->typeOfFile($v));
+		$url = wp_get_attachment_url($v);
+		update_post_meta($post_id, $this->options["typefield"], $this->typeOfFile($url));
 	}
 	/**
 	* Return a 3 character file type: img for image, pdf, vid, aud, doc, htm, txt etc
