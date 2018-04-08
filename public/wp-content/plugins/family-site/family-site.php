@@ -8,16 +8,25 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-need to store the type of media for interest
-judith dob not showing
+homepage formatting wrong
+featured_media_type is being saved when fatured media is 0, i think after post save
+pending as the post content??? think it ran out of execution time?
+
 timeline entries arent being deleted when post is deleted
 change 'leave a reply to 'make a comment
 More person info = pull contact info from user profile
 if person is deceased, would like to display the dates as a subheading
 maybe an edit function to pull out the shortcodes for all tagged people and drop them into the text
-date_within is not supported in the import or the timeline
 
 --after release
+need timeline for a single day.
+
+judith dob not showing - dosnt seem to be a problem
+date_within is not supported in the import or the timeline. - it works for new post creation
+need to store the type of media for interest - it is stored
+
+Event carousel  not stoppable, and not full screen. Would be good to have a hover that  showed picture details.
+Main picture detail still shows a thumbnail, not whole pic. Not full sccreen, not fit to screen.
 Theme is really not working
 	timeline group by day
 	timeline into JS?
@@ -173,9 +182,10 @@ class FamilySite {
 	  group by post_type;";
 	  $res = $wpdb->get_results($s,ARRAY_A);
 	  $m ="<table><thead>";
-	  $m.="<tr><td>type</td><td>number</td></tr>";
+	  $m.="<tr><td>type</td><td></td><td>number</td></tr>";
 	  $m.="</thead><tbody>";
 	  for ($k=0; $k<count($res); $k++){
+		  $extra = "";
 		  switch($res[$k]['post_type']){
 			  case 'fs_event': $tt = "Events";
 			  break;
@@ -184,10 +194,49 @@ class FamilySite {
 			  case 'fs_place': $tt = "Places";
 			  break;
 			  default: $tt = "Photos etc.";
+			  $extra = $this->get_post_types($res[$k]['num']);
 		  }
-		$m.="<tr><td>".$tt."</td><td>".$res[$k]['num']."</td></tr>";  
+		$m.="<tr><td>".$tt."</td><td></td><td>".$res[$k]['num']."</td></tr>".$extra;  
 	  }
 	  $m.="</tbody></table>";
+	  return $m;
+  }
+  public function get_post_types($totalPosts){
+	  global $wpdb;
+	  // other attachment types
+	  $s = 'select PM.meta_value as attach, count(*) as num
+	  from ".$wpdb->posts." P, ".$wpdb->postmeta." PM
+	  where PM.post_id = P.ID 
+	  and P.post_type="post" and P.post_status="publish"
+	  and PM.meta_key = "featured_media_type"
+	  group by PM.meta_value
+	  ;'
+	  // number with thumbnail
+	  $thumbs = 'select count(*) 
+	  from ".$wpdb->posts." P, ".$wpdb->postmeta." PM
+	  where PM.post_id = P.ID 
+	  and P.post_type="post" and P.post_status="publish"
+	  and PM.meta_key = "_thumbnail_id"
+	  ;'
+	  // number not completed
+	  $aborted = 'select count(*) 
+	  from ".$wpdb->posts." P, ".$wpdb->postmeta." PM
+	  where PM.post_id = P.ID 
+	  and P.post_type="post" and P.post_status="publish" and P.post_content="pending"
+	  and PM.meta_key = "ent_curly_desc"
+	  ;'
+
+	  $m="";
+	  $others = $totalPosts;
+	  
+	  $res = $wpdb->get_results($s,ARRAY_A);
+	  for ($k=0; $k<count($res); $k++){
+		  $others= $others-$res[$k]['num'];
+		  $m.="<tr><td></td><td>".$res[$k]['attach']."</td><td>".$res[$k]['num']."</td></tr>";	  
+	  }
+	  if ($others>0){
+		  $m.="<tr><td></td><td>Others</td><td>".$others."</td></tr>";	  		  
+	  }
 	  return $m;
   }
 
