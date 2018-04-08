@@ -193,7 +193,7 @@ class FamilySite {
 			  break;
 			  case 'fs_place': $tt = "Places";
 			  break;
-			  default: $tt = "Photos etc.";
+			  default: $tt = "Memorabilia";
 			  $extra = $this->get_post_types($res[$k]['num']);
 		  }
 		$m.="<tr><td>".$tt."</td><td></td><td>".$res[$k]['num']."</td></tr>".$extra;  
@@ -205,26 +205,26 @@ class FamilySite {
 	  global $wpdb;
 	  // other attachment types
 	  $s = 'select PM.meta_value as attach, count(*) as num
-	  from ".$wpdb->posts." P, ".$wpdb->postmeta." PM
+	  from '.$wpdb->posts.' P, '.$wpdb->postmeta.' PM
 	  where PM.post_id = P.ID 
 	  and P.post_type="post" and P.post_status="publish"
 	  and PM.meta_key = "featured_media_type"
 	  group by PM.meta_value
-	  ;'
+	  ;';
 	  // number with thumbnail
-	  $thumbs = 'select count(*) 
-	  from ".$wpdb->posts." P, ".$wpdb->postmeta." PM
+	  $thumbs = 'select count(*) as num
+	  from '.$wpdb->posts.' P, '.$wpdb->postmeta.' PM
 	  where PM.post_id = P.ID 
 	  and P.post_type="post" and P.post_status="publish"
 	  and PM.meta_key = "_thumbnail_id"
-	  ;'
+	  ;';
 	  // number not completed
 	  $aborted = 'select count(*) 
-	  from ".$wpdb->posts." P, ".$wpdb->postmeta." PM
+	  from '.$wpdb->posts.' P, '.$wpdb->postmeta.' PM
 	  where PM.post_id = P.ID 
 	  and P.post_type="post" and P.post_status="publish" and P.post_content="pending"
 	  and PM.meta_key = "ent_curly_desc"
-	  ;'
+	  ;';
 
 	  $m="";
 	  $others = $totalPosts;
@@ -233,6 +233,13 @@ class FamilySite {
 	  for ($k=0; $k<count($res); $k++){
 		  $others= $others-$res[$k]['num'];
 		  $m.="<tr><td></td><td>".$res[$k]['attach']."</td><td>".$res[$k]['num']."</td></tr>";	  
+	  }
+
+	  $pix =  $wpdb->get_results($thumbs,ARRAY_A);
+	  if (count($pix)>0){
+		  $numpix = $pix[0]["num"];
+		  $others= $others - $numpix;
+		  $m.="<tr><td></td><td>Pictures</td><td>".$numpix."</td></tr>";	  		  
 	  }
 	  if ($others>0){
 		  $m.="<tr><td></td><td>Others</td><td>".$others."</td></tr>";	  		  
