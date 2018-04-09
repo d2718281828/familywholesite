@@ -147,6 +147,7 @@ class EntLoader {
   * COMMAND read in pics from album
   */
   public function loadPics(){
+	  $starttime = microtime();
 	  $up = wp_upload_dir();
 	  $this->input = $up["basedir"]."/album";
 	  
@@ -174,8 +175,41 @@ class EntLoader {
 	  
 	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
 	  $m.= $this->reports("loaded","builtsample","stats","phase1","phase2","phase2a","phase3");
+	  $m.= "<p>Elapsed time : ".$this->timeDiff(microtime(),$starttime);
 	  return $m;
 	  
+  }
+  /**
+  * COMMAND look for and fix any pictures which didnt load properly - most probably due to a timeout.  Fix or delete?
+  */
+  public function fixPics(){
+	  global $wpdb;
+	  //  just list them to start
+	  $aborted = 'select P.ID, P.post_title 
+	  from '.$wpdb->posts.' P, '.$wpdb->postmeta.' PM
+	  where PM.post_id = P.ID 
+	  and P.post_type="post" and P.post_status="publish" and P.post_content="pending"
+	  and PM.meta_key = "ent_curly_desc"
+	  ;';
+	  $res = $wpdb->get_results($aborted,ARRAY_A);
+	  $m = "<table>";
+	  $m.= "<tr><td>ID</td><td>post</td><td>edit</td></tr>";
+	  for ($k=0; $k<count($res);  $k++){
+		  $id = $res[$k]["ID"];
+		  $pp = "<a href='".get_permalink($id)."' target='_blank'>".$res[$k]["ID"]."</a>";
+		  $ed = "<a href='".get_site_url()."/wp-admin/post.php?post=".$id."&action=edit' target='_blank'>Edit</a>";
+		  $m.= "<tr><td>".$id."</td><td>".$pp."</td><td>".$ed."</td></tr>";		  
+	  }
+	  $m.= "</table>";
+	  return $m;
+  }
+  /**
+  * Subtract microtimes. microtime format is two numbers separated by a space, both are in seconds.
+  */
+  public timeDiff($a,$b){
+	  $av = explode(" ",$a);
+	  $bv = explode(" ",$b);
+	  return $av[0]-$bv[0] + ($av[1]-$bv[1]);
   }
   protected function nextBatch($batchsize = 5){
 	  $res = [];
