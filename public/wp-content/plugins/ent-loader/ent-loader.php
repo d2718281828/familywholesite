@@ -39,7 +39,7 @@ class EntLoader {
 	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd","ewcndw4","ewcndw5","ewcndw6","ewcndw7",
 	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
 	  
-	  $this->picBatchSize = 15;
+	  $this->picBatchSize = 20;
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
@@ -155,26 +155,31 @@ class EntLoader {
 	  //$justThese = ["dscn7229"];
 
 	  $this->load();
+	  set_time_limit(60); 
 	  
 	  $this->wantedPics();
 	  $this->reportLoad(false);
+	  set_time_limit(60); 
 	  
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  
 	  $this->build();		// create cposts out of ents
+	  set_time_limit(60); 
 	  
 	  $testset = $justThese ?: $this->nextBatch($this->picBatchSize);
 	  if (!$testset) return "<p>No further pictures to load.".$this->reports("stats");
 	  echo "<p>Test set ".implode(", ",$testset);
 	  
 	  $this->phase1($testset);		// initial WP create of everything.
+	  set_time_limit(60); 
 
 	  $this->phase2($testset);		// resolve references in parameters, like mother, father
+	  set_time_limit(60); 
 	  
 	  $this->phase3($testset);		// re-save and convert text in the descriptions
 	  
 	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m.= $this->reports("loaded","builtsample","stats","phase1","phase2","phase2a","phase3");
+	  $m.= $this->reports("loaded","builtsample","stats",/* "phase1","phase2",*/ "phase2a","phase3");
 	  $m.= "<p>Elapsed time : ".$this->timeDiff(microtime(),$starttime);
 	  return $m;
 	  
@@ -196,17 +201,19 @@ class EntLoader {
 	  $m.= "<tr><td>ID</td><td>post</td><td>edit</td></tr>";
 	  for ($k=0; $k<count($res);  $k++){
 		  $id = $res[$k]["ID"];
-		  $pp = "<a href='".get_permalink($id)."' target='_blank'>".$res[$k]["ID"]."</a>";
+		  $pp = "<a href='".get_permalink($id)."' target='_blank'>".$res[$k]["post_title"]."</a>";
 		  $ed = "<a href='".get_site_url()."/wp-admin/post.php?post=".$id."&action=edit' target='_blank'>Edit</a>";
+ 		  wp_delete_post( $id, true );
 		  $m.= "<tr><td>".$id."</td><td>".$pp."</td><td>".$ed."</td></tr>";		  
 	  }
 	  $m.= "</table>";
+	  $m.= "<p>Found ".count($res);
 	  return $m;
   }
   /**
   * Subtract microtimes. microtime format is two numbers separated by a space, both are in seconds.
   */
-  public timeDiff($a,$b){
+  public function timeDiff($a,$b){
 	  $av = explode(" ",$a);
 	  $bv = explode(" ",$b);
 	  return $av[0]-$bv[0] + ($av[1]-$bv[1]);
