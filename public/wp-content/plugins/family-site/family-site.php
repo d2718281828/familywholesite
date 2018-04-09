@@ -218,13 +218,6 @@ class FamilySite {
 	  and P.post_type="post" and P.post_status="publish"
 	  and PM.meta_key = "_thumbnail_id"
 	  ;';
-	  // number not completed
-	  $aborted = 'select count(*) 
-	  from '.$wpdb->posts.' P, '.$wpdb->postmeta.' PM
-	  where PM.post_id = P.ID 
-	  and P.post_type="post" and P.post_status="publish" and P.post_content="pending"
-	  and PM.meta_key = "ent_curly_desc"
-	  ;';
 
 	  $m="";
 	  $others = $totalPosts;

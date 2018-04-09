@@ -552,6 +552,14 @@ class EntLoader {
   public function wantedPics(){
 	  foreach($this->set as $id=>$ent){
 		  $entid = $ent->key();
+		  
+		  // check the public attribute
+		  $public = $ent->get("public");
+		  if ($public){
+			  if ($publlic=="y" || $public=="yes") $ent->setWanted(true);
+			  if ($publlic=="n" || $public=="no") $ent->setWanted(false);
+			  continue;		// this overrides anyother rules
+		  }
 		  $ix = $ent->get("index");
 		  $picdate = $ent->get("date_created");
 		  // if any current nodes have this as a featured image
