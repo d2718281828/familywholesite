@@ -24,6 +24,7 @@ class mediaType extends MediaSelector2 {
 	*/
 	protected function updateAction($post_id,$v){
 		if (!isset($this->options["typefield"])) return;
+		if ($v==0) return;
 		$url = wp_get_attachment_url($v);
 		update_post_meta($post_id, $this->options["typefield"], $this->typeOfFile($url));
 	}

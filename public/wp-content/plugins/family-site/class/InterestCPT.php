@@ -18,7 +18,7 @@ class InterestCPT extends FSCpt {
         ->addField(new DateHelper("actual_date", "Actual date", "Date that the picture was actually taken"))
         ->addField(new FieldHelper("date_within", "Date within (days)", "The true date should be within this number of days of the date given"))
         ->addField(new FieldHelper("uploader_ref", "Uploader's reference", "The file name or folder and filename that the uploader can use to cross reference the picture"))
-        ->addField(new mediaType("featured_media", "Featured Media file, doc, audio, video", "Associated media file if not image",["typefield"=>"featured_media_type"]))
+        ->addField(new mediaType("featured_media", "Featured Media file: pdf, doc, audio, video etc.", "Associated media file if not image (you must load the file into the media library first)",["typefield"=>"featured_media_type"]))
 		// featured_media_type	field set automatically, doesnt appear in edit
         ->addField(new CPTSelectHelper("event", "Event", "", ["posttype"=>"fs_event"]))
     ;
