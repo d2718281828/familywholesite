@@ -553,12 +553,21 @@ class EntLoader {
 	  foreach($this->set as $id=>$ent){
 		  $entid = $ent->key();
 		  
-		  // check the public attribute
+		  // check the public attribute - this overrides anyother rules. 
+		  // <public>familysite<x>y
 		  $public = $ent->get("public");
 		  if ($public){
-			  if ($publlic=="y" || $public=="yes") $ent->setWanted(true);
-			  if ($publlic=="n" || $public=="no") $ent->setWanted(false);
-			  continue;		// this overrides anyother rules
+			  if (is_array($public) && $public[0]=="familysite"){
+				if ($public[1]=="y" || $public[1]=="yes") {
+					$ent->setWanted(true);
+					continue;
+				}
+				if ($public[1]=="n" || $public[1]=="no") {
+				  $ent->setWanted(false);
+				  continue;	
+				}	
+			  }
+			  echo "<p>Public attribute not set correctly in ".$id.", ignored: ".$public[0]."-".$public[1];
 		  }
 		  $ix = $ent->get("index");
 		  $picdate = $ent->get("date_created");

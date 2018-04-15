@@ -9,8 +9,6 @@ Author URI:
 */
 /* TODOs
 homepage formatting wrong
-featured_media_type is being saved when featured media is 0, i think after post save
-lessimportnt,but the stats count of photos needs to exclude the other media. wouldnt be a problem if we didnt have unk.
 
 timeline entries arent being deleted when post is deleted
 change 'leave a reply to 'make a comment
@@ -41,6 +39,10 @@ maps
 family tree
 birthdays calendar
 anniversaries calendar
+
+done ========
+featured_media_type is being saved when featured media is 0, i think after post save
+lessimportnt,but the stats count of photos needs to exclude the other media. wouldnt be a problem if we didnt have unk.
 
 New <public> attribute:
 <public>familysite<x>y
