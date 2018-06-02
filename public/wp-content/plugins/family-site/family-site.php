@@ -8,7 +8,9 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
+cant look at photos on the same date. if there isnt an event created then you're stuck.
 homepage formatting wrong
+must use whole photo on detail pages. Possibly reduce the width?
 
 timeline entries arent being deleted when post is deleted
 change 'leave a reply to 'make a comment
