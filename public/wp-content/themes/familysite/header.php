@@ -48,7 +48,7 @@
 	 */
 	if ( ( is_single() || ( is_page() && ! twentyseventeen_is_frontpage() ) ) && has_post_thumbnail( get_queried_object_id() ) ) :
 		echo '<div class="single-featured-image-header">';
-		echo get_the_post_thumbnail( get_queried_object_id(), 'twentyseventeen-featured-image' );
+		echo get_the_post_thumbnail( );
 		echo '</div><!-- .single-featured-image-header -->';
 	endif;
 	?>
