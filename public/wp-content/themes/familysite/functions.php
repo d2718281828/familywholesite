@@ -1,7 +1,7 @@
 <?php
 global $showside;
 
-$showside = false;
+$showside = ($_SERVER['REQUEST_URI']=="/"); // is_home and is_front_page dont work at  this point
 
 function my_theme_enqueue_styles() {
 
