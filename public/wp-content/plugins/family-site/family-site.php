@@ -9,7 +9,6 @@ Author URI:
 */
 /* TODOs
 cant look at photos on the same date. if there isnt an event created then you're stuck.
-homepage formatting wrong
 
 timeline entries arent being deleted when post is deleted
 change 'leave a reply to 'make a comment
