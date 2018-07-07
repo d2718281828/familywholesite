@@ -2,6 +2,9 @@
 namespace EntLoader;
 use CPTHelper\CptHelper;
 
+/**
+This class is a factory class which converts an Ent into a CPost in the make method
+*/
 class EntCPost  {
 	
 	protected $entloader;
@@ -9,6 +12,9 @@ class EntCPost  {
 	public function __construct($loader){
 		$this->entloader = $loader;
 	}
+	/**
+	* Takes an ent and spits out a cpost object
+	*/
 	// I need to keep some values which arent part of the CPT - internal housekeeping. they will be prefixed ent_
 	// some of these values cannot be set until after all nodes have been created.
 	public function make($ent){
@@ -18,7 +24,7 @@ class EntCPost  {
 		$new["post_title"] = $ent->get("title");
 		// this will need to be translated when all the cposts are in.
 		$new["post_content"] = "pending";
-		$new["ent_curly_desc"] = $ent->get("description");
+		$new["ent_curly_desc"] = $ent->get("description");		// for subsequent translation, after everything is loaded.
 		// the ent_ properties are for resolution later
 		$new["ent_ref"] = $ent->key();
 		if ($s=$ent->get("picnode")) $new["ent_link_featured"] = strtolower($s);
