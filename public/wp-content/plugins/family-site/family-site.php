@@ -12,6 +12,7 @@ the home page columns arent stacking properly
 NEED TO SET UP EMAIL ON THE SERVER
 NEED MORE SPACE ON DROPSIE
 the pdf viewer is showing cookie messages!!!
+Check image upload sizes and timeline overall load times
 cant look at photos on the same date. if there isnt an event created then you're stuck.
 
 timeline entries arent being deleted when post is deleted
@@ -22,8 +23,12 @@ maybe an edit function to pull out the shortcodes for all tagged people and drop
 
 family tree
 
+Newsletter and 
+
 --after release
 need timeline or a slideshow for a single day.
+
+lookup by uploaders reference
 
 judith dob not showing - dosnt seem to be a problem
 date_within is not supported in the import or the timeline. - it works for new post creation
