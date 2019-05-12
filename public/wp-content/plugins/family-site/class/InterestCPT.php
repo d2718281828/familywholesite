@@ -124,7 +124,8 @@ class InterestCPT extends FSCpt {
   * @return {string} html
   */
   protected function imageBlock($url){
-		return '<div class="image-wrapper"><img src="'.$url.'"></div>';
+	$a = '<p>A</p>';
+	return $a.'<div class="image-wrapper"><img src="'.$url.'"></div>';
   }
   /**
   * Return the image EXIF data, if any has been stored
