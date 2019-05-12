@@ -15,12 +15,14 @@ class InterestCPT extends FSCpt {
     parent::setup();
 	$this
 	      ->setClass("FamilySite\Interest")
-        ->addField(new DateHelper("actual_date", "Actual date", "Date that the picture was actually taken"))
-        ->addField(new FieldHelper("date_within", "Date within (days)", "The true date should be within this number of days of the date given"))
+        ->addField(new DateHelper("actual_date", "Actual date", "Relevant date: when the picture was taken or the recording made"))
+        ->addField(new FieldHelper("date_within", "Date within (days)", "If you dont know exactly when it happened, guess a date and give some idea of how far out you are: the true date should be within this number of days of the date given"))
+        ->addField(new CPTSelectHelper("maker", "Maker", "Who took the photo or made the recording", ["posttype"=>"fs_person"]))
+        ->addField(new FieldHelper("maker_text", "Maker (text)", "Who took the photo or made the recording (if not a person on the site)"))
         ->addField(new FieldHelper("uploader_ref", "Uploader's reference", "The file name or folder and filename that the uploader can use to cross reference the picture"))
         ->addField(new mediaType("featured_media", "Featured Media file: pdf, doc, audio, video etc.", "Associated media file if not image (you must load the file into the media library first)",["typefield"=>"featured_media_type"]))
 		// featured_media_type	field set automatically, doesnt appear in edit
-        ->addField(new CPTSelectHelper("event", "Event", "", ["posttype"=>"fs_event"]))
+        ->addField(new CPTSelectHelper("event", "Event", "If you can associate the picture or recording with an event (like 'auntie Betty's baptism'), even if you dont know when the event was, this can help to organise pictures. ", ["posttype"=>"fs_event"]))
     ;
 	
 	add_filter( 'the_content', [$this, 'add_final_content'] );
