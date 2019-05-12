@@ -33,7 +33,20 @@ class InterestCPT extends FSCpt {
   * @return {string} Post content
   */
   public function add_final_content($content){
-	  return $content.$this->exif().$this->loaderRef().$this->featured_media();
+	  return $this->before_content().$content.$this->exif().$this->loaderRef().$this->featured_media();
+  }
+  public function before_content(){
+	global $post;
+	$maker = get_post_meta($post->ID,"maker",true);
+	if ($maker){
+		$mm = get_the_title($maker);
+		$mmu = get_permalink($maker);
+		$mm = '<a href="'.$mmu.'">'.$mm.'</a>';
+	} else {
+		$mm = get_post_meta($post->ID,"maker_text",true);
+	}
+	if ($mm) return '<div class="creator_block"><p>Created by: '.$mm.'</p></div>';
+	return '';
   }
   public function loaderRef(){
 	  global $post;
@@ -124,8 +137,7 @@ class InterestCPT extends FSCpt {
   * @return {string} html
   */
   protected function imageBlock($url){
-	$a = '<p>A</p>';
-	return $a.'<div class="image-wrapper"><img src="'.$url.'"></div>';
+	return '<div class="image-wrapper"><img src="'.$url.'"></div>';
   }
   /**
   * Return the image EXIF data, if any has been stored
