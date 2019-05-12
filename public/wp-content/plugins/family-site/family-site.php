@@ -8,6 +8,10 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
+the home page columns arent stacking properly
+NEED TO SET UP EMAIL ON THE SERVER
+NEED MORE SPACE ON DROPSIE
+the pdf viewer is showing cookie messages!!!
 cant look at photos on the same date. if there isnt an event created then you're stuck.
 
 timeline entries arent being deleted when post is deleted
@@ -16,8 +20,10 @@ More person info = pull contact info from user profile
 if person is deceased, would like to display the dates as a subheading
 maybe an edit function to pull out the shortcodes for all tagged people and drop them into the text
 
+family tree
+
 --after release
-need timeline for a single day.
+need timeline or a slideshow for a single day.
 
 judith dob not showing - dosnt seem to be a problem
 date_within is not supported in the import or the timeline. - it works for new post creation
