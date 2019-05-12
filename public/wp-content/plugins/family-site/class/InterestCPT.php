@@ -6,7 +6,7 @@ use CPTHelper\DateHelper;
 use CPTHelper\CPTSelectHelper;
 use CPTHelper\SelectHelper;
 use CPTHelper\UseridSelector;
-//use CPTHelper\MediaSelector2;
+
 require_once("types/mediaType.php");
 
 class InterestCPT extends FSCpt {
