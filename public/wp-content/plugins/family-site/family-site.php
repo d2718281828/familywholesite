@@ -8,6 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
+entloader EntCPost.php on line 81 created_by
 the home page columns arent stacking properly
 NEED TO SET UP EMAIL ON THE SERVER
 NEED MORE SPACE ON DROPSIE
@@ -24,6 +25,12 @@ maybe an edit function to pull out the shortcodes for all tagged people and drop
 family tree
 
 Newsletter and 
+
+Page/widget/shortcode ideas
+new arrivals - youngest people
+page for the cousins
+page for the second cousins
+Quiz - what is the relationship between two randomly chosen persons?
 
 --after release
 need timeline or a slideshow for a single day.

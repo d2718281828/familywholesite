@@ -35,17 +35,21 @@ class InterestCPT extends FSCpt {
   public function add_final_content($content){
 	  return $this->before_content().$content.$this->exif().$this->loaderRef().$this->featured_media();
   }
+  /**
+  *
+  */
   public function before_content(){
 	global $post;
 	$maker = get_post_meta($post->ID,"maker",true);
+	$mm = "";
 	if ($maker){
 		$mm = get_the_title($maker);
 		$mmu = get_permalink($maker);
 		$mm = '<a href="'.$mmu.'">'.$mm.'</a>';
-	} else {
-		$mm = get_post_meta($post->ID,"maker_text",true);
 	}
-	if ($mm) return '<div class="creator_block"><p>Created by: '.$mm.'</p></div>';
+	$mm2 = get_post_meta($post->ID,"maker_text",true);
+	
+	if ($mm) return '<div class="creator_block"><p>Created by: '.$mm.($mm2 ? " ".$mm2 : "").'</p></div>';
 	return '';
   }
   public function loaderRef(){
