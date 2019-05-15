@@ -12,7 +12,7 @@ class Person extends FSPost {
 	// is the user logged in?
 	$this->loggedin = is_user_logged_in();
 	$this->sensitive = $this->get("date_death") ? false : true;
-	$this->showDates = $this->sensitive && !$this->loggedin;
+	$this->showDates = !$this->sensitive || $this->loggedin;
   }
 
 
@@ -59,6 +59,7 @@ class Person extends FSPost {
 	if ($userid){
 		$userdata = get_userdata( $userid );		
 		$m.= $this->infoBit("Email",$userdata->user_email);
+		if ($userdata->description) $m.= $this->infoBit("About",$userdata->description);
 	}
     return $m;
   }
