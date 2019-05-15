@@ -40,7 +40,13 @@ class CPost {
             $this->is_error = true;
             $this->error_message = "Object constructed with invalid argument";
         }
+		$this->init();
     }
+	/**
+	* Overrideable
+	*/
+	public function init(){
+	}
 
     /**
      * set the type and look up the helper for that type

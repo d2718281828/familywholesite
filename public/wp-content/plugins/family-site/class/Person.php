@@ -5,26 +5,38 @@ namespace FamilySite;
 class Person extends FSPost {
 
   protected $taxes = [];
+  protected $loggedin = false;
+  protected $sensitive = true;	// is the persson object sensitive (i.e. still around)
+  
+  public function init(){
+	// is the user logged in?
+	$this->loggedin = is_user_logged_in();
+	$this->sensitive = $this->get("date_death") ? false : true;
+	$this->showDates = $this->sensitive && !$this->loggedin;
+  }
+
 
   public function infoBox(){
     $m = "";
     $m.=$this->infoBit("Full name at birth",$this->get("birthname"));
 
-    if ($bp=$this->get("place_birth")){
-      $place = new Place($bp);
-      $placename = " at ".$place->simpleLink();
-    } else $placename = "";
-    $m.=$this->infoBit("Born",$this->get("date_birth").$placename);
+	if ($this->showDates) {
+		if ($bp=$this->get("place_birth")){
+		  $place = new Place($bp);
+		  $placename = " at ".$place->simpleLink();
+		} else $placename = "";
+		$m.=$this->infoBit("Born",$this->get("date_birth").$placename);
 
-    if ($z=$this->get("date_baptism")) $m.= $this->infoBit("Baptized",$z);
+		if ($z=$this->get("date_baptism")) $m.= $this->infoBit("Baptized",$z);
 
-    if ($dd=$this->get("date_death")){
-      if ($bp=$this->get("place_death")){
-        $place = new Place($bp);
-        $placename = " at ".$place->simpleLink();
-      } else $placename = "";
-      $m.=$this->infoBit("Died",$dd.$placename);
-    }
+		if ($dd=$this->get("date_death")){
+		  if ($bp=$this->get("place_death")){
+			$place = new Place($bp);
+			$placename = " at ".$place->simpleLink();
+		  } else $placename = "";
+		  $m.=$this->infoBit("Died",$dd.$placename);
+		}
+	}
     if ($z=$this->get("occupation")) $m.= $this->infoBit("Occupation",$z);
 	
     if ($z=$this->relativeLink("father")) $m.= $this->infoBit("Father",$z);
@@ -40,9 +52,14 @@ class Person extends FSPost {
 	// children
 	$kids = $this->getChildren();
 	$k = "";
-	foreach ($kids as $kid) $k.=" ".$kid->simpleLink();
-	if ($k) $m.= $this->infoBit("Children",$k);
+	foreach ($kids as $kid) $k.=", ".$kid->simpleLink();
+	if ($k) $m.= $this->infoBit("Children",substr($k,2));
 	
+	$userid = $this->get("userid");
+	if ($userid){
+		$userdata = get_userdata( $userid );		
+		$m.= $this->infoBit("Email",$userdata->user_email);
+	}
     return $m;
   }
   /** 
