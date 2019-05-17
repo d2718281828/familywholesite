@@ -13,7 +13,7 @@ class PlaceCPT extends FSCpt {
     parent::setup();
 	$this
         ->set_taxonomy("place_tax")
-		->addToQueries()
+		->addToQueries(["category"])
         ->setClass("FamilySite\Place")
         ->addField(new FieldHelper("lat", "Latitude", "In degrees and decimals of a degree, + is North"))
         ->addField(new FieldHelper("long", "Longitude", "In degrees, + is East, - is West."))

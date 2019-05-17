@@ -209,7 +209,11 @@ class CptHelper {
         return $this->builtin ? $this->slug : $this->prefix.$this->slug;
     }
     public function add_to_query($query){
-        if ( (is_home() || is_category() ) && $query->is_main_query() ){
+		$applies = false;
+		if ( is_home() && array_search("home", $this->showInQueriesWhich)!==false ) $applies = true;
+		if ( is_category() && array_search("category", $this->showInQueriesWhich)!==false ) $applies = true;
+		
+        if ( $applies && $query->is_main_query() ){
 			$currentTypes = $query->get('post_type');
 			$currentTypes[] = $this->posttype();
             $query->set( 'post_type', $currentTypes );
@@ -281,8 +285,9 @@ class CptHelper {
      * Call this function straight after object creation to add the CPT to general queries
      * Returns $this to allow chaining.
      */
-    public function addToQueries(){
+    public function addToQueries($which = ["home"]){
         $this->showInQueries = true;
+		$this->showInQueriesWhich = $which;
         return $this;
     }
 

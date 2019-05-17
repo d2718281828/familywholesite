@@ -9,6 +9,9 @@ Author URI:
 */
 /* TODOs
 Categories for people and places and events
+ trying to use the show in query but it isnt the right thing... it makes CPT show in the home page and dont want that
+ need option just to show in caTEGORY PAGES 
+
 Person needs to be only editable by admin or by the user who is in the user field.
 Maybe we need a privacy policy page…
 
