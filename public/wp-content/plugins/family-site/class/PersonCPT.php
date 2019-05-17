@@ -15,6 +15,7 @@ class PersonCPT extends FSCpt {
     parent::setup();
 	$this
         ->set_taxonomy("person_tax")
+		->addToQueries()
         ->setClass("FamilySite\Person")
         ->addField(new DateHelper("date_birth", "Date of Birth", "Date the person was born"))
         ->addField(new CPTSelectHelper("place_birth", "Place of Birth", "Place the person was living in immediately after birth", ["posttype"=>"fs_place"]))
