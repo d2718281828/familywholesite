@@ -14,6 +14,7 @@ class PlaceCPT extends FSCpt {
 	$this
         ->set_taxonomy("place_tax")
 		->addToQueries(["category"])
+		->allowExcerpt()
         ->setClass("FamilySite\Place")
         ->addField(new FieldHelper("lat", "Latitude", "In degrees and decimals of a degree, + is North"))
         ->addField(new FieldHelper("long", "Longitude", "In degrees, + is East, - is West."))
