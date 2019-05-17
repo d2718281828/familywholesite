@@ -9,15 +9,11 @@ Author URI:
 */
 /* TODOs
 Before final load
-!!! Need to fix creaated by and image captions for searching in the media library
+!!! Need to fix created by and image captions for searching in the media library
 
-Categories for people and places and events
- I added more detail to showInQuery so it specifies which query. However posts still dont showin a category page
-!!! Posts not appearing in category pages - WRONG
- 
 !!! I added excerpt to the CPTs but it isnt showing up.
 
-!!! Manual image crop is not working
+!!! Manual image crop is not working, Have to find another plugin
 
 test add photo and write it up in the help page.
 Finding images in the media library (for featured image) isnt easy.
@@ -26,6 +22,8 @@ Finding images in the media library (for featured image) isnt easy.
 !!!	ALso a Go to Crop link. But crop isnt working
 
 !!! Need an SSL certificate . Could do self certified, since I know all my audience.
+
+Help pages - hosting? SSL certs. 
 
 cant upload mpegs. grandma recordings
 

@@ -53,6 +53,7 @@ class CptHelper {
     protected $urlslug = null;
     protected $showInQueries = false;
     protected $supports = [];
+    protected $supportsExtra = [];
     protected $metaFields = [];
     protected $constants = [];
     protected $instanceClass = 'CPost';
@@ -133,8 +134,8 @@ class CptHelper {
                 //$optslist['rewrite']['ep_mask'] = EP_PERMALINK;
                 $optslist['rewrite']['with_front'] = false;
             }
-            if ($this->supports){
-                $optslist["supports"] = $this->supports;
+            if ($this->supports || $this->supportsExtra){
+                $optslist["supports"] = array_merge($this->supports, $this->supportsExtra);
             }
             if ($this->metaFields) $optslist["supports"][] = 'custom_fields';
 
@@ -296,11 +297,11 @@ class CptHelper {
      * @return $this
      */
     public function allowComments(){
-        $this->supports[] = "comments";
+        $this->supportsExtra[] = "comments";
         return $this;
     }
     public function allowExcerpt(){
-        $this->supports[] = "excerpt";
+        $this->supportsExtra[] = "excerpt";
         return $this;
     }
     public function addField($field)
