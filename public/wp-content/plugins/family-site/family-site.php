@@ -9,11 +9,14 @@ Author URI:
 */
 /* TODOs
 Before final load
-!!! Need to fix created by and image captions for searching in the media library
+!!! cant tag a picture on upload. maybe adding it to categories has wiped out the others.
 
-!!! I added excerpt to the CPTs but it isnt showing up.
+!!! Need to fix created by and image captions for searching in the media library
+!!! also in load - person pictures.
 
 !!! Manual image crop is not working, Have to find another plugin
+
+Does a normal post appear on the timeline? SHould there be a category for posts which arent time related?
 
 test add photo and write it up in the help page.
 Finding images in the media library (for featured image) isnt easy.

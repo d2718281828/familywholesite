@@ -13,7 +13,7 @@ class EventCPT extends FSCpt {
     parent::setup();
 	$this
         ->set_taxonomy("event_tax")
-		->addToQueries(["category"])
+		->addToQueries(["category", "home"])
 		->allowExcerpt()
         ->setClass("FamilySite\Event")
         ->addField(new DateHelper("actual_date", "Actual date", "Date event started"))

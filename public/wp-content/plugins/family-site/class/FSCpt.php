@@ -11,6 +11,7 @@ class FSCpt extends CptHelper {
   }
   public function set_taxonomy($taxname){
     $this->related_tax = $taxname;
+	$this->taxonomiesExtra[] = $taxname;	// this will get it into the register
     return $this;
   }
   public function get_taxonomy(){
