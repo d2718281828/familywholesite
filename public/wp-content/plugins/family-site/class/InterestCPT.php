@@ -40,6 +40,10 @@ class InterestCPT extends FSCpt {
   *
   */
   public function before_content(){
+	if (is_single()) return $this->creator_block();
+	return '';
+  }
+  public function creator_block(){
 	global $post;
 	$maker = get_post_meta($post->ID,"maker",true);
 	$mm = "";
@@ -50,7 +54,7 @@ class InterestCPT extends FSCpt {
 	}
 	$mm2 = get_post_meta($post->ID,"maker_text",true);
 	
-	if ($mm) return '<div class="creator_block"><p>Created by: '.$mm.($mm2 ? " ".$mm2 : "").'</p></div>';
+	if ($mm || $mm2) return '<div class="creator_block"><p>Created by: '.$mm.($mm2 ? " ".$mm2 : "").'</p></div>';
 	return '';
   }
   public function loaderRef(){

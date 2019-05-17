@@ -10,10 +10,19 @@ Author URI:
 /* TODOs
 Categories for people and places and events
  I added more detail to showInQuery so it specifies which query. However posts still dont showin a category page
+!!! It does what i want for now but i would like to fix this
+ 
+!!! I added excerpt to the CPTs but it isnt showing up.
 
-test add photo
-test add person picture
-test grandma recordings
+created by's not showing on the front page properly.
+
+test add photo and write it up in the help page.
+Finding images in the media library (for featured image) isnt easy.
+	Do an "Add to entity" button on the post itself.
+
+cant upload mpegs. grandma recordings
+
+Adding person picture is OK but finding a picture in the media library is not easy. Can I add titles and captions in te import?
 
 Person needs to be only editable by admin or by the user who is in the user field.
 Maybe we need a privacy policy page…
