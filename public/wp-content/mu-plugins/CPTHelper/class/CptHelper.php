@@ -144,15 +144,15 @@ class CptHelper {
 			add_shortcode($this->shcName,[$this,"do_shc"]);
 
 
-            if ($this->showInQueries){
-                add_action( 'pre_get_posts', [$this,'add_to_query'] );
-            }
-
             if ($this->flushRules) {
                 //if (TRACEIT) traceit("!!!!!!!!!!!!!!Flushing rules on plugin activation after CPT registration");
                 flush_rewrite_rules();   // only on plugin (de)activation
             }
         }
+        if ($this->showInQueries){
+            add_action( 'pre_get_posts', [$this,'add_to_query'] );
+        }
+
         self::$registrations[$this->posttype()] = $this;
         if ($this->metaFields){
             add_action( 'add_meta_boxes', [$this, 'addMetaBox'] );

@@ -8,17 +8,24 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
+Before final load
+!!! Need to fix creaated by and image captions for searching in the media library
+
 Categories for people and places and events
  I added more detail to showInQuery so it specifies which query. However posts still dont showin a category page
-!!! It does what i want for now but i would like to fix this
+!!! Posts not appearing in category pages - WRONG
  
 !!! I added excerpt to the CPTs but it isnt showing up.
 
-created by's not showing on the front page properly.
+!!! Manual image crop is not working
 
 test add photo and write it up in the help page.
 Finding images in the media library (for featured image) isnt easy.
 	Do an "Add to entity" button on the post itself.
+	ANd a "Make this my photo"
+!!!	ALso a Go to Crop link. But crop isnt working
+
+!!! Need an SSL certificate . Could do self certified, since I know all my audience.
 
 cant upload mpegs. grandma recordings
 
