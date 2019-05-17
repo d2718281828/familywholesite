@@ -212,7 +212,7 @@ class CptHelper {
         if ( is_home() && $query->is_main_query() ){
 			$currentTypes = $query->get('post_type');
 			$currentTypes[] = $this->posttype();
-            $query->set( 'post_type', $currentTypes ) );
+            $query->set( 'post_type', $currentTypes );
         }
          return $query;
     }
