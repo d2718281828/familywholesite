@@ -15,6 +15,7 @@ class InterestCPT extends FSCpt {
     parent::setup();
 	$this
 	      ->setClass("FamilySite\Interest")
+		->addToQueries()
         ->addField(new DateHelper("actual_date", "Actual date", "Relevant date: when the picture was taken or the recording made"))
         ->addField(new FieldHelper("date_within", "Date within (days)", "If you dont know exactly when it happened, guess a date and give some idea of how far out you are: the true date should be within this number of days of the date given"))
         ->addField(new CPTSelectHelper("maker", "Maker", "Who took the photo or made the recording", ["posttype"=>"fs_person"]))
