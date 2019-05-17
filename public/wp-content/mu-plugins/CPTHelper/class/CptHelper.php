@@ -209,7 +209,7 @@ class CptHelper {
         return $this->builtin ? $this->slug : $this->prefix.$this->slug;
     }
     public function add_to_query($query){
-        if ( is_home() && $query->is_main_query() ){
+        if ( (is_home() || is_category() ) && $query->is_main_query() ){
 			$currentTypes = $query->get('post_type');
 			$currentTypes[] = $this->posttype();
             $query->set( 'post_type', $currentTypes );
