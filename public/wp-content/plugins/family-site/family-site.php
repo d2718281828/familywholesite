@@ -8,9 +8,13 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-entloader EntCPost.php on line 81 created_by
+Categories for people and places and events
+Person needs to be only editable by admin or by the user who is in the user field.
+Maybe we need a privacy policy page…
+
 the home page columns arent stacking properly
 NEED TO SET UP EMAIL ON THE SERVER
+BACKUPS ON SERVER
 NEED MORE SPACE ON DROPSIE
 the pdf viewer is showing cookie messages!!!
 Check image upload sizes and timeline overall load times
@@ -18,7 +22,6 @@ cant look at photos on the same date. if there isnt an event created then you're
 
 timeline entries arent being deleted when post is deleted
 change 'leave a reply to 'make a comment
-More person info = pull contact info from user profile
 if person is deceased, would like to display the dates as a subheading
 maybe an edit function to pull out the shortcodes for all tagged people and drop them into the text
 
@@ -126,10 +129,14 @@ class FamilySite {
     } else $GLOBALS["cpost"] = null;
   }
   protected function setupCPTs(){
+	  
+	$personOptions = ['taxonomies' => array( 'category' )];
+	$eventOptions = ['taxonomies' => array( 'category' )];
+	$placeOptions = ['taxonomies' => array( 'category' )];
 
-    $z = new PersonCPT("person", "Person", "People", []);
-    $z = new EventCPT("event", "Event", "Events", []);
-    $z = new PlaceCPT("place", "Place", "Places", []);
+    $z = new PersonCPT("person", "Person", "People", $personOptions );
+    $z = new EventCPT("event", "Event", "Events", $eventOptions);
+    $z = new PlaceCPT("place", "Place", "Places", $placeOptions);
     $z = new InterestCPT("post", null, null, []);
   }
 
