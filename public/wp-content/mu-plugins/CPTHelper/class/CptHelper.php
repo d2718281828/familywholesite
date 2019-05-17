@@ -208,10 +208,11 @@ class CptHelper {
     public function posttype(){
         return $this->builtin ? $this->slug : $this->prefix.$this->slug;
     }
-    // TODO got to get the current list and add ours to it
     public function add_to_query($query){
         if ( is_home() && $query->is_main_query() ){
-            $query->set( 'post_type', array( 'post', $this->posttype() ) );
+			$currentTypes = $query->get('post_type');
+			$currentTypes[] = $this->posttype();
+            $query->set( 'post_type', $currentTypes ) );
         }
          return $query;
     }
