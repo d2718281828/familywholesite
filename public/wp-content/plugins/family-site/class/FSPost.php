@@ -232,7 +232,7 @@ class FSPost extends CPost {
 	* download asset info - default is that there is none.
 	* @return null or object containing url and icon properties.
 	*/
-	public function dowloadAsset(){
+	public function downloadAsset(){
 		return null;
 	}
 }
