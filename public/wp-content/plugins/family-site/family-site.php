@@ -12,9 +12,14 @@ Before final load
 !!! cant tag a picture on upload. maybe adding it to categories has wiped out the others.
 
 !!! Need to fix created by and image captions for searching in the media library
+
 !!! also in load - person pictures.
 
 !!! Manual image crop is not working, Have to find another plugin
+
+!!! the left and right buttons on the event slideshow need to be styled
+
+!!! Places should be tagged with places (nearby) and people and events
 
 Does a normal post appear on the timeline? SHould there be a category for posts which arent time related?
 
@@ -85,8 +90,6 @@ birthdays calendar
 anniversaries calendar
 
 done ========
-featured_media_type is being saved when featured media is 0, i think after post save
-lessimportnt,but the stats count of photos needs to exclude the other media. wouldnt be a problem if we didnt have unk.
 
 New <public> attribute:
 <public>familysite<x>y
@@ -158,10 +161,14 @@ class FamilySite {
 	$eventOptions = $personOptions;
 	$placeOptions = $personOptions;
 
+	$thingOptions = ['taxonomies' => ['category', 'person_tax', 'place_tax' ],
+				];
+	$thingOptions = [];		// dont think that the above is necessary
+	
     $z = new PersonCPT("person", "Person", "People", $personOptions );
     $z = new EventCPT("event", "Event", "Events", $eventOptions);
     $z = new PlaceCPT("place", "Place", "Places", $placeOptions);
-    $z = new InterestCPT("post", null, null, []);
+    $z = new InterestCPT("post", null, null, $thingOptions );
   }
 
   protected function setupTaxes(){
@@ -213,18 +220,6 @@ class FamilySite {
       "re-write" => ["slug"=>"event",],
 
     ]);
-  }
-  // obsolete
-  public function do_a_obs($att,$content,$tag){
-	  if (isset($att[0]) && $att[0]){
-		  $cp = CptHelper::makeByName($att[0]);
-		  if ($cp===null) return "-".$att[0]." not known-";
-		  if ($content) $text = do_shortcode($content);
-		  elseif (isset($att[1]) && $att[1]) $text = $att[1];
-		  else $text = null;
-		  return $cp->simpleLink($text);
-	  }
-	  return "";
   }
   public function do_stats($att,$content,$tag){
 	  global $wpdb;

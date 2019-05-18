@@ -140,8 +140,8 @@ class CptHelper {
             }
             if ($this->metaFields) $optslist["supports"][] = 'custom_fields';
 			
-			$taxes = $optslist["taxonomies"] ? $optslist["taxonomies"] : [];
-			array_merge($taxes, $this->taxonomiesExtra);
+			$taxes = array_key_exists("taxonomies", $optslist) ? $optslist["taxonomies"] : [];
+			$taxes = array_merge($taxes, $this->taxonomiesExtra);
             if ($taxes) $optslist["taxonomies"] = $taxes;
 
             //if (TRACEIT) traceit("!!!!!!!!actually registering the post type ".print_r($optslist,true));
