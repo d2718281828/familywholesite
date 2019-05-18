@@ -36,8 +36,8 @@ function fs_edit_post($postid = null){
 function fs_download_image(){
 	global $cpost;
 	if (!$cpost) return "";
-	if (!$down = $cpost->downloadAsset()) return "";
-	return "<a href='".$down->url."' download alt='".$down->alt."'><div class='fs_edit_marker fs_download_marker'><img src = '".$down->icon."'></div></a>";	
+	if (!($down = $cpost->downloadAsset())) return "";
+	return "<a href='".$down["url"]."' download alt='".$down["alt"]."'><div class='fs_edit_marker fs_download_marker'><img src = '".$down["icon"]."'></div></a>";	
 }
 /**
  * Over-write body_class function in here.
