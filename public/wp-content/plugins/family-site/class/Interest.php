@@ -79,14 +79,14 @@ class Interest extends FSPost {
   public function downloadAsset(){
 	$icon = plugin_dir_url( __FILE__ )."../assets/Download_Icon.svg";
 	$url = get_the_post_thumbnail_url($this->postid, "full");	// need to make sure it is full size
-	if ($url!=get_site_url()) {
+	if ($url) {
 		return  [
 			"icon"=>$icon,
 			"url" => $url,
 			"alt" => "Download full sized image"
 		];
 	}
-	$mediapost = $this->get("featured_media", true);
+	$mediapost = $this->get("featured_media");
 	if (!$mediapost) return null;
 	
 	$url = wp_get_attachment_url($mediapost);
