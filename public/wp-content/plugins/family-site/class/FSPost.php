@@ -228,6 +228,13 @@ class FSPost extends CPost {
 	public function slideShow(){
 		return null;
 	}
+	/**
+	* download asset info - default is that there is none.
+	* @return null or object containing url and icon properties.
+	*/
+	public function dowloadAsset(){
+		return null;
+	}
 }
 
 

@@ -72,5 +72,31 @@ class Interest extends FSPost {
   public function hasIndexSection(){
     return false;
   }
+  /**
+  * download asset info
+  * @return null if none, or object containing url and icon properties.
+  */
+  public function downloadAsset(){
+	$icon = plugin_dir_url( __FILE__ )."../assets/Download_Icon.svg";
+	$res = ;
+	$url = get_the_post_thumbnail_url($postid, "full");	// need to make sure it is full size
+	if ($url!=get_site_url()) {
+		return {
+			"icon"=>$icon,
+			"url" => $url,
+			"alt" => "Download full sized image"
+		};
+	}
+	$mediapost = $this->get("featured_media", true);
+	if ((!$mediapost) return null;
+	
+	$url = wp_get_attachment_url($mediapost);
+	
+	return {
+		"icon"=>$icon,
+		"url" => $url,
+		"alt" => "Download file"
+	};
+  }
 
 }

@@ -31,16 +31,13 @@ function fs_edit_post($postid = null){
 		$url = "$site/wp-admin/post.php?post=$postid&action=edit";
 		echo "<a href='$url' target='".($wpadmin_tab_name ?: "_blank")."' alt='edit'><div class='fs_edit_marker'><img src = '$template/assets/2000px-Blue_pencil.svg.png'></div></a>";
 	}
-	echo fs_download_image($postid);
+	echo fs_download_image();
 }
-function fs_download_image($postid = null){
-	global $post;
-	$site = get_site_url();
-	$template = get_stylesheet_directory_uri();
-	//$site = site_url();
-	$url = get_the_post_thumbnail_url($postid, "full");	// need to make sure it is full size
-	return "<a href='$url' download alt='download full size image'><div class='fs_edit_marker fs_download_marker'><img src = '$template/assets/Download_Icon.svg'></div></a>";
-	
+function fs_download_image(){
+	global $cpost;
+	if (!$cpost) return "";
+	if (!$down = $cpost->downloadAsset()) return "";
+	return "<a href='".$down->url."' download alt='".$down->alt."'><div class='fs_edit_marker fs_download_marker'><img src = '".$down->icon."'></div></a>";	
 }
 /**
  * Over-write body_class function in here.

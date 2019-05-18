@@ -9,11 +9,10 @@ Author URI:
 */
 /* TODOs
 Before final load
-!!! cant tag a picture on upload. maybe adding it to categories has wiped out the others.
+!!! download button - not always appropriate, depends on type of asset. there may be none
 
 !!! Need to fix created by and image captions for searching in the media library
-
-!!! also in load - person pictures.
+!!! person pictures - nodepic
 
 !!! Manual image crop is not working, Have to find another plugin
 
