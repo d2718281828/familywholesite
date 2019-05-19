@@ -766,29 +766,18 @@ class EntLoader {
 		  $this->creators[$creatorName] = [null, $creatorName];
 		  return [null, $creatorName];
 	  }
-	  $args = ['user_login' => $wpname ];
-	  $user_query = new \WP_User_Query( $args );
-	  $users = $user_query->get_results();
-	  if (count($users)<1) {
-		  // we should have found this but anyway
-		  echo "<p>error - found ".count($users)." users for ".$wpname. ", creator=".$creatorName;
-		  $this->creators[$creatorName] = [null, $creatorName];
-		  return [null, $creatorName];
-	  }
-	  if (count($users)>1) {
-		  // should be unique but because i have been doing multiple loads it is finding old ones
-		  echo "<p>error - found ".count($users)." users for ".$wpname. ", creator=".$creatorName;
-	  }
-	  $res = [ $this->biggestId($users), null];
+	  $wpid = $this->getIdBySlug($wpname, "fs_person");
+	  if ($wpid) $res = [ $wpid, null];
+	  else $res = [null, $creatorName];
 	  $this->creators[$creatorName] = $res;
 	  return $res;
   }
-  private function biggestId($users){
-	  $res = 0;
-	  for ($k=0; $k<count($users); $k++){
-		  if ($users[$k]->ID > $res) $res = $users[$k]->ID;
-	  }
-	  return $res;
+  public function getIdBySlug($slug, $type){
+	global $wpdb;
+	$s = "select ID from ".$wpdb->posts." where post_type=%s and post_status='publish' and post_name=%s;";
+	$res = $wpdb->get_results($wpdb->prepare($s, $type, $slug),ARRAY_A);
+	if (count($res)==0) return null;
+	return $res[0]["ID"];
   }
   /**
   * cross reference from names which have been used in the album to WP names
