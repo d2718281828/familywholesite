@@ -37,7 +37,8 @@ class EntLoader {
 	  "euston-thetford-norfolk","58a-robson-avenue-willesden-london-nw10","bens","violet","markmac"];
 	  $this->wantedPeople = [["chrisx","M"],["vivian","F"]];		// anyone not pulled in by the setAncs and setDescs
 	  // pictures we definitely dont want
-	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd","ewcndw4","ewcndw5","ewcndw6","ewcndw7",
+	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd",
+	  "ewcndw4","ewcndw5","ewcndw6","ewcndw7","gmmhkoxd","gmmhkoxc",
 	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
 	  
 	  $this->picBatchSize = 20;
@@ -768,14 +769,26 @@ class EntLoader {
 	  $args = ['user_login' => $wpname ];
 	  $user_query = new \WP_User_Query( $args );
 	  $users = $user_query->get_results();
-	  if (count($users)!=1) {
+	  if (count($users)<1) {
+		  // we should have found this but anyway
 		  echo "<p>error - found ".count($users)." users for ".$wpname. ", creator=".$creatorName;
 		  $this->creators[$creatorName] = [null, $creatorName];
 		  return [null, $creatorName];
 	  }
-	  $res = [ $users[0]->ID, null];
+	  if (count($users)>1) {
+		  // should be unique but because i have been doing multiple loads it is finding old ones
+		  echo "<p>error - found ".count($users)." users for ".$wpname. ", creator=".$creatorName;
+	  }
+	  $res = [ $this->biggestId($users), null];
 	  $this->creators[$creatorName] = $res;
 	  return $res;
+  }
+  private function biggestId($users){
+	  $res = 0;
+	  for ($k=0; $k<count($users); $k++){
+		  if ($users[$k]->ID > $res) $res = $users[$k]->ID;
+	  }
+	  return $res
   }
   /**
   * cross reference from names which have been used in the album to WP names
