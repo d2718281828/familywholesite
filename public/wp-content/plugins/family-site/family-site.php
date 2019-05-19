@@ -9,14 +9,20 @@ Author URI:
 */
 /* TODOs
 Before final load
-!!! Need to fix created by and image captions for searching in the media library
-!!! person pictures - nodepic
+!!! Need to fix image captions for searching in the media library
+!!! person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
+!!! Add photos to events - lookup based on date? May not be necessary - tst with reloaded nodes.
+	test 13/7/2002
+!!! test the movie files from 13/7/2002 in  /agd/mov207
+	mpg file just shows as a link
+!!! Places should be tagged with places (nearby) and people and events
+
+!!! page 2 etc on the front page doesnt show side bar
 
 !!! Manual image crop is not working, Have to find another plugin
 
 !!! the left and right buttons on the event slideshow need to be styled
 
-!!! Places should be tagged with places (nearby) and people and events
 
 Doreen's music post doesnt have a date
 

@@ -93,6 +93,9 @@ class InterestCPT extends FSCpt {
 		  case "pdf":
 		  return $this->pdfBlock($url);
 		  
+		  case "mpg":
+		  return $this->movieBlock($url);
+		  
 		  case "ppt":
 		  case "doc":
 		  case "docx":
@@ -100,7 +103,7 @@ class InterestCPT extends FSCpt {
 		  
 		  case "mov":
 		  case "mp4":
-		  case "mpg":
+		  //case "mpg":
 		  
 		  case "mp3":
 		  case "ogg":
@@ -140,6 +143,17 @@ class InterestCPT extends FSCpt {
   */
   protected function linkBlock($url){
 	return "<p><a href='$url'>Media File</a></p>";
+  }
+  /**
+  * A movie
+  * @return {string} html
+  */
+  protected function movieBlock($url){
+	  $html = "<video controls>
+		<source src='".$url."' type='video/mpg'>
+		Your browser does not support the video tag.
+	</video>";
+	return '<div class="video-wrapper">'.$html.'</div>';
   }
   /**
   * An image tag

@@ -36,9 +36,10 @@ class EntLoader {
 	  $this->testset = ["neils","marians","joans","rhians","20-raglan-st-lowestoft-suffolk",
 	  "euston-thetford-norfolk","58a-robson-avenue-willesden-london-nw10","bens","violet","markmac"];
 	  $this->wantedPeople = [["chrisx","M"],["vivian","F"]];		// anyone not pulled in by the setAncs and setDescs
+
 	  // pictures we definitely dont want
 	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd",
-	  "ewcndw4","ewcndw5","ewcndw6","ewcndw7","gmmhkoxd","gmmhkoxc",
+	  "ewcndw4","ewcndw5","ewcndw6","ewcndw7","gmmhkoxd","gmmhkoxc","eopasmk2",
 	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
 	  
 	  $this->picBatchSize = 20;
