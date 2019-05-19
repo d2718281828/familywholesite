@@ -788,7 +788,7 @@ class EntLoader {
 	  for ($k=0; $k<count($users); $k++){
 		  if ($users[$k]->ID > $res) $res = $users[$k]->ID;
 	  }
-	  return $res
+	  return $res;
   }
   /**
   * cross reference from names which have been used in the album to WP names
