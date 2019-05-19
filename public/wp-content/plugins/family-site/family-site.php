@@ -9,8 +9,6 @@ Author URI:
 */
 /* TODOs
 Before final load
-!!! download button - not always appropriate, depends on type of asset. there may be none
-
 !!! Need to fix created by and image captions for searching in the media library
 !!! person pictures - nodepic
 
@@ -19,6 +17,8 @@ Before final load
 !!! the left and right buttons on the event slideshow need to be styled
 
 !!! Places should be tagged with places (nearby) and people and events
+
+Doreen's music post doesnt have a date
 
 Does a normal post appear on the timeline? SHould there be a category for posts which arent time related?
 

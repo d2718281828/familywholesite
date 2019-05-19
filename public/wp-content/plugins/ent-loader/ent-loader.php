@@ -27,6 +27,7 @@ class EntLoader {
 	protected $newplaces = [];
 	protected $knownEnts = [];
 	protected $thisSite = "familysite";
+	protected $creators = [];		// list of stored creators
 
   public function __construct(){
 	  add_action("init", [$this,"init"]);
@@ -750,6 +751,91 @@ class EntLoader {
 		  $this->get($dad)->setMale(true); 
 		  $this->setAncs($dad);
 	  }
+  }
+  /**
+  * Lookup and cache creator names
+  * @return two emelements, the maker, or null, and the maker_text, or null.
+  */
+  public function getCreator($creatorName){
+	  // is it cached?
+	  if (array_key_exists($creatorName, $this->creators)) return $this->creators[$creatorName];
+	  
+	  $wpname = $this->convertCreatorName($creatorName);
+	  if (!$wpname) {
+		  $this->creators[$creatorName] = [null, $creatorName]
+		  return [null, $creatorName];
+	  }
+	  $args = ['user_login' => $wpname ];
+	  $user_query = new WP_User_Query( $args );
+	  $users = $user_query->get_results();
+	  if (count($users)!=1) {
+		  echo "<p>error - found ".count($users)." users for ".$wpname. ", creator=".$creatorName;
+		  $this->creators[$creatorName] = [null, $creatorName]
+		  return [null, $creatorName];
+	  }
+	  $res = [ $users[0]->ID, null];
+	  $this->creators[$creatorName] = $res;
+	  return $res;
+  }
+  /**
+  * cross reference from names which have been used in the album to WP names
+  */
+  protected function convertCreatorName($creatorName){
+	  switch($creatorName){
+		  case "Derek":
+		  case "derek":
+		  return "derek-storkey";
+		  case "Peter":
+		  case "peter":
+		  return "peter-storkey";
+		  case "{ a johns}":
+		  case "John Storkey-Taylor":
+		  case "John S-T":
+		  case "{a johns:JST}":
+		  return "john-storkeytaylor";
+		  case "Matthew":
+		  return "matthew-storkey";
+		  case "Anna":
+		  return "anna-storkey";
+		  case "Alex":
+		  return "alex-storkey";
+		  case "Verity":
+		  return "verity-mitchell";
+		  case "Neil":
+		  return "neil-storkey";
+		  //case "Jonathan":		// since i dont know, leave it out, it could be done manually one day
+		  //return "";
+		  case "Hazel":
+		  return "hazel-bustin";
+		  case "Rowan":
+		  return "rowan-lloyd";
+		  case "John S":
+		  case "John Stephens":
+		  return "john-stephens";
+		  case "Joan Storkey":
+		  return "joan-storkey";
+		  case "Jenny":
+		  return "jenny-heritage";
+		  case "Judith":
+		  return "judith-turner";
+		  case "Maja":
+		  return "maja-storkey";
+		  case "Brian":
+		  return "brian-heritage";
+		  case "Pauline":
+		  return "pauline-stephens";
+		  case "Marian":
+		  return "marian-mackintosh";
+		  case "Yvonne":
+		  return "yvonne-storkey";
+		  case "Mark Stephens":
+		  return "mark-stephens";
+		  case "Alan Storkey":
+		  return "alan-storkey";
+		  case "Chris Patrick":
+		  return "chris-patrick";
+	  }
+	  return null;
   }
   protected function placeNorm($place){
 	  switch($place){

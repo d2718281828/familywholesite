@@ -79,7 +79,9 @@ class EntCPost  {
 			$this->cpDate($new, "actual_date" , $ent, "date_created");
 			$this->    cp($new, "date_within" , $ent, "date_within");
 			$creator = $ent->get("created_by");
-			echo "<p>created by example : ".$creator;
+			$maker = $this->entloader->getCreator($creator);
+		
+			echo "<p>created by example : ".$creator." = ".$maker[0]." / ".$maker[1];
 			$this->    cp($new, "maker_text" , $ent, "created_by");
 			break;
 		}
