@@ -762,15 +762,15 @@ class EntLoader {
 	  
 	  $wpname = $this->convertCreatorName($creatorName);
 	  if (!$wpname) {
-		  $this->creators[$creatorName] = [null, $creatorName]
+		  $this->creators[$creatorName] = [null, $creatorName];
 		  return [null, $creatorName];
 	  }
 	  $args = ['user_login' => $wpname ];
-	  $user_query = new WP_User_Query( $args );
+	  $user_query = new \WP_User_Query( $args );
 	  $users = $user_query->get_results();
 	  if (count($users)!=1) {
 		  echo "<p>error - found ".count($users)." users for ".$wpname. ", creator=".$creatorName;
-		  $this->creators[$creatorName] = [null, $creatorName]
+		  $this->creators[$creatorName] = [null, $creatorName];
 		  return [null, $creatorName];
 	  }
 	  $res = [ $users[0]->ID, null];
