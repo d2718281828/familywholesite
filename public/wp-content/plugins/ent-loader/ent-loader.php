@@ -692,9 +692,9 @@ class EntLoader {
 	}
 	// set caption for searchability
 	$extras = ["ID"=>$id]; $num=0;
-	for ($prop in $description){
+	foreach ($description as $prop=>$val){
 		if ($prop == "caption") {
-			$extras["post_excerpt"] = $description[$prop];
+			$extras["post_excerpt"] = $val;
 			$num++;
 		}
 	}
