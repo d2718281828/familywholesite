@@ -39,7 +39,9 @@ class EntLoader {
 
 	  // pictures we definitely dont want
 	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd",
-	  "ewcndw4","ewcndw5","ewcndw6","ewcndw7","gmmhkoxd","gmmhkoxc","eopasmk2",
+	  "ewcndw4","ewcndw5","ewcndw6","ewcndw7","gmmhkoxd","gmmhkoxc","eopasmk2","abz4le06","abz4le07","abz4le08",
+	  "abz4le09","abz4le11","abz4le12","abz4le13","abz4le14","abz4le15","abz4le17","abz4le21","abz4le22",
+	  "abz4le23","sjnkht00",
 	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
 	  
 	  $this->picBatchSize = 20;
@@ -321,7 +323,8 @@ class EntLoader {
 		
 		if ((isset($this->set[$id])) && $pic = $this->set[$id]->getImageFile()){
 			$pic = str_replace("//","/",$pic);
-			$id = $this->sideload($pic, 0);
+			$caption = ["caption"=> $cp->get("post_title") ];
+			$id = $this->sideload($pic, 0, $caption);
 			if ( is_wp_error($id)) $m.="<br />Error loading image ".implode("<br/>",$id->get_error_messages());
 			else {
 				$mtype = $this->typeOfFile($pic);
@@ -677,7 +680,8 @@ class EntLoader {
 	if (WP_DEBUG) error_log("media handle sideload with ".$file_array['name'].", ".$file_array['tmp_name']);
 
 	// do the validation and storage stuff
-	$id = media_handle_sideload( $file_array, $post_id ?: 0, $description ?: $file_array['name'] );
+	$filetitle = $description && $description["title"] ? $description["title"] : $file_array['name'] ;
+	$id = media_handle_sideload( $file_array, $post_id ?: 0, $filetitle);
 
 	// If error storing permanently, unlink
 	if ( is_wp_error($id) ) {
@@ -686,6 +690,16 @@ class EntLoader {
 		error_log("Error sideloading ".$fullfile." ".$id->get_error_message());
 		return $id;
 	}
+	// set caption for searchability
+	$extras = ["ID"=>$id]; $num=0;
+	for ($prop in $description){
+		if ($prop == "caption") {
+			$extras["post_excerpt"] = $description[$prop];
+			$num++;
+		}
+	}
+	if ($num > 0)  wp_update_post($extras);
+	
 	return $id;
   }
   protected function listWanted(){
