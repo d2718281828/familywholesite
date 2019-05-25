@@ -216,7 +216,7 @@ class EntLoader {
 		  $pp = "<a href='".get_permalink($id)."' target='_blank'>".$res[$k]["post_title"]."</a>";
 		  
 		  $picurl = wp_get_attachment_url($res[$k]["media"]);
-		  $pic = "<a href="$picurl">".$res[$k]["media"]."</a>";
+		  $pic = "<a href='$picurl'>".$res[$k]["media"]."</a>";
 		  $m.= "<tr><td>".$id."</td><td>".$pp."</td><td>".$pic."</td></tr>";		  
 	  }
 	  $m.= "</table>";
