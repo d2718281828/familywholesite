@@ -84,7 +84,7 @@ class FSPost extends CPost {
 	  $m = "";
 	  foreach ($allmeta as $prop=>$val){
 		  if ($prop=="merg") continue;
-		  $m.= "<tr><td>".$prop."</td><td>".$val."</td></tr>";
+		  $m.= "<tr><td>".$prop."</td><td>".print_r($val,true)."</td></tr>";
 	  }
 	  if ($m) {
 		  $m = "<table>".$m."</table>";
