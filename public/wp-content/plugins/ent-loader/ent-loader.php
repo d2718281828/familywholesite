@@ -190,7 +190,44 @@ class EntLoader {
 	  
   }
   /**
+  * Things to be done after all pics loaded
+  */
+  public function complete(){
+	  $this->addNodePics();
+  }
+  /**
+  * Things to be done after all pics loaded
+  */
+  public function addNodePics(){
+	  global $wpdb;
+	  //  find all posts with a node pic for which a post exists
+	  $nodepics = 'select P.ID, P.post_title , PIC.post_id as media
+	  from '.$wpdb->posts.' P, '.$wpdb->postmeta.' PN, '.$wpdb->postmeta.' PIC
+	  where PN.post_id = P.ID and PN.meta_value = PIC.meta_value
+	  and P.post_status="publish"
+	  and PN.meta_key = "ent_link_featured" and PIC.meta_key = "ent_ref"
+	  ;';
+	  $res = $wpdb->get_results($nodepics,ARRAY_A);
+	  
+	  $m = "<table>";
+	  $m.= "<tr><td>ID with nodepic</td><td>post title</td><td>the pic node</td></tr>";
+	  for ($k=0; $k<count($res);  $k++){
+		  $id = $res[$k]["ID"];
+		  $pp = "<a href='".get_permalink($id)."' target='_blank'>".$res[$k]["post_title"]."</a>";
+		  
+		  $picurl = wp_get_attachment_url($res[$k]["media"]);
+		  $pic = "<a href="$picurl">".$res[$k]["media"]."</a>";
+		  $m.= "<tr><td>".$id."</td><td>".$pp."</td><td>".$pic."</td></tr>";		  
+	  }
+	  $m.= "</table>";
+	  $m.= "<p>Found ".count($res);
+	  return $m;
+	  
+  }
+  /**
   * COMMAND look for and fix any pictures which didnt load properly - most probably due to a timeout.  Fix or delete?
+  * I am a bit confused by this one, there's an edit link put out after the post is deleted.
+  * It seems to be picking out all posts with ent_curly_desc...
   */
   public function fixPics(){
 	  global $wpdb;
@@ -202,6 +239,7 @@ class EntLoader {
 	  and PM.meta_key = "ent_curly_desc"
 	  ;';
 	  $res = $wpdb->get_results($aborted,ARRAY_A);
+	  
 	  $m = "<table>";
 	  $m.= "<tr><td>ID</td><td>post</td><td>edit</td></tr>";
 	  for ($k=0; $k<count($res);  $k++){
