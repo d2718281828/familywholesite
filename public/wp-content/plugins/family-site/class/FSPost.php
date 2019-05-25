@@ -87,8 +87,8 @@ class FSPost extends CPost {
   public function showPostMeta(){
 	  // check if we want to dislay this
 	  $u = wp_get_current_user();
-	  if (!$u ) return "NOT LOGGED IN";
-	  if ($u->login_name!="derek" && $u->login_name!="derek-storkey") return print_r($u,true);
+	  if (!$u ) return "";
+	  if ($u->user_login!="derek" && $u->user_login!="derek-storkey") return "";
 	  
 	  // get all post meta
 	  $allmeta = get_post_meta($this->postid);
