@@ -75,8 +75,19 @@ class FSPost extends CPost {
   public function indexSection(){
     return "";
   }
+  /*
+  * Add a tabulation of post meta
+  */
   public function afterIndexSection(){
+	  return $this->showPostMeta();
+  }
+  /*
+  * Show all post meta, but only for me :)
+  */
+  public function showPostMeta(){
 	  // check if we want to dislay this
+	  $u = wp_get_current_user();
+	  if (!$u || ($u->login_name!="derek" && $u->login_name!="derek-storkey")) return "";
 	  
 	  // get all post meta
 	  $allmeta = get_post_meta($this->postid);
@@ -84,7 +95,8 @@ class FSPost extends CPost {
 	  $m = "";
 	  foreach ($allmeta as $prop=>$val){
 		  if ($prop=="merg") continue;
-		  $m.= "<tr><td>".$prop."</td><td>".print_r($val,true)."</td></tr>";
+		  $pval = is_array($val) && count($val)==1 ? $val[0] : print_r($val,true);
+		  $m.= "<tr><td>".$prop."</td><td>".$pval."</td></tr>";
 	  }
 	  if ($m) {
 		  $m = "<table>".$m."</table>";
