@@ -124,7 +124,7 @@ class Person extends FSPost {
   public function indexSection(){
     require_once("TimeLine.php");
     $tl = new TimeLine($this);
-    return $tl->html();
+    return $tl->html().$this->afterIndexSection();
   }
   public function getLinks(){
 	  return [];

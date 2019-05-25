@@ -38,6 +38,7 @@ class Event extends FSPost {
   * The index section - this is the timeline for people and events. Could be linked posts for Interest
   */
   public function indexSection(){
+	return $this->afterIndexSection();
 	return "";
   }
   public function getLinks(){

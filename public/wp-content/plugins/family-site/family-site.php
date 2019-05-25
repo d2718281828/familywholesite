@@ -9,20 +9,21 @@ Author URI:
 */
 /* TODOs
 Before final load
-!!! Need to fix image captions for searching in the media library
 !!! person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 !!! Add photos to events - lookup based on date? May not be necessary - tst with reloaded nodes.
 	test 13/7/2002
+	Excerpts
+!!! Manual image crop is not working, Have to find another plugin
+	
+	
 !!! test the movie files from 13/7/2002 in  /agd/mov207
 	mpg file just shows as a link
 !!! Places should be tagged with places (nearby) and people and events
 
 !!! page 2 etc on the front page doesnt show side bar
 
-!!! Manual image crop is not working, Have to find another plugin
 
 !!! the left and right buttons on the event slideshow need to be styled
-
 
 Doreen's music post doesnt have a date
 
@@ -38,14 +39,14 @@ Finding images in the media library (for featured image) isnt easy.
 
 Help pages - hosting? SSL certs. 
 
-cant upload mpegs. grandma recordings
+Timeline should use standard crop size photos
 
-Adding person picture is OK but finding a picture in the media library is not easy. Can I add titles and captions in te import?
+cant upload mpegs. grandma recordings
 
 Person needs to be only editable by admin or by the user who is in the user field.
 Maybe we need a privacy policy page…
 
-the home page columns arent stacking properly
+the home page columns arent stacking properly on page>1
 NEED TO SET UP EMAIL ON THE SERVER
 BACKUPS ON SERVER
 NEED MORE SPACE ON DROPSIE

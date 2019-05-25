@@ -32,7 +32,8 @@ class FSPost extends CPost {
   public function actualDate(){
     $actdate = $this->get("actual_date");
     if ($actdate){
-      return $actdate;
+	  $within = $this->get("date_within");
+      return $this->approx_date($actdate, $within);
     }
     $event = $this->get("event");
     if ($event){
@@ -40,6 +41,14 @@ class FSPost extends CPost {
       return $ev->actualDate();
     }
     return '';
+  }
+  /**
+  * Express the date as naturally as possible given the within days. 
+  * ultimately could have results like 1975/03 or 1975/05-08 or 1975-80 
+  */
+  protected function approx_date($thedate, $within){
+	  if ($within && $within<2) return $thedate;
+	  return $thedate." +/- ".$within;
   }
 
   public function posted(){
@@ -65,6 +74,23 @@ class FSPost extends CPost {
   */
   public function indexSection(){
     return "";
+  }
+  public function afterIndexSection(){
+	  // check if we want to dislay this
+	  
+	  // get all post meta
+	  $allmeta = get_post_meta($this->postid);
+	  
+	  $m = "";
+	  foreach ($allmeta as $prop=>$val){
+		  if ($prop=="merg") continue;
+		  $m.= "<tr><td>".$prop."</td><td>".$val."</td></tr>";
+	  }
+	  if ($m) {
+		  $m = "<table>".$m."</table>";
+		  $m = "<div class='after-index-section'>".$m."</div>";
+	  }
+	  return $m;
   }
   // TODO the linking process via tags should be moved into base CPost/CptHelper, but not now
   protected function getLinksViaTax($tax,$type){

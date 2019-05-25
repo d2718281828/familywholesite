@@ -70,7 +70,10 @@ class Interest extends FSPost {
   * Do we have an index section?
   */
   public function hasIndexSection(){
-    return false;
+    return true;
+  }
+  public function indexSection(){
+	return $this->afterIndexSection();
   }
   /**
   * download asset info
