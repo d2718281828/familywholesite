@@ -10,10 +10,12 @@ Author URI:
 /* TODOs
 Before final load
 !!! person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
-!!! Add photos to events - lookup based on date? May not be necessary - tst with reloaded nodes.
-	test 13/7/2002
+	cant progress this until a picture has been loaded
+!!! Add photos to events - lookup based on date? May not be necessary - test with reloaded nodes.
+	test 13/7/2002. They may need to be manually added, nothing more to do on load.
 	Excerpts
 !!! Manual image crop is not working, Have to find another plugin
+	Need a search by date for images and events.
 	
 	
 !!! test the movie files from 13/7/2002 in  /agd/mov207
@@ -140,6 +142,10 @@ class FamilySite {
 	
 	// change the reply text
 	add_filter( 'comment_reply_link', [$this, 'change_comment'] );
+	
+	// add shortcodes to excerpts
+	add_filter( 'the_excerpt', 'shortcode_unautop');
+	add_filter( 'the_excerpt', 'do_shortcode');
   }
   public function admin_init(){
     wp_enqueue_style( 'family-site-admin-css', plugin_dir_url( __FILE__ ).'css/admin.css' );

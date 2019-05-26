@@ -41,7 +41,8 @@ class EntLoader {
 	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd",
 	  "ewcndw4","ewcndw5","ewcndw6","ewcndw7","gmmhkoxd","gmmhkoxc","eopasmk2","abz4le06","abz4le07","abz4le08",
 	  "abz4le09","abz4le11","abz4le12","abz4le13","abz4le14","abz4le15","abz4le17","abz4le21","abz4le22",
-	  "abz4le23","sjnkht00",
+	  "abz4le23","sjnkht00","mkkfeppl","jstzz022","jstzz025","jstzz024","jstzz023",
+	  "jstzz030", "jstzz031", "jstzz032", "jstzz033","jstzz034","dscn7107", "dscn7108", "dscn7109",
 	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
 	  
 	  $this->picBatchSize = 20;
@@ -209,7 +210,9 @@ class EntLoader {
 	  ;';
 	  $res = $wpdb->get_results($nodepics,ARRAY_A);
 	  
-	  $m = "<table>";
+	  $m = "<p>NOTE: this hasnt been finished yet, waiting for something to show up in the list below";
+	  $m.= "<p>SQL=".$nodepics;
+	  $m.= "<table>";
 	  $m.= "<tr><td>ID with nodepic</td><td>post title</td><td>the pic node</td></tr>";
 	  for ($k=0; $k<count($res);  $k++){
 		  $id = $res[$k]["ID"];
