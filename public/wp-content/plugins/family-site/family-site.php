@@ -9,12 +9,9 @@ Author URI:
 */
 /* TODOs
 Before final load
-!!! person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
-	cant progress this until a picture has been loaded
-!!! Add photos to events - lookup based on date? May not be necessary - test with reloaded nodes.
-	test 13/7/2002. They may need to be manually added, nothing more to do on load.
+tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
+		cant progress this until a picture has been loaded
 	Excerpts
-!!! Manual image crop is not working, Have to find another plugin
 	Need a search by date for images and events.
 	
 	
@@ -28,6 +25,10 @@ Before final load
 !!! the left and right buttons on the event slideshow need to be styled
 
 Doreen's music post doesnt have a date
+
+!!! Add photos to events - lookup based on date? May not be necessary - test with reloaded nodes.
+	test 13/7/2002. They may need to be manually added, nothing more to do on load.
+OK  Manual image crop is not working, it is now working, whhy didnt itt before?
 
 Does a normal post appear on the timeline? SHould there be a category for posts which arent time related?
 

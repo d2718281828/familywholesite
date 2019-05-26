@@ -47,7 +47,13 @@ class FSPost extends CPost {
   * ultimately could have results like 1975/03 or 1975/05-08 or 1975-80 
   */
   protected function approx_date($thedate, $within){
-	  if ($within && $within<2) return $thedate;
+	  if (!$within) return $thedate;
+	  if ($within<2) return $thedate;
+	  if ($within<12) return $thedate." +/- ".$within;
+	  if ($within<20) return substr($thedate,0,7);
+	  // now complicated stuff about a range of months
+	  if ($within<310) return substr($thedate,0,4);
+	  // now complicated stuff about a range of years
 	  return $thedate." +/- ".$within;
   }
 
