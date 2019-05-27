@@ -19,7 +19,6 @@ tst person pictures - nodepic - might already be done, might just need a final t
 	
 !!! test the movie files from 13/7/2002 in  /agd/mov207
 	mpg file just shows as a link
-!!! Places should be tagged with places (nearby) and people and events
 
 !!! page 2 etc on the front page doesnt show side bar
 
@@ -102,6 +101,7 @@ anniversaries calendar
 
 done ========
 
+OK Places should be tagged with places (nearby) and people and events
 New <public> attribute:
 <public>familysite<x>y
 */

@@ -174,6 +174,7 @@ class EntCPost  {
 		// resolve the descriptions
 		$desc = $cpost->get("ent_curly_desc");	// should be array
 		$cpost->set("post_content", $this->wpRender($desc));
+		$cpost->set("post_excerpt", $this->wpRender($desc));
 		
 		$cpost->on_update(2);		// re-save it, checking the custom fields and ensuring consistency
 		$m.="<br />Phase 3 on ".$cpost->show();
