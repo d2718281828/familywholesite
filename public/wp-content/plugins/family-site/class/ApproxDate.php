@@ -10,6 +10,7 @@ class ApproxDate {
   /**
   * Express the date as naturally as possible given the within days. 
   * ultimately could have results like 1975/03 or 1975/05-08 or 1975-80 
+  * @param thedate is string yyyy/mm/dd
   */
   public function convert($thedate, $within){
 	  if (!$within) return $thedate;
@@ -20,7 +21,7 @@ class ApproxDate {
 	  if ($within<310) return substr($thedate,0,4);
 	  // now complicated stuff about a range of years
 	  $wyears = round($within/365);
-	  return $thedate." +/- ".$wyears." yrs";
+	  return substr($thedate,0,4)." +/- ".$wyears." yrs";
   }
 
 }
