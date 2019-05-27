@@ -7,21 +7,35 @@ require_once("ApproxDate.php");
 class TimeLine {
 
   protected $focus = null;
+  protected $timerange = null;	// two element array date from, to, or null.
+  protected $summary = 0;		// summary level. 0 = not summarised. 100 is the most possible.
 
   public function __construct($focus = null){
     $this->focus = $focus;
 	$this->ad = new ApproxDate();
   }
+  public function setRange($from,$to){
+	$this->timerange = [$from, $to];
+  }
+  public function setSummary($level){
+	  $this->summary = $level;
+  }
   // next job - rework this with different timeline event types
   public function html(){
     global $wpdb;
+	
+	$predicates = [];
+	if ($this->focus) $predicates[] = "object=".$this->focus->postid;
+	if ($this->timerange) $predicates[] = "event_date between '".$this->timerange[0]."' and '".$this->timerange[1]."'";
 
     $sql = "select * from ".$wpdb->prefix."timeline";
-	if ($this->focus) $sql.=" where object=".$this->focus->postid;
+	$sql.= count($predicates)>0 ? "where ".join($predicates," and ") : "";
 	$sql.= " order by event_date desc;";
     $res = $wpdb->get_results($sql, ARRAY_A);
+	
+	// summarise if we need to
 
-    $m = "<div class='timeline-wrap'>";
+    $m = "<p>".$sql."<div class='timeline-wrap'>";
     foreach($res as $event) {
       $source = \CPTHelper\CPTHelper::make($event["source"],$event["source_type"]);
 	  
@@ -117,7 +131,6 @@ class TimeLine {
 	else $sql = $wpdb->prepare($ins,$cd,$dwithin,$sid, $stype,$ev, $oid, $otype, $place, $event, $o2, $o2type);
 	
 	$rc = $wpdb->query($sql);
-	  
   }
   /**
   * This is to cope with dates which are not days. we will accept yyyy and yyyy/mm.
@@ -154,6 +167,17 @@ class TimeLine {
   */
   static function addInterest($event_date, $sid, $stype, $x, $xtype, $date_within=0){
 	  self::addEntry($event_date, $sid, $stype, "INTEREST", $x, $xtype, 0, 0, null, null, $date_within);
+  }
+  /** Call this in init to define the timeline shortcode
+  */
+  static function init(){
+  	add_shortcode("timeline","TimeLine::do_shortcode");
+  }
+  /** Call this in init to define the timeline shortcode
+  */
+  static function do_shortcode($atts, $content, $tag){
+	  $tl = new TimeLine();
+	  return $tl->html();
   }
 }
  ?>

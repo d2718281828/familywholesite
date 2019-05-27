@@ -147,6 +147,9 @@ class FamilySite {
     $this->setupTaxes();
 	add_shortcode("stats",[$this,"do_stats"]);
 	
+	// timeline initialisation
+	TimeLine::init();
+	
 	// change the reply text
 	add_filter( 'comment_reply_link', [$this, 'change_comment'] );
 	
