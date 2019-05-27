@@ -11,6 +11,7 @@ Author URI:
 Before final load
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
+	Approx date should also be on the timeline
 	Excerpts
 	Need a search by date for images and events.
 	
