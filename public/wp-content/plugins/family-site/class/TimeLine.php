@@ -111,6 +111,7 @@ class TimeLine {
 	$ins2 = "insert into  $timeline(event_date, date_within, source, source_type,event_type, object, object_type,event, place) values(%s, %d, %d,%s,%s,%d,%s,%d,%d);";
 	
 	list($cd,$dwithin) = self::correctDate($event_date,$within);
+	$dwithin = $dwithin>0 ? $dwithin : $within;
 	if ($o2===null) $sql = $wpdb->prepare($ins2,$cd,$dwithin, $sid, $stype,$ev,$oid, $otype, $place, $event);
 	else $sql = $wpdb->prepare($ins,$cd,$dwithin,$sid, $stype,$ev, $oid, $otype, $place, $event, $o2, $o2type);
 	
@@ -150,8 +151,8 @@ class TimeLine {
   }
   /** Interest item, containing $x
   */
-  static function addInterest($event_date, $sid, $stype, $x, $xtype){
-	  self::addEntry($event_date, $sid, $stype, "INTEREST", $x, $xtype, 0, 0);
+  static function addInterest($event_date, $sid, $stype, $x, $xtype, $date_within=0){
+	  self::addEntry($event_date, $sid, $stype, "INTEREST", $x, $xtype, 0, 0, null, null, $date_within);
   }
 }
  ?>

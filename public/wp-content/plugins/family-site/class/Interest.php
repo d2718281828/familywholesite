@@ -45,14 +45,18 @@ class Interest extends FSPost {
 		if ($event = $this->getcf($req,"event")) {
 			$event = (int)$event;
 			$actual_date = get_post_meta($event, "actual_date", true);
+			$date_within = get_post_meta($event, "date_within", true);
 		}
+	} else {
+		$date_within = $this->getcf($req,"date_within");
+		$date_within = $date_within ?: 0;	// in case it's null
 	}
     if (WP_DEBUG) error_log("Interest $post_id has date $actual_date");
 	
 	if ($actual_date){
 		$links = $this->getLinks();
 		foreach($links as $link){
-			TimeLine::addInterest($actual_date, $post_id,  $this->getType(), $link->postid, $link->getType());
+			TimeLine::addInterest($actual_date, $post_id,  $this->getType(), $link->postid, $link->getType(), $date_within );
 		}
 	}
 
