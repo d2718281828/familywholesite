@@ -1,12 +1,15 @@
 <?php
 namespace FamilySite;
+require_once("ApproxDate.php");
 
+// todo use photo crops
 class TimeLine {
 
   protected $focus = null;
 
   public function __construct($focus = null){
     $this->focus = $focus;
+	$this->ad = new ApproxDate();
   }
   // next job - rework this with different timeline event types
   public function html(){
@@ -20,8 +23,10 @@ class TimeLine {
     $m = "<div class='timeline-wrap'>";
     foreach($res as $event) {
       $source = \CPTHelper\CPTHelper::make($event["source"],$event["source_type"]);
-      $evdate = new \DateTime($event["event_date"]);
-      $m.= '<div class="timeline-link"><div class="timeline-date">'.$evdate->format("Y, jS F").'</div>';
+	  
+	  $evdate = $this->ad->full($event["event_date"],$event["date_within"]);
+	  
+      $m.= '<div class="timeline-link"><div class="timeline-date">'.$evdate.'</div>';
 	  switch($event["event_type"]){
 		case "BORN":
 		$m.= '<div class="timeline-body">Born</div>';

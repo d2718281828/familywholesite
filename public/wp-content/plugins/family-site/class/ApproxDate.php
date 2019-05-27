@@ -23,5 +23,13 @@ class ApproxDate {
 	  $wyears = round($within/365);
 	  return substr($thedate,0,4)." +/- ".$wyears." yrs";
   }
+  /**
+  * Similar to the above but with the dates spelled out nicely
+  */
+  public function full($thedate, $within){
+	  if ($within && $within>1) return $this->convert( $thedate, $within);
+	  $x = new \DateTime($thedate);
+	  return $x->format("Y, jS F");
+  }
 
 }
