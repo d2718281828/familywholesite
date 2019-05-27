@@ -9,11 +9,12 @@ Author URI:
 */
 /* TODOs
 Before final load
-!!!	Approx date should also be on the timeline
-		Problem is that date_within isnt being stored in timeline table look at addInterest
+	Edit image link for sorting bad crops - could use crop icon
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
-	Need a search by date for images and events.
+	Edit image link for sorting bad crops - could use crop icon
+	Need a search by date for images and events, also search by file type for pdf etc.
+		Instead of a search, could have an overall timeline index using the timeline table. Group by year...
 	
 !!! test the movie files from 13/7/2002 in  /agd/mov207
 	mpg file just shows as a link
@@ -28,7 +29,6 @@ Doreen's music post doesnt have a date
 
 !!! Add photos to events - lookup based on date? May not be necessary - test with reloaded nodes.
 	test 13/7/2002. They may need to be manually added, nothing more to do on load.
-OK  Manual image crop is not working, it is now working, whhy didnt itt before?
 
 Does a normal post appear on the timeline? SHould there be a category for posts which arent time related?
 
@@ -43,6 +43,8 @@ Finding images in the media library (for featured image) isnt easy.
 Help pages - hosting? SSL certs. 
 
 Timeline should use standard crop size photos
+
+Timeline should include children's death, parents, grandparents death, grandchildren birth/death
 
 cant upload mpegs. grandma recordings
 
@@ -99,6 +101,9 @@ birthdays calendar
 anniversaries calendar
 
 done ========
+!!!	Approx date should also be on the timeline
+		Problem is that date_within isnt being stored in timeline table look at addInterest
+OK  Manual image crop is not working, it is now working, whhy didnt itt before?
 
 OK Places should be tagged with places (nearby) and people and events
 New <public> attribute:

@@ -44,6 +44,8 @@ class EntLoader {
 	  "abz4le23","sjnkht00","mkkfeppl","jstzz022","jstzz025","jstzz024","jstzz023",
 	  "jstzz030", "jstzz031", "jstzz032", "jstzz033","jstzz034","dscn7107", "dscn7108", "dscn7109",
 	  "foskxnv1", "foskxnv2", "foskxnv3", "foskxnv4", "foskxnv5", "foskxnv6", "foskxnv7","sjnkht00",
+	  "ioddtey","iodds3d","iodds3c","iodds3b","iodds3a",
+	  "dagvcj4","dagvcj3","dagvcj2","dagvcj1",
 	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
 	  
 	  $this->picBatchSize = 20;
