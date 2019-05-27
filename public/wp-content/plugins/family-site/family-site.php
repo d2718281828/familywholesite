@@ -11,7 +11,8 @@ Author URI:
 Before final load
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
-	Approx date should also be on the timeline
+!!!	Approx date should also be on the timeline
+		Problem is that date_within isnt being stored in timeline table look at addInterest
 	Excerpts
 	Need a search by date for images and events.
 	
@@ -145,7 +146,7 @@ class FamilySite {
 	// change the reply text
 	add_filter( 'comment_reply_link', [$this, 'change_comment'] );
 	
-	// add shortcodes to excerpts
+	// add shortcodes to excerpts. This doesnt work.
 	add_filter( 'the_excerpt', 'shortcode_unautop');
 	add_filter( 'the_excerpt', 'do_shortcode');
   }
@@ -202,7 +203,7 @@ class FamilySite {
       "re-write" => ["slug"=>"person",],
 
     ]);
-    register_taxonomy("place_tax", "post", [
+    register_taxonomy("place_tax", ["post","fs_place"], [
       "labels"=>[
         "name"=>__("Places","familysite"),
         "singular_name"=>__("Place","familysite"),
@@ -218,7 +219,7 @@ class FamilySite {
       "re-write" => ["slug"=>"place",],
 
     ]);
-    register_taxonomy("event_tax", "post", [
+    register_taxonomy("event_tax", ["post","fs_place"], [
       "labels"=>[
         "name"=>__("Events","familysite"),
         "singular_name"=>__("Event","familysite"),
