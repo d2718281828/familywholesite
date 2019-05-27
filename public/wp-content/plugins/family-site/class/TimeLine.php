@@ -3,6 +3,7 @@ namespace FamilySite;
 require_once("ApproxDate.php");
 
 // todo use photo crops
+// summary timeline and everything timeline
 class TimeLine {
 
   protected $focus = null;
