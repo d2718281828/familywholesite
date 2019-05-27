@@ -14,7 +14,6 @@ class EntLoadHelp extends BaseAdmin {
       ["Delete", "thiskiller"],
       ["Delete Pics", "killpics"],
       ["Complete Pics", "complete"],
-      ["Excerpts", "excerpts"],
     ];
   }
 
@@ -26,7 +25,6 @@ class EntLoadHelp extends BaseAdmin {
 	  echo "<p><input type='submit' name='action' value='Delete'>Delete all ent-created posts - <strong>there is no warning!</strong></p>";
 	  echo "<p><input type='submit' name='action' value='Delete Pics'>Delete just the pictures - <strong>there is no warning!</strong></p>";
 	  echo "<p><input type='submit' name='action' value='Complete Pics'>Complete - e.g. things that need to wait until all pics have been loaded</p>";
-	  echo "<p><input type='submit' name='action' value='Excerpts'>Make explicit excerpts where there are shortcodes</p>";
   }
   
   public function thisloader(){
@@ -48,9 +46,6 @@ class EntLoadHelp extends BaseAdmin {
   }
   public function complete(){
 	  return $this->parent->complete();
-  }
-  public function excerpts(){
-	  return $this->parent->excerpts();
   }
 
 }

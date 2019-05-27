@@ -9,19 +9,18 @@ Author URI:
 */
 /* TODOs
 Before final load
-tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
-		cant progress this until a picture has been loaded
 !!!	Approx date should also be on the timeline
 		Problem is that date_within isnt being stored in timeline table look at addInterest
-	Excerpts
+tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
+		cant progress this until a picture has been loaded
 	Need a search by date for images and events.
-	
 	
 !!! test the movie files from 13/7/2002 in  /agd/mov207
 	mpg file just shows as a link
 
 !!! page 2 etc on the front page doesnt show side bar
 
+	need a search for ent ref
 
 !!! the left and right buttons on the event slideshow need to be styled
 

@@ -195,7 +195,7 @@ class EntLoader {
   * Things to be done after all pics loaded
   */
   public function complete(){
-	  $this->addNodePics();
+	  return $this->addNodePics();
   }
   /**
   * Things to be done after all pics loaded
@@ -877,6 +877,8 @@ class EntLoader {
 		  return "jenny-heritage";
 		  case "Judith":
 		  return "judith-turner";
+		  case "Phil":
+		  return "phil-turner";
 		  case "Maja":
 		  return "maja-storkey";
 		  case "Brian":
