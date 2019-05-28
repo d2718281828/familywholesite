@@ -171,7 +171,7 @@ class TimeLine {
   /** Call this in init to define the timeline shortcode
   */
   static function init(){
-  	add_shortcode("timeline","TimeLine::do_shortcode");
+  	add_shortcode("timeline",[__CLASS__,"do_shortcode"]);
   }
   /** Call this in init to define the timeline shortcode
   */
