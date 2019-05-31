@@ -21,7 +21,7 @@ class Unique extends Aggregator {
 	  // suppress BORN records because they will also be a SON or DAUGHTER
 	  if ($newtype=="BORN") return null;
 
-	  // In general if the types arent the same they will definitely not be aggregated
+	  // In general if the types arent the same they will not be aggregated
 	  if ($oldtype != $newtype) return $this->makeNew($event);
 	  
 	  if ($newtype=="INTEREST"){
@@ -37,8 +37,19 @@ class Unique extends Aggregator {
 			  return null;
 		  }
 	  }
+	  if ($newtype=="MARRIAGE"){
+		  // this logic might fail if there are two weddings on the same day !!
+		  if ($event["object"]==$this->last["object2"] && $event["object2"]==$this->last["object"]) {
+			  $object = \CPTHelper\CPTHelper::make($event["object2"],$event["object2_type"]);
+			  $this->otherparty = $object->simpleLink();
+			  return null;
+		  }
+	  }
 	  
 	  return $this->makeNew($event);
+  }
+  protected function marriageLine($spouse){
+	  return $this->otherparty." and ".$spouse." married.";
   }
   
   protected function objectName(){

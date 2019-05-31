@@ -77,7 +77,7 @@ class Aggregator {
 		case "MARRIAGE":
 		if ($event["object2"]){
 			$spouse = \CPTHelper\CPTHelper::make($event["object2"],$event["object2_type"]);
-			$m.= '<div class="timeline-body">Marriage to '.$spouse->simpleLink().'</div>';
+			$m.= '<div class="timeline-body">'.$this->marriageLine($spouse->simpleLink()).'</div>';
 		}
 		break;
 		default:
@@ -85,6 +85,9 @@ class Aggregator {
 	  }
 	  $m.= '</div><!-- end timeline-link --->';
       return $m;
+  }
+  protected function marriageLine($spouse){
+	  return "Marriage to ".$spouse;
   }
   /**
   * Return the object name where possible. For a focussed thing the object is always the focus so not needed
