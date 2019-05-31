@@ -65,14 +65,14 @@ class Aggregator {
       $m.= '<div class="timeline-link"><div class="timeline-date">'.$evdate.'</div>';
 	  switch($event["event_type"]){
 		case "BORN":
-		$m.= '<div class="timeline-body">Born</div>';
+		$m.= '<div class="timeline-body">'.$this->objectName().'Born</div>';
 		break;
 		case "DIED":
-		$m.= '<div class="timeline-body">Passed away</div>';
+		$m.= '<div class="timeline-body">'.$this->objectName().'Passed away</div>';
 		break;
 		case "SON":
 		case "DAUGHTER":
-		$m.= '<div class="timeline-body">'.$event["event_type"].' '.$source->simpleBirthLink().'</div>';
+		$m.= '<div class="timeline-body">'..$this->objectName().$event["event_type"].' '.$source->simpleBirthLink().'</div>';
 		break;
 		case "MARRIAGE":
 		if ($event["object2"]){
@@ -85,6 +85,12 @@ class Aggregator {
 	  }
 	  $m.= '</div><!-- end timeline-link --->';
       return $m;
+  }
+  /**
+  * Return the object name where possible. For a focussed thing the object is always the focus so not needed
+  */
+  protected objectName(){
+	  return "";
   }
 }
  ?>
