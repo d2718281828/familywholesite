@@ -72,7 +72,7 @@ class Aggregator {
 		break;
 		case "SON":
 		case "DAUGHTER":
-		$m.= '<div class="timeline-body">'..$this->objectName().$event["event_type"].' '.$source->simpleBirthLink().'</div>';
+		$m.= '<div class="timeline-body">'.$this->objectName().$event["event_type"].' '.$source->simpleBirthLink().'</div>';
 		break;
 		case "MARRIAGE":
 		if ($event["object2"]){
