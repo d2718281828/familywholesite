@@ -34,6 +34,8 @@ class Unique extends Aggregator {
 			  return null;
 		  }
 	  }
+	  // suppress BORN records because they will also be a SON or DAUGHTER
+	  if ($newtype=="BORN") return null;
 	  
 	  return $this->makeNew($event);
   }
