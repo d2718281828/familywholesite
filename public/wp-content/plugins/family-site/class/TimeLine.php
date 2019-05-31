@@ -41,7 +41,7 @@ class TimeLine {
 	if ($this->timerange) $predicates[] = "event_date between '".$this->timerange[0]."' and '".$this->timerange[1]."'";
 
     $sql = "select * from ".$wpdb->prefix."timeline";
-	$sql.= count($predicates)>0 ? "where ".join($predicates," and ") : "";
+	$sql.= count($predicates)>0 ? " where ".join($predicates," and ") : "";
 	$sql.= " order by event_date desc;";
     $res = $wpdb->get_results($sql, ARRAY_A);
 	
