@@ -89,7 +89,7 @@ class Aggregator {
   /**
   * Return the object name where possible. For a focussed thing the object is always the focus so not needed
   */
-  protected objectName(){
+  protected function objectName(){
 	  return "";
   }
 }
