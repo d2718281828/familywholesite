@@ -1,9 +1,17 @@
 <?php
 namespace FamilySite;
 require_once("ApproxDate.php");
+require_once("timeline_aux/Aggregator.php");
 
 // todo use photo crops
 // summary timeline and everything timeline
+/**
+*	100 Decade
+* 	80 year		- both just a count of pictures, births, deaths, marriages, 
+*	40	list births, marriages, deaths, events (consolidated though). Subject has to be named.
+*	10	individual pictures, consolidated.
+*	0 only used when there is a focus
+*/
 class TimeLine {
 
   protected $focus = null;
@@ -20,8 +28,37 @@ class TimeLine {
   public function setSummary($level){
 	  $this->summary = $level;
   }
-  // next job - rework this with different timeline event types
+  /**
+  * Output the html for the timeline.
+  * Most of the work is devolved to the aggregator.
+  */
   public function html(){
+    global $wpdb;
+	
+	$predicates = [];
+	if ($this->focus) $predicates[] = "object=".$this->focus->postid;
+	if ($this->timerange) $predicates[] = "event_date between '".$this->timerange[0]."' and '".$this->timerange[1]."'";
+
+    $sql = "select * from ".$wpdb->prefix."timeline";
+	$sql.= count($predicates)>0 ? "where ".join($predicates," and ") : "";
+	$sql.= " order by event_date desc;";
+    $res = $wpdb->get_results($sql, ARRAY_A);
+	
+	// Choose the aggregator
+	$current = new Aggregator($this->focus);
+
+    $m = "<p>".$sql."<div class='timeline-wrap'>";
+    foreach($res as $event) {
+	  $next = $current->nextOne($event);
+	  if ($next){
+		  $m.= $current->html();
+		  $current = $next;
+	  }
+    }
+	$m.=$current->html()."</div><!-- end timeline-wrap --->";
+    return $m;
+  }
+  public function html_undo(){
     global $wpdb;
 	
 	$predicates = [];
@@ -176,7 +213,13 @@ class TimeLine {
   /** Call this in init to define the timeline shortcode
   */
   static function do_shortcode($atts, $content, $tag){
+	  $a = shortcode_atts( array(
+		'level' => 100,
+		'from' => 'RQ',		// means get it from URL request
+		'to' => 'RQ',
+	  ), $atts );
 	  $tl = new TimeLine();
+	  $tl->setSummary($a['level']);
 	  return $tl->html();
   }
 }
