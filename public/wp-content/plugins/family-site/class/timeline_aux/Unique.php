@@ -13,7 +13,7 @@ class Unique extends Aggregator {
   * If it isnt, then return a new aggregator of the same type with this->last set to $event.
   */
   public function nextOne($event){
-	  if ($event["event_type"]=="PIC"){
+	  if ($event["event_type"]=="INTEREST"){
 		  // if it is the same pic then we will effectively ignore it.
 		  if ($event["source"]==$this->last["source"]) return null;
 	  } 
