@@ -38,7 +38,7 @@ class Unique extends Aggregator {
 	  return $this->makeNew($event);
   }
   
-  protected objectName(){
+  protected function objectName(){
       $object = \CPTHelper\CPTHelper::make($this->last["object"],$this->last["object_type"]);
 	  $links = [];
 	  if ($this->otherparty) $links[] = $this->otherparty;
