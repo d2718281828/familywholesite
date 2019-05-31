@@ -1,11 +1,12 @@
 <?php
 namespace FamilySite;
-require_once("../ApproxDate.php");
+// require_once("../ApproxDate.php");	// this doesnt work, dont know why.
 
 /**
 *	Base class for timeline aggregator.
 * It assumes that the records will be sorted, and it checks each new record for whether it needs to be 
 *  aggregated
+* This base class treats every line as new, so it is for the focused, detailed timeline.
 */
 class Aggregator {
 
@@ -24,9 +25,7 @@ class Aggregator {
   * If it isnt, then return a new aggregator of the same type with this->last set to $event.
   */
   public function nextOne($event){
-	  $res = $this->makeNew();
-	  $res->last = $event;
-	  return $res;
+	  return $this->makeNew($event);
   }
   /**
   * Output the suitably aggregated record.
@@ -35,9 +34,10 @@ class Aggregator {
 	  if (!$this->last) return "";
 	  return $this->detailHtml();
   }
-  protected function makeNew(){
+  protected function makeNew($event){
 	  $className = get_class($this);
 	  $res = new $className($this->focus);
+	  $res->last = $event;
 	  return $res;
   }
   /* timeline types

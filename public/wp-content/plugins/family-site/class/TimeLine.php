@@ -2,6 +2,7 @@
 namespace FamilySite;
 require_once("ApproxDate.php");
 require_once("timeline_aux/Aggregator.php");
+require_once("timeline_aux/Unique.php");
 
 // todo use photo crops
 // summary timeline and everything timeline
@@ -45,7 +46,8 @@ class TimeLine {
     $res = $wpdb->get_results($sql, ARRAY_A);
 	
 	// Choose the aggregator
-	$current = new Aggregator($this->focus);
+	if ($this->focus) $current = new Aggregator($this->focus);
+	else $current = new Unique(null);
 
     $m = "<p>".$sql."<div class='timeline-wrap'>";
     foreach($res as $event) {
