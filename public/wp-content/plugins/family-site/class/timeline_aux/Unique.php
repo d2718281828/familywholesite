@@ -27,7 +27,7 @@ class Unique extends Aggregator {
 	  } 
 	  
 	  if ($newtype=="SON" || $newtype=="DAUGHTER"){
-		  if ($event["object"] == $this->last["object"]){
+		  if ($event["source"] == $this->last["source"]){
 			  // store the other party and then ignore the new record
 			  $object = \CPTHelper\CPTHelper::make($event["object"],$event["object_type"]);
 			  $this->otherparty = $object->simpleLink();
