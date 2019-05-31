@@ -18,6 +18,9 @@ class Unique extends Aggregator {
 	  $newtype = $event["event_type"];
 	  $oldtype = $this->last["event_type"];
 	  
+	  // suppress BORN records because they will also be a SON or DAUGHTER
+	  if ($newtype=="BORN") return null;
+
 	  // In general if the types arent the same they will definitely not be aggregated
 	  if ($oldtype != $newtype) return $this->makeNew($event);
 	  
@@ -34,8 +37,6 @@ class Unique extends Aggregator {
 			  return null;
 		  }
 	  }
-	  // suppress BORN records because they will also be a SON or DAUGHTER
-	  if ($newtype=="BORN") return null;
 	  
 	  return $this->makeNew($event);
   }
