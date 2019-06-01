@@ -3,6 +3,7 @@ namespace FamilySite;
 require_once("ApproxDate.php");
 require_once("timeline_aux/Aggregator.php");
 require_once("timeline_aux/Unique.php");
+require_once("timeline_aux/TLCounter.php");
 
 // todo use photo crops
 // summary timeline and everything timeline
@@ -16,7 +17,7 @@ require_once("timeline_aux/Unique.php");
 class TimeLine {
 
   protected $focus = null;
-  protected $timerange = null;	// two element array date from, to, or null.
+  protected $timerange = null;	// two element array date from, to, or null. from/to can also be null
   protected $summary = 0;		// summary level. 0 = not summarised. 100 is the most possible.
 
   public function __construct($focus = null){
@@ -38,16 +39,36 @@ class TimeLine {
 	
 	$predicates = [];
 	if ($this->focus) $predicates[] = "object=".$this->focus->postid;
-	if ($this->timerange) $predicates[] = "event_date between '".$this->timerange[0]."' and '".$this->timerange[1]."'";
+	if ($this->timerange) {
+		if ($this->timerange[0] && $this->timerange[1]){
+		  $predicates[] = "event_date between '".$this->timerange[0]."' and '".$this->timerange[1]."'";
+		} else {
+			if ($this->timerange[0]) $predicates[] = "event_date >= '".$this->timerange[0]."'";
+			if ($this->timerange[1]) $predicates[] = "event_date <= '".$this->timerange[1]."'";
+		}
+	}
 
     $sql = "select * from ".$wpdb->prefix."timeline";
 	$sql.= count($predicates)>0 ? " where ".join($predicates," and ") : "";
 	$sql.= " order by event_date desc;";
     $res = $wpdb->get_results($sql, ARRAY_A);
 	
-	// Choose the aggregator
-	if ($this->focus) $current = new Aggregator($this->focus);
-	else $current = new Unique(null);
+	/* Choose the aggregator
+	* summary 0 Aggregator or Unique
+	* 		10 daily - Unique - needs to cope with focus. One picture per day
+	* 		20 - monthly	Counter
+	*		30	yearly
+	*		40  decade
+	* Also aggregator needs a page link maybe?
+	*/
+	if ($this->summary < 10) {
+		if ($this->focus) $current = new Aggregator($this->summary, $this->focus);
+		else $current = new Unique($this->summary, null);
+	} elseif($this->summary < 20) {
+		$current = new Unique($this->summary, $this->focus);
+	} else {
+		$current = new TLCounter($this->summary, $this->focus);
+	}
 
     $m = "<p>".$sql."<div class='timeline-wrap'>";
     foreach($res as $event) {
@@ -216,12 +237,21 @@ class TimeLine {
   */
   static function do_shortcode($atts, $content, $tag){
 	  $a = shortcode_atts( array(
-		'level' => 100,
-		'from' => 'RQ',		// means get it from URL request
-		'to' => 'RQ',
+		'level' =>  100,
+		'from' => null,
+		'to' => null,
+		// todo focus?? yes, but how? just postid?
 	  ), $atts );
+	  
+	  $level = ($_REQUEST['level']) ?: $a["level"];
+	  $range = [null, null];
+	  $range[0] = ($_REQUEST['from']) ?: $a["from"];
+	  $range[1] = ($_REQUEST['to']) ?: $a["to"];
+	  
 	  $tl = new TimeLine();
-	  $tl->setSummary($a['level']);
+	  $tl->setSummary($level);
+	  $tl->setRange($range);
+	  
 	  return $tl->html();
   }
 }

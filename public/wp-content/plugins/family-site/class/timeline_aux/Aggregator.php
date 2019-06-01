@@ -12,9 +12,17 @@ class Aggregator {
 
   protected $last = null;
 
-  public function __construct($focus = null){
+  /**
+  * The aummary level for an Aggregator should be 0.
+  */
+  public function __construct($summarylevel = 0, $focus = null){
     $this->focus = $focus;
+	$this->summary = $summarylevel;
 	$this->ad = new ApproxDate();
+	
+	$this->init();
+  }
+  protected function init(){
   }
   public function hasData(){
 	  return ($this->last !== null);
