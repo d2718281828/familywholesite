@@ -118,7 +118,7 @@ class Aggregator {
 	}
 	return $current_url."?".substr($q,1);
   }
-  public function function root_url($uri=false) { 
+  public function root_url($uri=false) { 
 	$s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : ""; // an s if it is https 
 	$p=explode("/",strtolower($_SERVER["SERVER_PROTOCOL"])); 
 	$protocol = $p[0].$s; 
