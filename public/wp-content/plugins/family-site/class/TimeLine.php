@@ -243,14 +243,13 @@ class TimeLine {
 		// todo focus?? yes, but how? just postid?
 	  ), $atts );
 	  
-	  $level = ($_REQUEST['level']) ?: $a["level"];
-	  $range = [null, null];
-	  $range[0] = ($_REQUEST['from']) ?: $a["from"];
-	  $range[1] = ($_REQUEST['to']) ?: $a["to"];
+	  $level = property_exists ($_REQUEST,'level') ? $_REQUEST['level'] : $a["level"];
+	  $from = property_exists ($_REQUEST,'from') ? $_REQUEST['from'] : $a["from"];
+	  $to = property_exists ($_REQUEST,'to') ? $_REQUEST['to'] : $a["to"];
 	  
 	  $tl = new TimeLine();
 	  $tl->setSummary($level);
-	  $tl->setRange($range);
+	  $tl->setRange($from, $to);
 	  
 	  return $tl->html();
   }
