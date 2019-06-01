@@ -34,13 +34,13 @@ class TLCounter extends Aggregator {
 											"from" => "/01",
 											"to" => "/31",
 											]; 		// month 
-	  if ($this->summary >= 30) $this->lev = ["compare" => 4 
+	  if ($this->summary >= 30) $this->lev = ["compare" => 4,
 											"drill"=>20,
 											"lab"=>"",
 											"from" => "/01/01",
 											"to" => "/12/31",
 											]; 		// year 
-	  if ($this->summary >= 40) $this->lev = ["compare" => 3 
+	  if ($this->summary >= 40) $this->lev = ["compare" => 3 ,
 											"drill"=>30,
 											"lab"=>"0s",
 											"from" => "0/01/01",
