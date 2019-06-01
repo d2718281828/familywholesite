@@ -12,9 +12,9 @@ Before final load
 	Edit image link for sorting bad crops - could use crop icon
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
-	Edit image link for sorting bad crops - could use crop icon
 	Need a search by date for images and events, also search by file type for pdf etc.
 		Instead of a search, could have an overall timeline index using the timeline table. Group by year...
+	Timeline add events
 	
 !!! test the movie files from 13/7/2002 in  /agd/mov207
 	mpg file just shows as a link

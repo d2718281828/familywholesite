@@ -44,7 +44,7 @@ class Aggregator {
   }
   protected function makeNew($event){
 	  $className = get_class($this);
-	  $res = new $className($this->focus);
+	  $res = new $className($this->summary, $this->focus);
 	  $res->last = $event;
 	  return $res;
   }
