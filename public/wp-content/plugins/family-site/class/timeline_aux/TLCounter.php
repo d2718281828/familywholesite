@@ -2,8 +2,16 @@
 namespace FamilySite;
 // require_once("../ApproxDate.php");	// this doesnt work, dont know why.
 require_once("Aggregator.php");
+
+/* TODO
+the first event isnt counted...
+LINKS
+the REQUEST params need to be moved to the timeline instead of the shortcode.
+After testing, may need to add limits on summary0 without from and to
+*/
+
 /**
-* This is for level 20 and above.
+* This is for level 20 and above. It just counts births, deaths etc in sections of months, years or decades.
 * 
 */
 class TLCounter extends Aggregator {
@@ -14,15 +22,30 @@ class TLCounter extends Aggregator {
 					"DIED"=>0
 			];
   /**
-  * comparelength is the length of the substring of the date which is used to check when the new one is
+  * compare is the length of the substring of the date which is used to check when the new one is
   */
-  protected $compareLength;
+  protected $lev;
   protected $lastkey = "";
   
   protected function init(){
-	  if ($this->summary >= 20) $this->compareLength = 7; 		// month 
-	  if ($this->summary >= 30) $this->compareLength = 4; 		// year 
-	  if ($this->summary >= 40) $this->compareLength = 3; 		// decade 
+	  if ($this->summary >= 20) $this->lev = ["compare" => 7,
+											"drill"=>10,
+											"lab"=>"",
+											"from" => "/01",
+											"to" => "/31",
+											]; 		// month 
+	  if ($this->summary >= 30) $this->lev = ["compare" => 4 
+											"drill"=>20,
+											"lab"=>"",
+											"from" => "/01/01",
+											"to" => "/12/31",
+											]; 		// year 
+	  if ($this->summary >= 40) $this->lev = ["compare" => 3 
+											"drill"=>30,
+											"lab"=>"0s",
+											"from" => "0/01/01",
+											"to" => "9/12/31",
+											]; 		// decade 
   }
 /**
   * This controls the aggregation process. Compare $event with $last to see if this is part of the same
@@ -31,9 +54,9 @@ class TLCounter extends Aggregator {
   */
   public function nextOne($event){
 	  // has the significant part of the date changed?
-	  if (!$this->lastkey) $this->lastkey = substr($this->last["event_date"],0,$this->compareLength);
+	  if (!$this->lastkey) $this->lastkey = substr($this->last["event_date"],0,$this->lev["compare"]);
 	  
-	  if (substr($event["event_date"],0,$this->compareLength) != $this->lastkey) {
+	  if (substr($event["event_date"],0,$this->lev["compare"]) != $this->lastkey) {
 		  return $this->makeNew($event);
 	  }
 	  $this->countit($event);
@@ -68,10 +91,10 @@ class TLCounter extends Aggregator {
   }
   protected function summaryHTML(){
 	  $m = "";
-	  $evdate = $this->lastkey;
-	  if (strlen($evdate)<4) $evdate = $evdate."0s";
+	  $evdate = $this->lastkey.$this->lev["lab"];
+	  $url = $this->pagelink($this->lev["drill"],$this->lastkey.$this->lev["from"],$this->lastkey.$this->lev["to"]);
 	  
-      $m.= '<div class="timeline-link"><div class="timeline-date">'.$evdate.'</div>';
+      $m.= '<div class="timeline-link"><div class="timeline-date"><a href="'.$url.'">'.$evdate.'</a></div>';
 	  
 	  $m.= '<div class="timeline-body"><p>'.$this->formatCounts().'</p></div>';
 	  $m.= '</div><!-- end timeline-link --->';

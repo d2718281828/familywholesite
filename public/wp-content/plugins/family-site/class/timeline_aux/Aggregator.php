@@ -103,5 +103,30 @@ class Aggregator {
   protected function objectName(){
 	  return "";
   }
+  /**
+  * Link to this page.
+  */
+  protected function pagelink($summary, $from, $to){
+	global $wp;
+	$current_url = $this->root_url(true);
+	if ($summary) $_REQUEST["level"] = $summary;
+	if ($from) $_REQUEST["from"] = $from;
+	if ($to) $_REQUEST["to"] = $to;
+	$q = "";
+	foreach($_REQUEST as $prop=>$var){
+		$q.="&".$prop."=".$var;
+	}
+	return $current_url."?".substr($q,1);
+  }
+  public function function root_url($uri=false) { 
+	$s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : ""; // an s if it is https 
+	$p=explode("/",strtolower($_SERVER["SERVER_PROTOCOL"])); 
+	$protocol = $p[0].$s; 
+	$port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]); 
+	if ($s && $_SERVER["SERVER_PORT"]==443) $port = ""; 
+	$z=$protocol."://".$_SERVER['SERVER_NAME'].$port; 
+	if ($uri) return $z.$_SERVER['REQUEST_URI']; 
+	return $z; 
+  }
 }
  ?>
