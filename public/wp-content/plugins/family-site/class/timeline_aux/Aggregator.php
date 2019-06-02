@@ -96,7 +96,7 @@ class Aggregator {
 	  $m.= '</div><!-- end timeline-link --->';
       return $m;
   }
-  protected function datelink($evdate){
+  protected function dateLink($evdate){
 	  return $evdate;
   }
   protected function marriageLine($spouse){
