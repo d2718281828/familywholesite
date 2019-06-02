@@ -9,12 +9,15 @@ Author URI:
 */
 /* TODOs
 Before final load
-	Timeline add events
+	Timeline 
 	Edit image link for sorting bad crops - could use crop icon
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
 	Timeline summary, misc bugs
+		add events
 		summary level not being picked up from the shortcode
+		picture counts dont add up
+		/timeline/?summary=40 doesnt work
 		
 !!! test the movie files from 13/7/2002 in  /agd/mov207
 	mpg file just shows as a link
@@ -35,7 +38,7 @@ Does a normal post appear on the timeline? SHould there be a category for posts 
 test add photo and write it up in the help page.
 Finding images in the media library (for featured image) isnt easy.
 	Do an "Add to entity" button on the post itself.
-	ANd a "Make this my photo"
+	And a "Make this my photo"
 !!!	ALso a Go to Crop link. But crop isnt working
 
 !!! Need an SSL certificate . Could do self certified, since I know all my audience.

@@ -57,7 +57,7 @@ class TimeLine {
 
     $sql = "select * from ".$wpdb->prefix."timeline";
 	$sql.= count($predicates)>0 ? " where ".join($predicates," and ") : "";
-	$sql.= " order by event_date desc;";
+	$sql.= " order by event_date desc, source asc, event_type;";
     $res = $wpdb->get_results($sql, ARRAY_A);
 	
 	/* Choose the aggregator
@@ -142,7 +142,7 @@ class TimeLine {
   person  BORN  samepers place
   person  SON   parent
   person  DIED	samepers place
-  person  MARRIED samepers spouse place
+  person  MARRIAGE samepers spouse place
   picture PIC   tagged-pers
   picture PIC   tagged-event
   picture PIC   tagged-place
@@ -234,6 +234,11 @@ class TimeLine {
   */
   static function addInterest($event_date, $sid, $stype, $x, $xtype, $date_within=0){
 	  self::addEntry($event_date, $sid, $stype, "INTEREST", $x, $xtype, 0, 0, null, null, $date_within);
+  }
+  /** event
+  */
+  static function addEvent($event_date, $sid, $stype, $x, $xtype, $date_within=0){
+	  self::addEntry($event_date, $sid, $stype, "EVENT", $x, $xtype, 0, 0, null, null, $date_within);
   }
   /** Call this in init to define the timeline shortcode
   */

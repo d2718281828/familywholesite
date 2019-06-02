@@ -44,13 +44,34 @@ class Event extends FSPost {
   public function getLinks(){
 	  return [];
   }
-	public function showPosted(){
+  public function showPosted(){
 		return false;
+  }
+  public function slideShow(){
+	return array(
+		'meta_key'   => 'event',
+		'meta_value' => $this->postid
+	);
+  }
+  public function on_update($req = false){
+	$post_id = $this->postid;
+	parent::on_update($req);
+	if (WP_DEBUG) error_log("Event::on_update for ".$post_id.", ".($req?"REQ":"props"));
+	TimeLine::clearSource($post_id);
+
+	$actual_date = "";
+	if ($actual_date=$this->getcf($req,"actual_date")) {
+		$date_within = $this->getcf($req,"date_within");
+		$date_within = $date_within ?: 0;	// in case it's null
 	}
-	public function slideShow(){
-		return array(
-			'meta_key'   => 'event',
-			'meta_value' => $this->postid
-		);
+    if (WP_DEBUG) error_log("Event $post_id has date $actual_date");
+	
+	if ($actual_date){
+		$links = $this->getLinks();
+		foreach($links as $link){
+			TimeLine::addEvent($actual_date, $post_id,  $this->getType(), $link->postid, $link->getType(), $date_within );
+		}
 	}
+
+  }
 }
