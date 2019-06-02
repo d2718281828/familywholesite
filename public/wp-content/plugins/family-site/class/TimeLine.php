@@ -35,7 +35,7 @@ class TimeLine {
 	if (!$this->timeto) $this->timefrom = $to;
   }
   public function setSummary($level){
-	if (!$this->summary) $this->summary = $level;
+	if (!$this->summary && $this->summary!=0) $this->summary = $level;
   }
   /**
   * Output the html for the timeline.
@@ -76,7 +76,7 @@ class TimeLine {
 		$current = new TLCounter($this->summary, $this->focus);
 	}
 
-    $m = "<p>".$sql."<div class='timeline-wrap'>";
+    $m = "<div class='timeline-wrap'>";
     foreach($res as $event) {
 	  $next = $current->nextOne($event);
 	  if ($next){
@@ -243,14 +243,14 @@ class TimeLine {
   */
   static function do_shortcode($atts, $content, $tag){
 	  $a = shortcode_atts( array(
-		'level' =>  100,
+		'summary' =>  100,
 		'from' => null,
 		'to' => null,
 		// todo focus?? yes, but how? just postid?
 	  ), $atts );
 	  
 	  $tl = new TimeLine();
-	  $tl->setSummary($a["level"]);
+	  $tl->setSummary($a["summary"]);
 	  $tl->setRange($a["from"], $a["to"]);
 	  
 	  return $tl->html();
