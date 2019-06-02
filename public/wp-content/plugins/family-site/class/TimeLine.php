@@ -14,11 +14,12 @@ require_once("timeline_aux/TLCounter.php");
 *	10	individual pictures, consolidated.
 *	0 only used when there is a focus
 */
+
 class TimeLine {
 
   protected $focus = null;
   protected $timerange = null;	// two element array date from, to, or null. from/to can also be null
-  protected $summary = 0;		// summary level. 0 = not summarised. 100 is the most possible.
+  protected $summary = null;		// summary level. 0 = not summarised. 100 is the most possible.
 
   public function __construct($focus = null){
     $this->focus = $focus;
@@ -35,7 +36,7 @@ class TimeLine {
 	if (!$this->timeto) $this->timefrom = $to;
   }
   public function setSummary($level){
-	if (!$this->summary && $this->summary!=0) $this->summary = $level;
+	if (!is_numeric($this->summary)) $this->summary = $level;
   }
   /**
   * Output the html for the timeline.

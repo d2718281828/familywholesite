@@ -64,6 +64,7 @@ Text Domain: familysite
 	font-weight: bold;
 }
 .timeline-link .title {
+	height: 26px;
 	margin-bottom: 2px;
 }
 .exif-data{
