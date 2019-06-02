@@ -6,7 +6,15 @@ require_once("timeline_aux/Unique.php");
 require_once("timeline_aux/TLCounter.php");
 
 // todo use photo crops
-// summary timeline and everything timeline
+/* notes
+Events are now adde to the timeline but only if they are tagged with a person.
+They dont get tagged with everyone who is at the event though, so they still wont show up in focused TLs
+Bugs
+		summary level not being picked up from the shortcode
+		picture counts dont add up
+		/timeline/?summary=40 doesnt work
+
+*/
 /**
 *	100 Decade
 * 	80 year		- both just a count of pictures, births, deaths, marriages, 
@@ -14,7 +22,6 @@ require_once("timeline_aux/TLCounter.php");
 *	10	individual pictures, consolidated.
 *	0 only used when there is a focus
 */
-
 class TimeLine {
 
   protected $focus = null;

@@ -19,7 +19,8 @@ class TLCounter extends Aggregator {
   protected $counts = ["INTEREST"=>0,
 					"BORN"=>0,
 					"MARRIAGE"=>0,
-					"DIED"=>0
+					"DIED"=>0,
+					"EVENT"=>0
 			];
   /**
   * compare is the length of the substring of the date which is used to check when the new one is
@@ -76,10 +77,14 @@ class TLCounter extends Aggregator {
 		  // if it is the same pic then we will effectively ignore it.
 		  if ($event["source"]==$this->last["source"]) return;
 	  } 
+	  if ($newtype=="EVENT"){
+		  // if it is the same event then we will effectively ignore it.
+		  if ($event["source"]==$this->last["source"]) return;
+	  } 
 
 	  // these are counted under BORN
 	  if ($newtype=="SON" || $newtype=="DAUGHTER") return;
-	  
+	  	  
 	  // if there is no focus there will be two of these for each wedding
 	  if ($newtype=="MARRIAGE"){
 		  // this logic might fail if there are two weddings on the same day !!
@@ -122,6 +127,7 @@ class TLCounter extends Aggregator {
 	  $res = [];
 	  if ($x=$this->formatCount("INTEREST","picture")) $res[] = $x;
 	  if ($x=$this->formatCount("BORN","birth")) $res[] = $x;
+	  if ($x=$this->formatCount("EVENT","event")) $res[] = $x;
 	  if ($x=$this->formatCount("DIED","death")) $res[] = $x;
 	  if ($x=$this->formatCount("MARRIAGE","wedding")) $res[] = $x;
 	  return join(", ",$res).".";
