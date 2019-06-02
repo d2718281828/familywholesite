@@ -112,11 +112,18 @@ class TLCounter extends Aggregator {
       return $m;
   }
   protected function formatCounts(){
-	  $m =$this->counts["INTEREST"]." pictures, ";
-	  $m.=$this->counts["BORN"]." births, ";
-	  $m.=$this->counts["DIED"]." deaths, ";
-	  $m.=$this->counts["MARRIAGE"]." weddings.";
-	  return $m;
+	  $res = [];
+	  if ($x=$this->formatCount("INTEREST","picture")) $res[] = $x;
+	  if ($x=$this->formatCount("BORN","birth")) $res[] = $x;
+	  if ($x=$this->formatCount("DIED","death")) $res[] = $x;
+	  if ($x=$this->formatCount("MARRIAGE","wedding")) $res[] = $x;
+	  return join(", ",$res).".";
+  }
+  protected function formatCount($label, $desc){
+	  $number = $this->counts[$label];
+	  if ($number==0) return null;
+	  if ($number==1) return $number." ".$desc;
+	  return $number." ".$desc."s";
   }
 }
  ?>
