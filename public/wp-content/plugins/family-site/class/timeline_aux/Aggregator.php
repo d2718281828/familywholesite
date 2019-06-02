@@ -45,10 +45,12 @@ class Aggregator {
   protected function makeNew($event){
 	  $className = get_class($this);
 	  $res = new $className($this->summary, $this->focus);
-	  return $res->addEvent0($event);
+	  $res->addEvent0($event);
+	  return $res;
   }
   protected function addEvent0($event){
 	  $this->last = $event;
+	  
   }
   /* timeline types
   source is the post that writes these when being saved
