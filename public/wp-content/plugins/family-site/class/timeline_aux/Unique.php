@@ -26,8 +26,9 @@ class Unique extends Aggregator {
 	  // In general if the types arent the same they will not be aggregated
 	  if ($oldtype != $newtype) return $this->makeNew($event);
 	  	  
-	  if ($newtype=="INTEREST"){
+	  if ($newtype=="INTEREST" || $newtype=="EVENT"){
 		  // if it is the same pic then we will effectively ignore it.
+		  // todo i think it's a general rule if the sources are the same and no focus then ignore
 		  if ($event["source"]==$this->last["source"]) return null;
 	  } 
 	  
