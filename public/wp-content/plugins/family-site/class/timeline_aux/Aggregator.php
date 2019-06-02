@@ -120,7 +120,7 @@ class Aggregator {
 	$current_url = $x[0];	// remove the current parameter list
 	
 	// replace current requests with the new values
-	if ($summary) $_REQUEST["level"] = $summary;
+	if ($summary!==null && $summary !== "") $_REQUEST["level"] = $summary;
 	if ($from) $_REQUEST["from"] = $from;
 	if ($to) $_REQUEST["to"] = $to;
 	
