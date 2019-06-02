@@ -48,11 +48,17 @@ class TLCounter extends Aggregator {
 											]; 		// decade 
   }
 /**
-  * This controls the aggregation process. Compare $event with $last to see if this is part of the same
+  * This controls the aggregation process. 
+  * If there is no last then make it the last.
+  * Compare $event with $last to see if this is part of the same
   * aggregation. If it is, return null and aggregate however that needs to be done.
   * If it isnt, then return a new aggregator of the same type with this->last set to $event.
   */
   public function nextOne($event){
+	  if (!this->last){
+		  $this->addEvent0($event);
+		  return null;
+	  }
 	  // has the significant part of the date changed?
 	  if (!$this->lastkey) $this->lastkey = substr($this->last["event_date"],0,$this->lev["compare"]);
 	  
@@ -91,11 +97,12 @@ class TLCounter extends Aggregator {
   * Like countit but there is no last.
   */
   protected function addEvent0($event){
-	  $newtype = $event["event_type"];
-	  if ($newtype=="SON" || $newtype=="DAUGHTER") return;
+	$newtype = $event["event_type"];
+	if ($newtype=="SON" || $newtype=="DAUGHTER") return;
 
-	  $this->last = $event;
-	  $this->counts[$newtype]++;
+	$this->last = $event;
+	$this->lastkey = substr($event["event_date"],0,$this->lev["compare"]);
+	$this->counts[$newtype]++;
   }
   public function html(){
 	  return $this->summaryHTML();
