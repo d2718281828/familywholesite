@@ -63,6 +63,16 @@ class Unique extends Aggregator {
 	  return $this->otherparty." and ".$spouse." married.";
   }
   /**
+  * The date link that shows in the header for the entry
+  */
+  protected function datelink($evdate){
+	  if ($this->summary == 0) return $evdate;
+	  
+	  // detail level pictures for one day
+ 	  $url = $this->pagelink(0,$evdate,$evdate);
+	  return "<a href='$url'>$evdate</a>";
+ }
+  /**
   *
   */
   protected function objectName(){

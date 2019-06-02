@@ -86,6 +86,17 @@ class TLCounter extends Aggregator {
 	  
 	  return ;
   }
+  /**
+  * Add the first event.
+  * Like countit but there is no last.
+  */
+  protected function addEvent0($event){
+	  $newtype = $event["event_type"];
+	  if ($newtype=="SON" || $newtype=="DAUGHTER") return;
+
+	  $this->last = $event;
+	  $this->counts[$newtype]++;
+  }
   public function html(){
 	  return $this->summaryHTML();
   }

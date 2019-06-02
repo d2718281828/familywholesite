@@ -23,12 +23,19 @@ class TimeLine {
   public function __construct($focus = null){
     $this->focus = $focus;
 	$this->ad = new ApproxDate();
+	$this->timefrom = array_key_exists("from", $_REQUEST) ? $_REQUEST["from"] : null ;
+	$this->timefrom = array_key_exists("to", $_REQUEST) ? $_REQUEST["to"] : null ;
+	$this->summary = array_key_exists("level", $_REQUEST) ? $_REQUEST["level"] : null ;
   }
+  /**
+  * set from and to date strings or null
+  */
   public function setRange($from,$to){
-	$this->timerange = [$from, $to];
+	if (!$this->timefrom) $this->timefrom = $from;
+	if (!$this->timeto) $this->timefrom = $to;
   }
   public function setSummary($level){
-	  $this->summary = $level;
+	if (!$this->summary) $this->summary = $level;
   }
   /**
   * Output the html for the timeline.
@@ -39,13 +46,12 @@ class TimeLine {
 	
 	$predicates = [];
 	if ($this->focus) $predicates[] = "object=".$this->focus->postid;
-	if ($this->timerange) {
-		if ($this->timerange[0] && $this->timerange[1]){
-		  $predicates[] = "event_date between '".$this->timerange[0]."' and '".$this->timerange[1]."'";
-		} else {
-			if ($this->timerange[0]) $predicates[] = "event_date >= '".$this->timerange[0]."'";
-			if ($this->timerange[1]) $predicates[] = "event_date <= '".$this->timerange[1]."'";
-		}
+	
+	if ($this->timefrom && $this->timeto){
+		$predicates[] = "event_date between '".$this->timefrom."' and '".$this->timeto."'";
+	} else {
+		if ($this->timefrom) $predicates[] = "event_date >= '".$this->timefrom."'";
+		if ($this->timeto) $predicates[] = "event_date <= '".$this->timeto."'";
 	}
 
     $sql = "select * from ".$wpdb->prefix."timeline";
@@ -242,10 +248,6 @@ class TimeLine {
 		'to' => null,
 		// todo focus?? yes, but how? just postid?
 	  ), $atts );
-	  
-	  $level = array_key_exists ('level',$_REQUEST) ? $_REQUEST['level'] : $a["level"];
-	  $from = array_key_exists ('from',$_REQUEST) ? $_REQUEST['from'] : $a["from"];
-	  $to = array_key_exists ('to',$_REQUEST) ? $_REQUEST['to'] : $a["to"];
 	  
 	  $tl = new TimeLine();
 	  $tl->setSummary($level);

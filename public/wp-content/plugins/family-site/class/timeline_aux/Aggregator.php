@@ -45,8 +45,10 @@ class Aggregator {
   protected function makeNew($event){
 	  $className = get_class($this);
 	  $res = new $className($this->summary, $this->focus);
-	  $res->last = $event;
-	  return $res;
+	  return $res->addEvent0($event);
+  }
+  protected function addEvent0($event){
+	  $this->last = $event;
   }
   /* timeline types
   source is the post that writes these when being saved
@@ -70,7 +72,7 @@ class Aggregator {
 	  
 	  $evdate = $this->ad->full($event["event_date"],$event["date_within"]);
 	  
-      $m.= '<div class="timeline-link"><div class="timeline-date">'.$evdate.'</div>';
+      $m.= '<div class="timeline-link"><div class="timeline-date">'.$this->dateLink($evdate).'</div>';
 	  switch($event["event_type"]){
 		case "BORN":
 		$m.= '<div class="timeline-body">'.$this->objectName().'Born</div>';
@@ -93,6 +95,9 @@ class Aggregator {
 	  }
 	  $m.= '</div><!-- end timeline-link --->';
       return $m;
+  }
+  protected function datelink($evdate){
+	  return $evdate;
   }
   protected function marriageLine($spouse){
 	  return "Marriage to ".$spouse;
