@@ -25,7 +25,7 @@ class TimeLine {
 	$this->ad = new ApproxDate();
 	$this->timefrom = array_key_exists("from", $_REQUEST) ? $_REQUEST["from"] : null ;
 	$this->timeto = array_key_exists("to", $_REQUEST) ? $_REQUEST["to"] : null ;
-	$this->summary = array_key_exists("level", $_REQUEST) ? $_REQUEST["level"] : null ;
+	$this->summary = array_key_exists("summary", $_REQUEST) ? $_REQUEST["summary"] : null ;
   }
   /**
   * set from and to date strings or null
