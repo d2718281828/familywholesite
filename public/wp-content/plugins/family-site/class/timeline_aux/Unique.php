@@ -65,7 +65,7 @@ class Unique extends Aggregator {
   /**
   * The date link that shows in the header for the entry
   */
-  protected function dateLink($evdate, , $yyyymmdd){
+  protected function dateLink($evdate, $yyyymmdd){
 	  if ($this->summary == 0) return $evdate;
 	  
 	  // detail level pictures for one day

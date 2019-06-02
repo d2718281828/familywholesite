@@ -31,20 +31,20 @@ class TLCounter extends Aggregator {
 	  if ($this->summary >= 20) $this->lev = ["compare" => 7,
 											"drill"=>0,		// decided there's no point in level 10 for a month
 											"lab"=>"",
-											"from" => "/01",
-											"to" => "/31",
+											"from" => "-01",
+											"to" => "-31",
 											]; 		// month 
 	  if ($this->summary >= 30) $this->lev = ["compare" => 4,
 											"drill"=>20,
 											"lab"=>"",
-											"from" => "/01/01",
-											"to" => "/12/31",
+											"from" => "-01-01",
+											"to" => "-12-31",
 											]; 		// year 
 	  if ($this->summary >= 40) $this->lev = ["compare" => 3 ,
 											"drill"=>30,
 											"lab"=>"0s",
-											"from" => "0/01/01",
-											"to" => "9/12/31",
+											"from" => "0-01-01",
+											"to" => "9-12-31",
 											]; 		// decade 
   }
 /**
