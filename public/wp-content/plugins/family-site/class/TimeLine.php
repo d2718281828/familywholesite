@@ -250,8 +250,8 @@ class TimeLine {
 	  ), $atts );
 	  
 	  $tl = new TimeLine();
-	  $tl->setSummary($level);
-	  $tl->setRange($from, $to);
+	  $tl->setSummary($a["level"]);
+	  $tl->setRange($a["from"], $a["to"]);
 	  
 	  return $tl->html();
   }
