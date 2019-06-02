@@ -68,7 +68,7 @@ class Event extends FSPost {
 	
 	// an event only goes into the timeline if it has links
 	if ($actual_date){
-		$links = $this->getLinksViaTax("event_tax","fs_event");
+		$links = $this->getLinksViaTax("person_tax","fs_person");
 		foreach($links as $link){
 			TimeLine::addEvent($actual_date, $post_id,  $this->getType(), $link->postid, $link->getType(), $date_within );
 		}
