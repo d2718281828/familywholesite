@@ -109,9 +109,14 @@ class Aggregator {
   protected function pagelink($summary, $from, $to){
 	global $wp;
 	$current_url = $this->root_url(true);
+	$x = explode("?",$current_url);
+	$current_url = $x[0];	// remove the current parameter list
+	
+	// replace current requests with the new values
 	if ($summary) $_REQUEST["level"] = $summary;
 	if ($from) $_REQUEST["from"] = $from;
 	if ($to) $_REQUEST["to"] = $to;
+	
 	$q = "";
 	foreach($_REQUEST as $prop=>$var){
 		$q.="&".$prop."=".$var;
