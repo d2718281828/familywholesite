@@ -63,6 +63,9 @@ Text Domain: familysite
 	background-color: #e7e7e7;
 	font-weight: bold;
 }
+.timeline-link .title {
+	margin-bottom: 2px;
+}
 .exif-data{
     font-size: 75%;
     background-color: #ecf5ff;

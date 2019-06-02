@@ -65,11 +65,11 @@ class Unique extends Aggregator {
   /**
   * The date link that shows in the header for the entry
   */
-  protected function dateLink($evdate){
+  protected function dateLink($evdate, , $yyyymmdd){
 	  if ($this->summary == 0) return $evdate;
 	  
 	  // detail level pictures for one day
- 	  $url = $this->pagelink(0,$evdate,$evdate);
+ 	  $url = $this->pagelink(0,$yyyymmdd,$yyyymmdd);
 	  return "<a href='$url'>$evdate</a>";
  }
   /**

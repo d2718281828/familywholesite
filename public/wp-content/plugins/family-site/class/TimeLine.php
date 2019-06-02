@@ -101,7 +101,7 @@ class TimeLine {
 	
 	// summarise if we need to
 
-    $m = "<p>".$sql."<div class='timeline-wrap'>";
+    $m = "<div class='timeline-wrap'>";
     foreach($res as $event) {
       $source = \CPTHelper\CPTHelper::make($event["source"],$event["source_type"]);
 	  

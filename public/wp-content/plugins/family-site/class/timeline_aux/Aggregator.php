@@ -74,7 +74,7 @@ class Aggregator {
 	  
 	  $evdate = $this->ad->full($event["event_date"],$event["date_within"]);
 	  
-      $m.= '<div class="timeline-link"><div class="timeline-date">'.$this->dateLink($evdate).'</div>';
+      $m.= '<div class="timeline-link"><div class="timeline-date">'.$this->dateLink($evdate, $event["event_date"]).'</div>';
 	  switch($event["event_type"]){
 		case "BORN":
 		$m.= '<div class="timeline-body">'.$this->objectName().'Born</div>';
@@ -98,7 +98,7 @@ class Aggregator {
 	  $m.= '</div><!-- end timeline-link --->';
       return $m;
   }
-  protected function dateLink($evdate){
+  protected function dateLink($evdate, $yyyymmdd){
 	  return $evdate;
   }
   protected function marriageLine($spouse){

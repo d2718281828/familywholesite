@@ -29,7 +29,7 @@ class TLCounter extends Aggregator {
   
   protected function init(){
 	  if ($this->summary >= 20) $this->lev = ["compare" => 7,
-											"drill"=>10,
+											"drill"=>0,		// decided there's no point in level 10 for a month
 											"lab"=>"",
 											"from" => "/01",
 											"to" => "/31",
