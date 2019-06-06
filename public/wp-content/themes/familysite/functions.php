@@ -44,7 +44,7 @@ function fs_crop_image($postid = null){
 	
 	$featured = get_post_thumbnail_id($postid);
 	if (!$featured) return "";
-	$url = get_site_url()."/wp-admin/upload.php?item=$featured"
+	$url = get_site_url()."/wp-admin/upload.php?item=$featured";
 	return "<a href='$url' target='".($wpadmin_tab_name ?: "_blank")."'><div class='fs_edit_marker fs_crop_marker'>Cr</div></a>";	
 }
 function fs_download_image(){
