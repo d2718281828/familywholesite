@@ -9,17 +9,17 @@ Author URI:
 */
 /* TODOs
 Before final load
-	Timeline 
 	Edit image link for sorting bad crops - could use crop icon
+		next to downloadAsset()
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
 	Timeline summary, misc bugs
-		summary level not being picked up from the shortcode
-		picture counts dont add up
 		/timeline/?summary=40 doesnt work
 		
 !!! test the movie files from 13/7/2002 in  /agd/mov207
 	mpg file just shows as a link
+	
+	search for uploaders reference
 
 !!! page 2 etc on the front page doesnt show side bar
 

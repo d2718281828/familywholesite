@@ -9,18 +9,13 @@ require_once("timeline_aux/TLCounter.php");
 /* notes
 Events are now adde to the timeline but only if they are tagged with a person.
 They dont get tagged with everyone who is at the event though, so they still wont show up in focused TLs
+
+shortcode needs a focus parameter.
+Could experiment with timelines for places...
+
 Bugs
-		summary level not being picked up from the shortcode
-		picture counts dont add up
 		/timeline/?summary=40 doesnt work
 
-*/
-/**
-*	100 Decade
-* 	80 year		- both just a count of pictures, births, deaths, marriages, 
-*	40	list births, marriages, deaths, events (consolidated though). Subject has to be named.
-*	10	individual pictures, consolidated.
-*	0 only used when there is a focus
 */
 class TimeLine {
 

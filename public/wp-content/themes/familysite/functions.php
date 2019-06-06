@@ -31,7 +31,21 @@ function fs_edit_post($postid = null){
 		$url = "$site/wp-admin/post.php?post=$postid&action=edit";
 		echo "<a href='$url' target='".($wpadmin_tab_name ?: "_blank")."' alt='edit'><div class='fs_edit_marker'><img src = '$template/assets/2000px-Blue_pencil.svg.png'></div></a>";
 	}
+	echo fs_crop_image();
 	echo fs_download_image();
+}
+/**
+* Link directly to the image edit page for the featured image of the given post
+*/
+function fs_crop_image($postid = null){
+	global $post;
+	$postid = $postid ?: $post->ID;
+	if (!current_user_can("edit_posts")) return "";
+	
+	$featured = get_post_thumbnail_id($postid);
+	if (!$featured) return "";
+	$url = get_site_url()."/wp-admin/post.php?post=$featured&action=edit&classic-editor";
+	return "<a href='$url'><div class='fs_edit_marker fs_crop_marker'>Crop</div></a>";	
 }
 function fs_download_image(){
 	global $cpost;
