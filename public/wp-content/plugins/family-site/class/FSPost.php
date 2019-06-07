@@ -101,6 +101,14 @@ class FSPost extends CPost {
 	  }
 	  return $m;
   }
+  /**
+  * Crude but effective simple year interval calculation on dates
+  */
+  protected function addYear($dd, $interval){
+	  $year = substr($dd,0,4);
+	  $year = $year + $interval;
+	  return $year.substr($dd,4);
+  }
   // TODO the linking process via tags should be moved into base CPost/CptHelper, but not now
   protected function getLinksViaTax($tax,$type){
 	  global $wpdb;

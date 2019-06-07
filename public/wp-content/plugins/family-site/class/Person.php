@@ -202,7 +202,7 @@ class Person extends FSPost {
 		  * and some dont have a date of birth either.
 		  * First get approx parent death: if we dont have the actual, just to limit timeline entries
 		  */
-		  $cparent = CptHelper::make($parent["parid"],"Person");
+		  $cparent = CptHelper::make($parent["parid"],"fs_person");
 		  if ($x = $cparent->get("date_birth")) $parentborn = $x;
 		  elseif ($x = $cparent->get("date_baptism")) $parentborn = $this->addYear($x, -5);
 		  else $parentborn = $this->addYear($ancestorbirth, -15);		// this cant be  null
