@@ -84,7 +84,14 @@ class Aggregator {
 		break;
 		case "SON":
 		case "DAUGHTER":
-		$m.= '<div class="timeline-body">'.$this->objectName().$event["event_type"].' '.$source->simpleBirthLink().'</div>';
+		case "GSON":
+		case "GDAUGHTER":
+		case "GGSON":
+		case "GGDAUGHTER":
+		case "GGGSON":
+		case "GGGDAUGHTER":
+		$evtype = $this->eventDescription($event["event_type"]);
+		$m.= '<div class="timeline-body">'.$this->objectName().$evtype.' '.$source->simpleBirthLink().'</div>';
 		break;
 		case "MARRIAGE":
 		if ($event["object2"]){
@@ -97,6 +104,14 @@ class Aggregator {
 	  }
 	  $m.= '</div><!-- end timeline-link --->';
       return $m;
+  }
+  protected function eventDescription($type){
+	  $res = strtolower($type);
+	  $res = str_replace("gs","xrands",$res);
+	  $res = str_replace("gdaug","xranddaux",$res);
+	  $res = str_replace("g","xreat-",$res};
+	  $res = str_replace("x","g",$res};
+	  return $res;
   }
   protected function dateLink($evdate, $yyyymmdd){
 	  return $evdate;
