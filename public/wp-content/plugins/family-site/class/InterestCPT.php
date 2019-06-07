@@ -34,13 +34,16 @@ class InterestCPT extends FSCpt {
   * @return {string} Post content
   */
   public function add_final_content($content){
-	  return $this->before_content().$content.$this->exif().$this->loaderRef().$this->featured_media();
+	  return $this->before_content().$content.$this.after_sections();
+  }
+  protected function after_sections(){
+	  $m = is_single() ? $this->creator_block() : "";
+	  return $m.$this->loaderRef().$this->exif().$this->featured_media();
   }
   /**
   *
   */
   public function before_content(){
-	if (is_single()) return $this->creator_block();
 	return '';
   }
   public function creator_block(){

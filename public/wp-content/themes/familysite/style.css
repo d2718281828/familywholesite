@@ -25,6 +25,7 @@ Text Domain: familysite
 	width: 18px;
 	height: 18px;
 	display: inline-block;
+	margin-right: 6px;
 }
 .fs_edit_marker  img {
 	width: 100%;
@@ -76,6 +77,12 @@ Text Domain: familysite
 .loader-reference{
     font-size: 75%;
     background-color: #fff5ec;
+    border: 1px solid #999999;
+    margin: 5px 0 5px 0;
+}
+.creator_block {
+    font-size: 85%;
+    background-color: #f5ffec;
     border: 1px solid #999999;
     margin: 5px 0 5px 0;
 }
