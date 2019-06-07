@@ -110,8 +110,8 @@ class Aggregator {
 	  $res = str_replace("gs","xrands",$res);
 	  $res = str_replace("daug","daux",$res);
 	  $res = str_replace("gd","xrandd",$res);
-	  $res = str_replace("g","xreat-",$res};
-	  $res = str_replace("x","g",$res};
+	  $res = str_replace("g","xreat-",$res);
+	  $res = str_replace("x","g",$res);
 	  return $res;
   }
   protected function dateLink($evdate, $yyyymmdd){
