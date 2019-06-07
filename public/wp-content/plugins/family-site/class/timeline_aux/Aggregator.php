@@ -108,7 +108,8 @@ class Aggregator {
   protected function eventDescription($type){
 	  $res = strtolower($type);
 	  $res = str_replace("gs","xrands",$res);
-	  $res = str_replace("gdaug","xranddaux",$res);
+	  $res = str_replace("daug","daux",$res);
+	  $res = str_replace("gd","xrandd",$res);
 	  $res = str_replace("g","xreat-",$res};
 	  $res = str_replace("x","g",$res};
 	  return $res;
