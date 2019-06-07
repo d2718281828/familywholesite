@@ -34,7 +34,7 @@ class InterestCPT extends FSCpt {
   * @return {string} Post content
   */
   public function add_final_content($content){
-	  return $this->before_content().$content.$this.after_sections();
+	  return $this->before_content().$content.$this->after_sections();
   }
   protected function after_sections(){
 	  $m = is_single() ? $this->creator_block() : "";
