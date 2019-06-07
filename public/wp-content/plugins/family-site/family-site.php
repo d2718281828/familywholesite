@@ -9,17 +9,16 @@ Author URI:
 */
 /* TODOs
 Before final load
-	Edit image link for sorting bad crops - could use crop icon
-		next to downloadAsset()
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
 	Timeline summary, misc bugs
 		/timeline/?summary=40 doesnt work
+!!!	the pdf viewer is showing cookie messages!!!
+
 		
 !!! test the movie files from 13/7/2002 in  /agd/mov207
 	mpg file just shows as a link
 	
-	search for uploaders reference
 
 !!! page 2 etc on the front page doesnt show side bar
 
@@ -37,10 +36,11 @@ Does a normal post appear on the timeline? SHould there be a category for posts 
 test add photo and write it up in the help page.
 Finding images in the media library (for featured image) isnt easy.
 	Do an "Add to entity" button on the post itself.
-	And a "Make this my photo"
-!!!	ALso a Go to Crop link. But crop isnt working
+	And a "Make this my photo"!!!	ALso a Go to Crop link. But crop isnt working
 
 !!! Need an SSL certificate . Could do self certified, since I know all my audience.
+
+	search for uploaders reference
 
 Help pages - hosting? SSL certs. 
 
@@ -48,7 +48,7 @@ Timeline should use standard crop size photos
 
 Timeline should include children's death, parents, grandparents death, grandchildren birth/death
 
-cant upload mpegs. grandma recordings
+!!! cant upload mpegs. grandma recordings
 
 Person needs to be only editable by admin or by the user who is in the user field.
 Maybe we need a privacy policy page…
@@ -57,7 +57,6 @@ the home page columns arent stacking properly on page>1
 NEED TO SET UP EMAIL ON THE SERVER
 BACKUPS ON SERVER
 NEED MORE SPACE ON DROPSIE
-the pdf viewer is showing cookie messages!!!
 Check image upload sizes and timeline overall load times
 cant look at photos on the same date. if there isnt an event created then you're stuck.
 
