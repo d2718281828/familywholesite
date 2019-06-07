@@ -145,9 +145,9 @@ class Person extends FSPost {
 		TimeLine::clearSource($post_id);
 		
 		//if (WP_DEBUG) error_log("Person::on_update date_birth= ".$this->getcf($req,"date_birth","none"));
-		if ($s=$this->getcf($req,"date_birth")){
+		if ($birthdate=$this->getcf($req,"date_birth")){
 			$place = $this->getcf($req,"place_birth",0);
-			TimeLine::add1($s, $post_id, "BORN", $place, 0);
+			TimeLine::add1($birthdate, $post_id, "BORN", $place, 0);
 			// add mother and father too
 			$gender = $this->getcf($req,"gender");
 			$type = ($gender=="M") ? "SON" : "DAUGHTER";
@@ -182,12 +182,12 @@ class Person extends FSPost {
 	  // do outer join to the parents (PAR) of post_id (P), pulling back live parents at birthdate
 	  // so the outer join brings back those whose date of death is later, and those who do not have a date of death
 	  $sql = "select P.meta_key,P.meta_value as parid , PAR.meta_value as pardied
-	  from ".$wpdb->prefix."_postmeta as P
-	  LEFT OUTER JOIN ".$wpdb->prefix."_postmeta as PAR on (PAR.post_id = P.meta_value 
+	  from ".$wpdb->prefix."postmeta as P
+	  LEFT OUTER JOIN ".$wpdb->prefix."postmeta as PAR on (PAR.post_id = P.meta_value 
 	  and PAR.meta_key = 'date_death' and PAR.meta_value > %s) 
 	  where P.post_id=%d and P.meta_key in ('father','mother') ";
 	  
-	  $res = $wpdb->get_results($wpdb->prepare($sql,$birthdate,$ancestor));
+	  $res = $wpdb->get_results($wpdb->prepare($sql,$birthdate,$ancestor), ARRAY_A);
 	  if (WP_DEBUG) error_log("Person::setGrandchildren for ".$post_id." finds ".count($res));
 	  
 	  for ($p = 0; $p<count($res); $p++){
