@@ -18,7 +18,7 @@ class InterestCPT extends FSCpt {
 		->addToQueries(["category", "home"])
         ->addField(new DateHelper("actual_date", "Actual date", "Relevant date: when the picture was taken or the recording made"))
         ->addField(new FieldHelper("date_within", "Date within (days)", "If you dont know exactly when it happened, guess a date and give some idea of how far out you are: the true date should be within this number of days of the date given"))
-        ->addField(new CPTSelectHelper("maker", "Maker", "Who took the photo or made the recording", ["posttype"=>"fs_person"]))
+        ->addField(new CPTSelectHelper("maker", "Maker", "Who took the photo or made the recording or painted the picture or wrote the document", ["posttype"=>"fs_person"]))
         ->addField(new FieldHelper("maker_text", "Maker (text)", "Who took the photo or made the recording (if not a person on the site)"))
         ->addField(new FieldHelper("uploader_ref", "Uploader's reference", "The file name or folder and filename that the uploader can use to cross reference the picture"))
         ->addField(new mediaType("featured_media", "Featured Media file: pdf, doc, audio, video etc.", "Associated media file if not image (you must load the file into the media library first)",["typefield"=>"featured_media_type"]))

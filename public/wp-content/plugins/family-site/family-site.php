@@ -9,6 +9,7 @@ Author URI:
 */
 /* TODOs
 Before final load
+!!!	test pauls marriages
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
 	Timeline summary, misc bugs
@@ -41,6 +42,8 @@ Finding images in the media library (for featured image) isnt easy.
 !!! Need an SSL certificate . Could do self certified, since I know all my audience.
 
 	search for uploaders reference
+
+	maker dropdown is clunky - too many. need a post selector which can cope with large numbers
 
 Help pages - hosting? SSL certs. 
 

@@ -151,16 +151,20 @@ class Person extends FSPost {
 			// add mother and father too
 			$gender = $this->getcf($req,"gender");
 			$type = ($gender=="M") ? "SON" : "DAUGHTER";
+			/*
 			if ($mum=$this->getcf($req,"mother",0)){
 				TimeLine::addChild($s, $post_id, $type, $mum, $place, 0);
 			}
 			if ($dad=$this->getcf($req,"father",0)){
 				TimeLine::addChild($s, $post_id, $type, $dad, $place, 0);
 			}
+			*/
+			$this->setAllAncestors($birthdate, $post_id, $type, $post_id, $place);
 		}
 		if ($s=$this->getcf($req,"date_death")){
 			$place = $this->getcf($req,"place_death", 0);
 			TimeLine::add1($s, $post_id, "DIED", $place,0 );
+			// add children
 			// add mother and father too ???
 		}
 		if ($s=$this->getcf($req,"date_marriage")){
@@ -172,21 +176,46 @@ class Person extends FSPost {
 			}
 		}
   }
-    public function on_destroy(){
-		parent::on_destroy();
-		if (WP_DEBUG) error_log("Person::on_delete for ".$this->postid);
-		TimeLine::clearSource($this->postid);
-    }
-    /**
-    * Return a simple a tag linked to the permalink, with text which is the person's birthname.
-    */
-    public function simpleBirthLink(){
-      $url = get_permalink($this->postid);
-	  $birthname = $this->get("birthname");
-      return '<a href="'.$url.'">'.($birthname ?: $this->get("post_title")).'</a>';
-    }
-	public function showPosted(){
-		return false;
-	}
+  protected function setAllAncestors($birthdate, $post_id, $childtype, $ancestor, $place){
+	  global $wpdb;
+	  
+	  // do outer join to the parents (PAR) of post_id (P), pulling back live parents at birthdate
+	  // so the outer join brings back those whose date of death is later, and those who do not have a date of death
+	  $sql = "select P.meta_key,P.meta_value as parid , PAR.meta_value as pardied
+	  from ".$wpdb->prefix."_postmeta as P
+	  LEFT OUTER JOIN ".$wpdb->prefix."_postmeta as PAR on (PAR.post_id = P.meta_value 
+	  and PAR.meta_key = 'date_death' and PAR.meta_value > %s) 
+	  where P.post_id=%d and P.meta_key in ('father','mother') ";
+	  
+	  $res = $wpdb->get_results($wpdb->prepare($sql,$birthdate,$ancestor));
+	  if (WP_DEBUG) error_log("Person::setGrandchildren for ".$post_id." finds ".count($res));
+	  
+	  for ($p = 0; $p<count($res); $p++){
+		  $parent = $res[$p];
+		  // add the son/daughter to the parent's timeline
+		  TimeLine::addChild($birthdate, $post_id, $childtype, $parent["parid"], $place, 0);
+		  // the parent's death will be added to the childrens timeline by setAllDescendants
+		  // recurse upwards.
+		  // recursion is limited by death recordss on parentss. There is a slight risk for those without one
+		  $this->setAllAncestors($birthdate, $post_id, "G".$childtype, $parent["parid"], $place);
+	  }  
+	   
+  }
+  public function on_destroy(){
+	parent::on_destroy();
+	if (WP_DEBUG) error_log("Person::on_delete for ".$this->postid);
+	TimeLine::clearSource($this->postid);
+  }
+  /**
+  * Return a simple a tag linked to the permalink, with text which is the person's birthname.
+  */
+  public function simpleBirthLink(){
+    $url = get_permalink($this->postid);
+	$birthname = $this->get("birthname");
+    return '<a href="'.$url.'">'.($birthname ?: $this->get("post_title")).'</a>';
+  }
+  public function showPosted(){
+	return false;
+  }
 
 }

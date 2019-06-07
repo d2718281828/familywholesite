@@ -90,52 +90,6 @@ class TimeLine {
 	$m.=$current->html()."</div><!-- end timeline-wrap --->";
     return $m;
   }
-  public function html_undo(){
-    global $wpdb;
-	
-	$predicates = [];
-	if ($this->focus) $predicates[] = "object=".$this->focus->postid;
-	if ($this->timerange) $predicates[] = "event_date between '".$this->timerange[0]."' and '".$this->timerange[1]."'";
-
-    $sql = "select * from ".$wpdb->prefix."timeline";
-	$sql.= count($predicates)>0 ? "where ".join($predicates," and ") : "";
-	$sql.= " order by event_date desc;";
-    $res = $wpdb->get_results($sql, ARRAY_A);
-	
-	// summarise if we need to
-
-    $m = "<div class='timeline-wrap'>";
-    foreach($res as $event) {
-      $source = \CPTHelper\CPTHelper::make($event["source"],$event["source_type"]);
-	  
-	  $evdate = $this->ad->full($event["event_date"],$event["date_within"]);
-	  
-      $m.= '<div class="timeline-link"><div class="timeline-date">'.$evdate.'</div>';
-	  switch($event["event_type"]){
-		case "BORN":
-		$m.= '<div class="timeline-body">Born</div>';
-		break;
-		case "DIED":
-		$m.= '<div class="timeline-body">Passed away</div>';
-		break;
-		case "SON":
-		case "DAUGHTER":
-		$m.= '<div class="timeline-body">'.$event["event_type"].' '.$source->simpleBirthLink().'</div>';
-		break;
-		case "MARRIAGE":
-		if ($event["object2"]){
-			$spouse = \CPTHelper\CPTHelper::make($event["object2"],$event["object2_type"]);
-			$m.= '<div class="timeline-body">Marriage to '.$spouse->simpleLink().'</div>';
-		}
-		break;
-		default:
-		$m.= '<div class="timeline-pic">'.$source->link().'</div><!-- end timeline-pic --->';
-	  }
-	  $m.= '</div><!-- end timeline-link --->';
-    }
-	$m.="</div><!-- end timeline-wrap --->";
-    return $m;
-  }
   /* timeline types
   source is the post that writes these when being saved
   object is the filter for a particular timeline
