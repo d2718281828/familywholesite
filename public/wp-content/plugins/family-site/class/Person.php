@@ -159,7 +159,7 @@ class Person extends FSPost {
 				TimeLine::addChild($s, $post_id, $type, $dad, $place, 0);
 			}
 			*/
-			$this->setAllAncestors($birthdate, $post_id, $type, $post_id, $place);
+			$this->setAllAncestors($birthdate, $post_id, $type, $post_id, $birthdate, $place);
 		}
 		if ($s=$this->getcf($req,"date_death")){
 			$place = $this->getcf($req,"place_death", 0);
@@ -176,7 +176,10 @@ class Person extends FSPost {
 			}
 		}
   }
-  protected function setAllAncestors($birthdate, $post_id, $childtype, $ancestor, $place){
+  /**
+  * On saving a person post, add a record of the birth to all ancestors who were alive at the time.
+  */
+  protected function setAllAncestors($birthdate, $post_id, $childtype, $ancestor, $ancestorbirth, $place){
 	  global $wpdb;
 
 	  // do outer join to the parents (PAR) of post_id (P), pulling back parents
@@ -193,16 +196,33 @@ class Person extends FSPost {
 	  for ($p = 0; $p<count($res); $p++){
 		  $parent = $res[$p];
 		  
-		  // note - couldnt find a way of getting this condition into the outer join above
-		  if ($parent["pardied"]!=null && $parent["pardied"] < $birthdate) continue;
+		  /* Recurse upwards to find all ancestors alive at $birthdate
+		  * The problem is how to terminate the recursion, especially as some have a date of death,
+		  * and some dont have a date of birth either.
+		  * First get approx parent death: if we dont have the actual, just to limit timeline entries
+		  */
+		  $cparent = CptHelper::make($parent["parid"],"Person");
+		  if ($x = $cparent->get("date_birth")) $parentborn = $x;
+		  elseif ($x = $cparent->get("date_baptism")) $parentborn = $this->addYear($x, -5);
+		  else $parentborn = $this->addYear($ancestorbirth, -15);		// this cant be  null
+			  
+		  // here we assume max lifetime 90 - that just means we dont add timeline entries after age 90
+		  // unless we know that the person lived longer than that from their date of death.
+		  if ($parent["pardied"]) $parentdied = $parent["pardied"];
+		  else $parentdied = $this->addYear($parentborn, 90);
+		  		  
+		  if ($parentdied >= $birthdate) {
+			// add the son/daughter to the parent's timeline
+			TimeLine::addChild($birthdate, $post_id, $childtype, $parent["parid"], $place, 0);
+		  }
 		  
-		  // add the son/daughter to the parent's timeline
-		  TimeLine::addChild($birthdate, $post_id, $childtype, $parent["parid"], $place, 0);
-		  
+		  // recursion is limited by death date on parents. If parent died > 50 years before dont go up
+		  // the 50 is arbitrary... but we have to allow that the grandparents might outlive the parents
+		  // parentborn is passed up the tree just as an estimate for when birth date and death date are missing.
+		  if ($this->addYear($parentdied,50)> $birthdate){
+			$this->setAllAncestors($birthdate, $post_id, "G".$childtype, $parent["parid"], $parentborn, $place);
+		  }
 		  // the parent's death will be added to the childrens timeline by setAllDescendants
-		  // recurse upwards.
-		  // recursion is limited by death records on parents. There is a slight risk for those without one
-		  $this->setAllAncestors($birthdate, $post_id, "G".$childtype, $parent["parid"], $place);
 	  }  
 	   
   }

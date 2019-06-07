@@ -7,6 +7,12 @@ require_once("timeline_aux/TLCounter.php");
 
 // todo use photo crops
 /* notes
+Working on the grands-
+	need to go up further.
+	how to trim the list when there is no death, or birth?
+	Might need a dead_by which means we dont know when the death was but it was definitely before dead_by
+	need the descendents version, like ancestors
+
 Events are now adde to the timeline but only if they are tagged with a person.
 They dont get tagged with everyone who is at the event though, so they still wont show up in focused TLs
 
