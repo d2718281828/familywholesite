@@ -1,5 +1,6 @@
 <?php
 namespace FamilySite;
+use CPTHelper\CptHelper;
 
 // represents an instance of the Person CPT
 class Person extends FSPost {
