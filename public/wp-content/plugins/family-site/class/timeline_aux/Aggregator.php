@@ -50,7 +50,6 @@ class Aggregator {
   }
   protected function addEvent0($event){
 	  $this->last = $event;
-	  
   }
   /* timeline types
   source is the post that writes these when being saved
@@ -112,7 +111,8 @@ class Aggregator {
 	  $res = str_replace("gd","xrandd",$res);
 	  $res = str_replace("g","xreat-",$res);
 	  $res = str_replace("x","g",$res);
-	  return $res;
+	 
+	  return ucfirst($res);
   }
   protected function dateLink($evdate, $yyyymmdd){
 	  return $evdate;

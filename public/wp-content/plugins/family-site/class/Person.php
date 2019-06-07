@@ -178,25 +178,30 @@ class Person extends FSPost {
   }
   protected function setAllAncestors($birthdate, $post_id, $childtype, $ancestor, $place){
 	  global $wpdb;
-	  
-	  // do outer join to the parents (PAR) of post_id (P), pulling back live parents at birthdate
-	  // so the outer join brings back those whose date of death is later, and those who do not have a date of death
+
+	  // do outer join to the parents (PAR) of post_id (P), pulling back parents
+	  // so the outer join brings back those with and without a date of death
 	  $sql = "select P.meta_key,P.meta_value as parid , PAR.meta_value as pardied
 	  from ".$wpdb->prefix."postmeta as P
 	  LEFT OUTER JOIN ".$wpdb->prefix."postmeta as PAR on (PAR.post_id = P.meta_value 
-	  and PAR.meta_key = 'date_death' and PAR.meta_value > %s) 
+	  and PAR.meta_key = 'date_death') 
 	  where P.post_id=%d and P.meta_key in ('father','mother') ";
 	  
-	  $res = $wpdb->get_results($wpdb->prepare($sql,$birthdate,$ancestor), ARRAY_A);
+	  $res = $wpdb->get_results($wpdb->prepare($sql, $ancestor), ARRAY_A);
 	  if (WP_DEBUG) error_log("Person::setGrandchildren for ".$post_id." finds ".count($res));
 	  
 	  for ($p = 0; $p<count($res); $p++){
 		  $parent = $res[$p];
+		  
+		  // note - couldnt find a way of getting this condition into the outer join above
+		  if ($parent["pardied"]!=null && $parent["pardied"] < $birthdate) continue;
+		  
 		  // add the son/daughter to the parent's timeline
 		  TimeLine::addChild($birthdate, $post_id, $childtype, $parent["parid"], $place, 0);
+		  
 		  // the parent's death will be added to the childrens timeline by setAllDescendants
 		  // recurse upwards.
-		  // recursion is limited by death recordss on parentss. There is a slight risk for those without one
+		  // recursion is limited by death records on parents. There is a slight risk for those without one
 		  $this->setAllAncestors($birthdate, $post_id, "G".$childtype, $parent["parid"], $place);
 	  }  
 	   
