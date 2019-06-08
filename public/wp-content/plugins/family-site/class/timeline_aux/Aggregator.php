@@ -58,14 +58,16 @@ class Aggregator {
 		  $pref = substr($from,0,3);
 		  $url = $this->pagelink(30,$pref."0-01-01",$pref."9-12-31");
 	  }
-	  elseif ($this->summary>=10) {
+	  else/*if ($this->summary>=10)*/ {
 		  $pref = substr($from,0,4);
 		  $url = $this->pagelink(20,$pref."-01-01",$pref."-12-31");
 	  }
+	  /* Leave this in but we arent using level 10 in the hierarchy at the moment
 	  else {
 		  $pref = substr($from,0,7);
 		  $url = $this->pagelink(10,$pref."-01",$pref."-31");
 	  }
+	  */
 	  return "<a href='$url'>UP</a>";
   }
   protected function makeNew($event){
