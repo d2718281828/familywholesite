@@ -178,7 +178,7 @@ class Aggregator {
 	
 	$q = "";
 	foreach($_REQUEST as $prop=>$var){
-		if ($_REQUEST[$prop]) $q.="&".$prop."=".$var;
+		if ($_REQUEST[$prop]!==null) $q.="&".$prop."=".$var;
 	}
 	return $current_url."?".substr($q,1);
   }
