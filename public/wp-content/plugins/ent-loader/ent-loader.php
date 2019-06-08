@@ -728,7 +728,7 @@ class EntLoader {
 	if (WP_DEBUG) error_log("media handle sideload with ".$file_array['name'].", ".$file_array['tmp_name']);
 
 	// do the validation and storage stuff
-	$filetitle = $description && $description["title"] ? $description["title"] : $file_array['name'] ;
+	$filetitle = $description && array_key_exists("title",$description) ? $description["title"] : $file_array['name'] ;
 	$id = media_handle_sideload( $file_array, $post_id ?: 0, $filetitle);
 
 	// If error storing permanently, unlink

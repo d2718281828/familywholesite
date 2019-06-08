@@ -8,10 +8,11 @@ require_once("timeline_aux/TLCounter.php");
 // todo use photo crops
 /* notes
 Working on the grands-
+	need the descendents version, like ancestors
 	Ancestors working OK.
 		I am not doing children's death
-	Might need a dead_by which means we dont know when the death was but it was definitely before dead_by
-	need the descendents version, like ancestors
+		Might need a dead_by which means we dont know when the death was but it was definitely before dead_by
+	Timelines for places?
 
 unfocussed timelines need to up-arrow
 

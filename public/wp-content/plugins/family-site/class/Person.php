@@ -179,6 +179,7 @@ class Person extends FSPost {
   }
   /**
   * On saving a person post, add a record of the birth to all ancestors who were alive at the time.
+  * The first 3 parms are what you are posting, the rest are whho to post it for
   */
   protected function setAllAncestors($birthdate, $post_id, $childtype, $ancestor, $ancestorbirth, $place){
 	  global $wpdb;
@@ -192,6 +193,57 @@ class Person extends FSPost {
 	  where P.post_id=%d and P.meta_key in ('father','mother') ";
 	  
 	  $res = $wpdb->get_results($wpdb->prepare($sql, $ancestor), ARRAY_A);
+	  if (WP_DEBUG) error_log("Person::setGrandchildren for ".$post_id." finds ".count($res));
+	  
+	  for ($p = 0; $p<count($res); $p++){
+		  $parent = $res[$p];
+		  
+		  /* Recurse upwards to find all ancestors alive at $birthdate
+		  * The problem is how to terminate the recursion, especially as some have a date of death,
+		  * and some dont have a date of birth either.
+		  * First get approx parent death: if we dont have the actual, just to limit timeline entries
+		  */
+		  $cparent = CptHelper::make($parent["parid"],"fs_person");
+		  if ($x = $cparent->get("date_birth")) $parentborn = $x;
+		  elseif ($x = $cparent->get("date_baptism")) $parentborn = $this->addYear($x, -5);
+		  else $parentborn = $this->addYear($ancestorbirth, -15);		// this cant be  null
+			  
+		  // here we assume max lifetime 90 - that just means we dont add timeline entries after age 90
+		  // unless we know that the person lived longer than that from their date of death.
+		  if ($parent["pardied"]) $parentdied = $parent["pardied"];
+		  else $parentdied = $this->addYear($parentborn, 90);
+		  		  
+		  if ($parentdied >= $birthdate) {
+			// add the son/daughter to the parent's timeline
+			TimeLine::addChild($birthdate, $post_id, $childtype, $parent["parid"], $place, 0);
+		  }
+		  
+		  // recursion is limited by death date on parents. If parent died > 50 years before dont go up
+		  // the 50 is arbitrary... but we have to allow that the grandparents might outlive the parents
+		  // parentborn is passed up the tree just as an estimate for when birth date and death date are missing.
+		  if ($this->addYear($parentdied,50)> $birthdate){
+			$this->setAllAncestors($birthdate, $post_id, "G".$childtype, $parent["parid"], $parentborn, $place);
+		  }
+		  // the parent's death will be added to the childrens timeline by setAllDescendants
+	  }  
+	   
+  }
+  /**
+  * On saving a person post, add a record of the death to all descendants who were alive at the time.
+  * The first 3 parms are what you are posting, the rest are whho to post it for
+  */
+  protected function setAllDescendants($deathdate, $post_id, $parenttype, $descendent, $descendentbirth, $place){
+	  global $wpdb;
+
+	  // do outer join to the children (KID) of descendent (P), pulling back parents
+	  // so the outer join brings back those with and without a date of death
+	  $sql = "select P.meta_key,P.meta_value as kidid , KID.meta_value as kidborn
+	  from ".$wpdb->prefix."postmeta as P
+	  LEFT OUTER JOIN ".$wpdb->prefix."postmeta as KID on (P.post_id = KID.meta_value 
+	  and KID.meta_key = 'date_birth') 
+	  where P.post_id=%d and KID.meta_key in ('father','mother') ";
+	  
+	  $res = $wpdb->get_results($wpdb->prepare($sql, $descendent), ARRAY_A);
 	  if (WP_DEBUG) error_log("Person::setGrandchildren for ".$post_id." finds ".count($res));
 	  
 	  for ($p = 0; $p<count($res); $p++){
