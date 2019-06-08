@@ -55,16 +55,16 @@ class Aggregator {
 		  $url = $this->pagelink(40,null,null, true);
 	  }
 	  elseif ($this->summary>=20) {
-		  $pref = substr($from,0,4);
-		  $url = $this->pagelink(30,$pref."-01-01",$pref."-12-31");
+		  $pref = substr($from,0,3);
+		  $url = $this->pagelink(30,$pref."0-01-01",$pref."9-12-31");
 	  }
 	  elseif ($this->summary>=10) {
-		  $pref = substr($from,0,7);
-		  $url = $this->pagelink(20,$pref."-01",$pref."-31");
+		  $pref = substr($from,0,4);
+		  $url = $this->pagelink(20,$pref."-01-01",$pref."-12-31");
 	  }
 	  else {
 		  $pref = substr($from,0,7);
-		  $url = $this->pagelink(10,$from,$to);
+		  $url = $this->pagelink(10,$pref."-01",$pref."-31");
 	  }
 	  return "<a href='$url'>UP</a>";
   }
