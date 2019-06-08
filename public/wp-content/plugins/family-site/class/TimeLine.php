@@ -87,7 +87,8 @@ class TimeLine {
 		$current = new TLCounter($this->summary, $this->focus);
 	}
 
-    $m = "<div class='timeline-wrap'>";
+    $m = "<div class='timeline-wrap'>\n";
+	if ($up = $current->upLink($this->timefrom, $this->timeto)) $m.= "<div class='timeline-uplink'>$up</div>\n"; 
     foreach($res as $event) {
 	  $next = $current->nextOne($event);
 	  if ($next){

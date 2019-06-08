@@ -46,6 +46,28 @@ class Aggregator {
 	  if (!$this->last) return "";
 	  return $this->detailHtml();
   }
+  public function uplink($from, $to){
+	  // for now summaries dont work with focus... need to think about it
+	  if ($this->focus) return "";
+	  if ($this->summary>=40) return "";
+	  
+	  if ($this->summary>=30) {
+		  $url = $this->pagelink(40,null,null, true);
+	  }
+	  elseif ($this->summary>=20) {
+		  $pref = substr($from,0,4);
+		  $url = $this->pagelink(30,$pref."-01-01",$pref."-12-31");
+	  }
+	  elseif ($this->summary>=10) {
+		  $pref = substr($from,0,7);
+		  $url = $this->pagelink(20,$pref."-01",$pref."-31");
+	  }
+	  else {
+		  $pref = substr($from,0,7);
+		  $url = $this->pagelink(10,$from,$to);
+	  }
+	  return "<a href='$url'>UP</a>";
+  }
   protected function makeNew($event){
 	  $className = get_class($this);
 	  $res = new $className($this->summary, $this->focus);
@@ -140,8 +162,10 @@ class Aggregator {
   }
   /**
   * Link to this page.
+  * Normally it will over-write the request values summary, from and to ONLY if non-null value is specified.
+  * if setnull is true then from and to are overridden
   */
-  protected function pagelink($summary, $from, $to){
+  protected function pagelink($summary, $from, $to, $setnull = false){
 	global $wp;
 	$current_url = $this->root_url(true);
 	$x = explode("?",$current_url);
@@ -149,12 +173,12 @@ class Aggregator {
 	
 	// replace current requests with the new values
 	if ($summary!==null && $summary !== "") $_REQUEST["summary"] = $summary;
-	if ($from) $_REQUEST["from"] = $from;
-	if ($to) $_REQUEST["to"] = $to;
+	if ($from || $setnull) $_REQUEST["from"] = $from;
+	if ($to || $setnull) $_REQUEST["to"] = $to;
 	
 	$q = "";
 	foreach($_REQUEST as $prop=>$var){
-		$q.="&".$prop."=".$var;
+		if ($_REQUEST["prop"]) $q.="&".$prop."=".$var;
 	}
 	return $current_url."?".substr($q,1);
   }
