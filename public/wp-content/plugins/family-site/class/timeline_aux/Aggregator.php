@@ -33,6 +33,10 @@ class Aggregator {
   * If it isnt, then return a new aggregator of the same type with this->last set to $event.
   */
   public function nextOne($event){
+	  if (!$this->last){
+		  $this->addEvent0($event);
+		  return null;
+	  }
 	  return $this->makeNew($event);
   }
   /**
@@ -65,6 +69,8 @@ class Aggregator {
   picture PIC   tagged-place
   event   EVENT  tagged-place
   event   EVENT  tagged-person (wedding)
+  
+  plus derived types GSON, GDAUGHTER etc. 
   */
   protected function detailHtml(){
 	  $event = $this->last;
@@ -155,6 +161,16 @@ class Aggregator {
 	$z=$protocol."://".$_SERVER['SERVER_NAME'].$port; 
 	if ($uri) return $z.$_SERVER['REQUEST_URI']; 
 	return $z; 
+  }
+  /**
+  * used by unique and TLcounter
+  */
+  protected function isDuplicate($type){
+	  if ($this->focus) return false;
+	  
+	  if (preg_match("/^G+SON$/", $type)) return true;
+	  if (preg_match("/^G+DAUGHTER$/", $type)) return true;
+	  return false;
   }
 }
  ?>

@@ -8,7 +8,7 @@ require_once("Aggregator.php");
 */
 class Unique extends Aggregator {
 	
-  protected $otherparty = "";		// when consolidating events with multiple objects.
+  protected $otherparty = "";		// when consolidating events with multiple objects: A and B had a son
   protected $pictureCount = 0;
 
   /**
@@ -17,11 +17,17 @@ class Unique extends Aggregator {
   * If it isnt, then return a new aggregator of the same type with this->last set to $event.
   */
   public function nextOne($event){
+	  if (!$this->last){
+		  $this->addEvent0($event);
+		  return null;
+	  }
 	  $newtype = $event["event_type"];
 	  $oldtype = $this->last["event_type"];
 	  
 	  // suppress BORN records because they will also be a SON or DAUGHTER
 	  if ($newtype=="BORN") return null;
+	  
+	  if ($this->isDuplicate($newtype)) return null;
 
 	  // In general if the types arent the same they will not be aggregated
 	  if ($oldtype != $newtype) return $this->makeNew($event);

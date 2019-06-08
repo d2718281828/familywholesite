@@ -60,6 +60,8 @@ class TLCounter extends Aggregator {
 		  $this->addEvent0($event);
 		  return null;
 	  }
+	  if ($this->isDuplicate($event["event_type"])) return null;
+
 	  // has the significant part of the date changed?
 	  if (!$this->lastkey) $this->lastkey = substr($this->last["event_date"],0,$this->lev["compare"]);
 	  

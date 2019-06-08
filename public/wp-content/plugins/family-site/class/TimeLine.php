@@ -8,8 +8,8 @@ require_once("timeline_aux/TLCounter.php");
 // todo use photo crops
 /* notes
 Working on the grands-
-	need to go up further.
-	how to trim the list when there is no death, or birth?
+	Ancestors working OK.
+		I am not doing children's death
 	Might need a dead_by which means we dont know when the death was but it was definitely before dead_by
 	need the descendents version, like ancestors
 
