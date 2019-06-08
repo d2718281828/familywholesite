@@ -62,6 +62,7 @@ class Aggregator {
   source		object	object2
   person  BORN  samepers place
   person  SON   parent
+  person  DAU   parent
   person  DIED	samepers place
   person  MARRIED samepers spouse place
   picture PIC   tagged-pers
@@ -174,7 +175,7 @@ class Aggregator {
 	  if ($this->focus) return false;
 	  
 	  if (preg_match("/^G+SON$/", $type)) return true;
-	  if (preg_match("/^G+DAUGHTER$/", $type)) return true;
+	  if (preg_match("/^G+DAU$/", $type)) return true;
 	  return false;
   }
 }

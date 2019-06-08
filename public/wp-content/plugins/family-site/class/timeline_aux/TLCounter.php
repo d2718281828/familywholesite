@@ -4,9 +4,7 @@ namespace FamilySite;
 require_once("Aggregator.php");
 
 /* TODO
-the first event isnt counted...
-LINKS
-the REQUEST params need to be moved to the timeline instead of the shortcode.
+summary levels could choose a picture to show
 After testing, may need to add limits on summary0 without from and to
 */
 
@@ -106,7 +104,8 @@ class TLCounter extends Aggregator {
   */
   protected function addEvent0($event){
 	$newtype = $event["event_type"];
-	if ($newtype=="SON" || $newtype=="DAUGHTER") return;
+	if ($newtype=="SON" || $newtype=="DAU") return;
+	if ($this->isDuplicate($newtype)) return;
 
 	$this->last = $event;
 	$this->lastkey = substr($event["event_date"],0,$this->lev["compare"]);
