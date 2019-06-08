@@ -151,7 +151,7 @@ class Person extends FSPost {
 			TimeLine::add1($birthdate, $post_id, "BORN", $place, 0);
 			// add mother and father too
 			$gender = $this->getcf($req,"gender");
-			$type = ($gender=="M") ? "SON" : "DAUGHTER";
+			$type = ($gender=="M") ? "SON" : "DAU";
 			/*
 			if ($mum=$this->getcf($req,"mother",0)){
 				TimeLine::addChild($s, $post_id, $type, $mum, $place, 0);

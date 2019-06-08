@@ -13,6 +13,8 @@ Working on the grands-
 	Might need a dead_by which means we dont know when the death was but it was definitely before dead_by
 	need the descendents version, like ancestors
 
+unfocussed timelines need to up-arrow
+
 Events are now adde to the timeline but only if they are tagged with a person.
 They dont get tagged with everyone who is at the event though, so they still wont show up in focused TLs
 
@@ -182,7 +184,7 @@ class TimeLine {
   static function add1($event_date, $sid, $evtype, $place, $event){
 	  self::addEntry($event_date, $sid, "fs_person", $evtype, $sid, "fs_person", $place, $event);
   }
-  /** person sid is child of parent, evtype is SON or DAUGHTER
+  /** person sid is child of parent, evtype is SON or DAU
   */
   static function addChild($event_date, $sid, $evtype, $parent, $place=0 , $event=0){
 	  self::addEntry($event_date, $sid, "fs_person", $evtype, $parent, "fs_person", $place, $event);

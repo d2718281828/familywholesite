@@ -70,7 +70,7 @@ class Aggregator {
   event   EVENT  tagged-place
   event   EVENT  tagged-person (wedding)
   
-  plus derived types GSON, GDAUGHTER etc. 
+  plus derived types GSON, GDAU etc. 
   */
   protected function detailHtml(){
 	  $event = $this->last;
@@ -88,13 +88,15 @@ class Aggregator {
 		$m.= '<div class="timeline-body">'.$this->objectName().'Passed away</div>';
 		break;
 		case "SON":
-		case "DAUGHTER":
+		case "DAU":
 		case "GSON":
-		case "GDAUGHTER":
+		case "GDAU":
 		case "GGSON":
-		case "GGDAUGHTER":
+		case "GGDAU":
 		case "GGGSON":
-		case "GGGDAUGHTER":
+		case "GGGDAU":
+		case "GGGGSON":
+		case "GGGGDAU":
 		$evtype = $this->eventDescription($event["event_type"]);
 		$m.= '<div class="timeline-body">'.$this->objectName().$evtype.' '.$source->simpleBirthLink().'</div>';
 		break;
@@ -110,13 +112,16 @@ class Aggregator {
 	  $m.= '</div><!-- end timeline-link --->';
       return $m;
   }
+  /**
+  * input is G+SON or G+DAU
+  */
   protected function eventDescription($type){
 	  $res = strtolower($type);
 	  $res = str_replace("gs","xrands",$res);
-	  $res = str_replace("daug","daux",$res);
 	  $res = str_replace("gd","xrandd",$res);
 	  $res = str_replace("g","xreat-",$res);
 	  $res = str_replace("x","g",$res);
+	  $res = str_replace("dau","daughter",$res);
 	 
 	  return ucfirst($res);
   }
