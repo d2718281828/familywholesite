@@ -56,11 +56,12 @@ class TLCounter extends Aggregator {
   * If it isnt, then return a new aggregator of the same type with this->last set to $event.
   */
   public function nextOne($event){
+	  if ($this->isDuplicate($event["event_type"])) return null;
+
 	  if (!$this->last){
 		  $this->addEvent0($event);
 		  return null;
 	  }
-	  if ($this->isDuplicate($event["event_type"])) return null;
 
 	  // has the significant part of the date changed?
 	  if (!$this->lastkey) $this->lastkey = substr($this->last["event_date"],0,$this->lev["compare"]);
@@ -85,7 +86,7 @@ class TLCounter extends Aggregator {
 	  } 
 
 	  // these are counted under BORN
-	  if ($newtype=="SON" || $newtype=="DAUGHTER") return;
+	  if ($newtype=="SON" || $newtype=="DAU") return;
 	  	  
 	  // if there is no focus there will be two of these for each wedding
 	  if ($newtype=="MARRIAGE"){
