@@ -214,15 +214,15 @@ class Aggregator {
   * used by unique and TLcounter
   */
   protected function isDuplicate($event){
-	  if ($this->focus && $this->focus->post_type=="fs_person") return false;
+	if ($this->focus && $this->focus->post_type=="fs_person") return false;
 	  
-	  // grandsons etc are only there for the object timelines, not needed if we are unfocussed
-	  if (preg_match("/^G+SON$/", $event["event_type"])) return true;
-	  if (preg_match("/^G+DAU$/", $event["event_type"])) return true;
+	// grandsons etc are only there for the object timelines, not needed if we are unfocussed
+	if (preg_match("/^G+SON$/", $event["event_type"])) return true;
+	if (preg_match("/^G+DAU$/", $event["event_type"])) return true;
 	  
-	  if ($event["object_type"]=="fs_place") return true;
+	if ($event["object_type"]=="fs_place") return true;
 	  
-	  return false;
+	return false;
   }
 }
  ?>

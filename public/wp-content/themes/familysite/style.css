@@ -86,6 +86,25 @@ Text Domain: familysite
     border: 1px solid #999999;
     margin: 5px 0 5px 0;
 }
+/* SLIDER BUTTONS ===================================== */
+.slick-arrow {
+	display: block;
+    position: absolute;
+    top: 50%;
+    color: white;
+    font-size: 24px;
+    height: 40px;
+    width: 30px;
+    text-align: center;
+    background-color: black;
+    z-index: 5;
+}
+.slick-arrow.prev {
+    left: 30px;
+}
+.slick-arrow.next {
+    right: 30px;
+}
 /* ENTRY FOOTER ===================================== */
 .entry-footer .tagsets {
   width: 100%;
