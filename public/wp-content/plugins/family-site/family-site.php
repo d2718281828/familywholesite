@@ -11,8 +11,6 @@ Author URI:
 Before final load
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
-	Timeline summary, misc bugs
-		/timeline/?summary=40 doesnt work
 !!!	the pdf viewer is showing cookie messages!!!
 
 		

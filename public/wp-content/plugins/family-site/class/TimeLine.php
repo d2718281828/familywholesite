@@ -8,9 +8,6 @@ require_once("timeline_aux/TLCounter.php");
 
 // todo use photo crops
 /* notes
-Add a creator column to the timeline... so you can browse all of the work of a particular person.
-	it can be stored in object 2!!!!!!!
-creators on the timeline is a bit more complex
 
 Timelines for places?
 
@@ -206,16 +203,19 @@ class TimeLine {
   */
   static function add1($event_date, $sid, $evtype, $place, $event){
 	  self::addEntry($event_date, $sid, "fs_person", $evtype, $sid, "fs_person", $place, $event);
+	  if ($place) self::addEntry($event_date, $sid, "fs_person", $evtype, $place, "fs_place", $place, $event);
   }
   /** person sid is child of parent, evtype is SON or DAU
   */
   static function addChild($event_date, $sid, $evtype, $parent, $place=0 , $event=0){
-	  self::addEntry($event_date, $sid, "fs_person", $evtype, $parent, "fs_person", $place, $event);
+	  self::addEntry($event_date, $sid, "fs_person", $evtype, $parent, "fs_person", 0, $event);
   }
   /** Marriage of a to b
   */
   static function addMarriage($event_date, $sid, $a, $b, $place, $event){
 	  self::addEntry($event_date, $sid, "fs_person", "MARRIAGE", $a, "fs_person", $place, $event, $b, "fs_person");
+	  if ($place)
+		self::addEntry($event_date, $sid, "fs_person", "MARRIAGE", $place, "fs_place", 0, $event, $b, "fs_person");
   }
   /** Interest item, containing $x
   */
