@@ -201,7 +201,8 @@ class EntLoader {
   * Things to be done after all pics loaded
   */
   public function complete(){
-	  return $this->addNodePics();
+	  $m = $this->resaveAll();
+	  return $m.$this->addNodePics();
   }
   /**
   * Things to be done after all pics loaded
@@ -233,6 +234,26 @@ class EntLoader {
 	  $m.= "<p>Found ".count($res);
 	  return $m;
 	  
+  }
+  /**
+  *
+  */
+  public function resaveAll(){
+	  global $wpdb;
+	  //  find all ent loaded posts
+	  $allents = 'select P.*
+	  from '.$wpdb->posts.' P, '.$wpdb->postmeta.' PM 
+	  where PM.post_id = P.ID and PM.meta_key = "ent_ref"
+	  ;';
+	  $res = $wpdb->get_results($allents);
+	  $m = "<p>Found ".count($res)." ent-created items";
+	  
+	  for ($k=0; $k<count($res); $k++){
+		  $cp = CptHelper::make($res[$k]);
+		  $cp->on_update(2);
+	  }
+	  
+	  return $m;
   }
   /**
   * COMMAND look for and fix any pictures which didnt load properly - most probably due to a timeout.  Fix or delete?
