@@ -10,12 +10,13 @@ namespace FamilySite;
 */
 class Aggregator {
 
-  protected $last = null;
+  protected $last = null;	// array for the last read record
+  protected $focus = false; // boolean true if this is a focussed timeline, either with focus or creator
 
   /**
   * The aummary level for an Aggregator should be 0.
   */
-  public function __construct($summarylevel = 0, $focus = null){
+  public function __construct($summarylevel = 0, $focus = false){
     $this->focus = $focus;
 	$this->summary = $summarylevel;
 	$this->ad = new ApproxDate();

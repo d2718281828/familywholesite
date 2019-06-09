@@ -32,16 +32,21 @@ Bugs
 */
 class TimeLine {
 
-  protected $focus = null;
+  protected $focus = null;		// CPT of the focus
+  protected $creator = null;	// cpt ffor the creator filter if there is one
   protected $timerange = null;	// two element array date from, to, or null. from/to can also be null
   protected $summary = null;		// summary level. 0 = not summarised. 100 is the most possible.
 
   public function __construct($focus = null){
     $this->focus = $focus;
+	$this->creator = null;
 	$this->ad = new ApproxDate();
 	$this->timefrom = array_key_exists("from", $_REQUEST) ? $_REQUEST["from"] : null ;
 	$this->timeto = array_key_exists("to", $_REQUEST) ? $_REQUEST["to"] : null ;
 	$this->summary = array_key_exists("summary", $_REQUEST) ? $_REQUEST["summary"] : null ;
+  }
+  public function serCreator($creator){
+	  $this->creator = $creator;
   }
   /**
   * set from and to date strings or null
@@ -61,7 +66,16 @@ class TimeLine {
     global $wpdb;
 	
 	$predicates = [];
-	if ($this->focus) $predicates[] = "object=".$this->focus->postid;
+	$isfocussed = false;
+	if ($this->focus) {
+		$predicates[] = "object=".$this->focus->postid;
+		$isfocussed = true;
+	}
+	if ($this->creator) {
+		$predicates[] = "object2=".$this->creator->postid;
+		$predicates[] = "event_type='INTEREST'";
+		$isfocussed = true;
+	}
 	
 	if ($this->timefrom && $this->timeto){
 		$predicates[] = "event_date between '".$this->timefrom."' and '".$this->timeto."'";
@@ -84,12 +98,12 @@ class TimeLine {
 	* Also aggregator needs a page link maybe?
 	*/
 	if ($this->summary < 10) {
-		if ($this->focus) $current = new Aggregator($this->summary, $this->focus);
-		else $current = new Unique($this->summary, null);
+		if ($isfocussed) $current = new Aggregator($this->summary, true);
+		else $current = new Unique($this->summary, false);
 	} elseif($this->summary < 20) {
-		$current = new Unique($this->summary, $this->focus);
+		$current = new Unique($this->summary, $isfocussed);
 	} else {
-		$current = new TLCounter($this->summary, $this->focus);
+		$current = new TLCounter($this->summary, $isfocussed);
 	}
 
     $m = "<div class='timeline-wrap'>\n";
@@ -113,9 +127,9 @@ class TimeLine {
   person  SON   parent
   person  DIED	samepers place
   person  MARRIAGE samepers spouse place
-  picture PIC   tagged-pers creator
-  picture PIC   tagged-event creator
-  picture PIC   tagged-place creator
+  picture INTEREST   tagged-pers creator
+  picture INTEREST   tagged-event creator
+  picture INTEREST   tagged-place creator
   event   EVENT  tagged-place
   event   EVENT  tagged-person (wedding)
   */
@@ -203,6 +217,7 @@ class TimeLine {
   /** Interest item, containing $x
   */
   static function addInterest($event_date, $sid, $stype, $x, $xtype, $creator=null, $date_within=0){
+	  // NOTE: the creator (maker) for a picture or item will be stored in object 2, dont need another column
 	  $crtype = $creator ? "fs_person" : null;
 	  self::addEntry($event_date, $sid, $stype, "INTEREST", $x, $xtype, 0, 0, $creator, $crtype, $date_within);
   }
@@ -223,14 +238,31 @@ class TimeLine {
 		'summary' =>  100,
 		'from' => null,
 		'to' => null,
-		// todo focus?? yes, but how? just postid?
+		'focus' => null,
+		'creator' => null,
 	  ), $atts );
 	  
-	  $tl = new TimeLine();
+	  if ($a['focus']){
+		  $cfocus = CptHelper::makeByName($a['focus']);
+		  $focus = $cfocus ? $cfocus->get("ID") : null;
+	  }
+	  if ($a['creator']){
+		  $ccreator = CptHelper::makeByName($a['creator']);
+		  $creator = $ccreator ? $ccreator->get("ID") : null;
+	  }
+	  $tl = new TimeLine(self::_getCPT($a,"focus"));
+	  $tl->setCreator(self::_getCPT($a,"creator"));
 	  $tl->setSummary($a["summary"]);
 	  $tl->setRange($a["from"], $a["to"]);
 	  
 	  return $tl->html();
+  }
+  static function _getCPT($a, $prop){
+	  if (array_key_exists($prop,$_REQUEST)) return $_REQUEST[$prop];
+	  if ($a[$prop]){
+		  return CptHelper::makeByName($a[$prop]);
+	  }
+	  return null;
   }
 }
  ?>

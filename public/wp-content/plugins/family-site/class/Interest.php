@@ -55,6 +55,7 @@ class Interest extends FSPost {
 	
 	if ($actual_date){
 		$links = $this->getLinks();
+		// note - creator is stored in object 2
 		$creator = $this->getcf($req,"maker");
 		$creator = $creator ?: null;		// turn zero into null for consistency 
 		foreach($links as $link){

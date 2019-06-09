@@ -393,12 +393,17 @@ class CptHelper {
 			$res = $wpdb->get_results($wpdb->prepare($s,$name));	// return object
 		}
 		if (count($res)==0) return null;
-		if (count($res)>1) error_log("WARNING search for $name returned more than 1 post");
-		$cpt = self::get($res[0]->post_type);
-		if (!$cpt) return null;
-        $class = $cpt->instanceClass;
-		$z = new $class($res[0]);
-		return $z;
+		// I have seen multiple records with different post types. Return the first with a posttype we know
+		//if (count($res)>1) error_log("WARNING search for $name returned more than 1 post");
+		
+		for ($k=0; $k<count($res); $k++) {
+			$cpt = self::get($res[$k]->post_type);
+			if (!$cpt) continue;
+			$class = $cpt->instanceClass;
+			$z = new $class($res[$k]);
+			return $z;
+		}
+		return null;
 	}
 	/**
 	* Make an html select element for all objects of this type.
