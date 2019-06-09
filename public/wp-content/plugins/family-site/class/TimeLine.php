@@ -45,7 +45,7 @@ class TimeLine {
 	$this->timeto = array_key_exists("to", $_REQUEST) ? $_REQUEST["to"] : null ;
 	$this->summary = array_key_exists("summary", $_REQUEST) ? $_REQUEST["summary"] : null ;
   }
-  public function serCreator($creator){
+  public function setCreator($creator){
 	  $this->creator = $creator;
   }
   /**
