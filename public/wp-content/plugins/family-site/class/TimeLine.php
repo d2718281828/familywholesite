@@ -66,10 +66,10 @@ class TimeLine {
 	
 	// first get the data from the timeline table
 	$predicates = [];
-	$isfocussed = false;
+	//$isfocussed = false;
 	if ($this->focus) {
 		$predicates[] = "object=".$this->focus->postid;
-		$isfocussed = true;
+		//$isfocussed = true;
 	}
 	if ($this->creator) {
 		$predicates[] = "object2=".$this->creator->postid;
@@ -99,12 +99,12 @@ class TimeLine {
 	* Also aggregator needs a page link maybe?
 	*/
 	if ($this->summary < 10) {
-		if ($isfocussed) $current = new Aggregator($this->summary, true);
-		else $current = new Unique($this->summary, false);
+		if ($isfocussed) $current = new Aggregator($this->summary, $this->focus);
+		else $current = new Unique($this->summary, null);
 	} elseif($this->summary < 20) {
-		$current = new Unique($this->summary, $isfocussed);
+		$current = new Unique($this->summary, $this->focus);
 	} else {
-		$current = new TLCounter($this->summary, $isfocussed);
+		$current = new TLCounter($this->summary, $this->focus);
 	}
 
     $m = "<div class='timeline-wrap'>\n";
@@ -249,7 +249,7 @@ class TimeLine {
 		'focus' => null,
 		'creator' => null,
 	  ), $atts );
-	  
+	  /*
 	  if ($a['focus']){
 		  $cfocus = CptHelper::makeByName($a['focus']);
 		  $focus = $cfocus ? $cfocus->get("ID") : null;
@@ -257,7 +257,7 @@ class TimeLine {
 	  if ($a['creator']){
 		  $ccreator = CptHelper::makeByName($a['creator']);
 		  $creator = $ccreator ? $ccreator->get("ID") : null;
-	  }
+	  }*/
 	  $tl = new TimeLine(self::_getCPT($a,"focus"));
 	  $tl->setCreator(self::_getCPT($a,"creator"));
 	  $tl->setSummary($a["summary"]);
@@ -265,9 +265,14 @@ class TimeLine {
 	  
 	  return $tl->html();
   }
+  /**
+  * Return the CPT corresponding to the given prop
+  */
   static function _getCPT($a, $prop){
-	  if (array_key_exists($prop,$_REQUEST)) return $_REQUEST[$prop];
+	  // REQUEST will have the id
+	  if (array_key_exists($prop,$_REQUEST)) return CptHelper::make($_REQUEST[$prop]);
 	  if ($a[$prop]){
+		  // the shortcode will have the name
 		  return CptHelper::makeByName($a[$prop]);
 	  }
 	  return null;

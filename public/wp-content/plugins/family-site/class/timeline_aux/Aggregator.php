@@ -11,12 +11,12 @@ namespace FamilySite;
 class Aggregator {
 
   protected $last = null;	// array for the last read record
-  protected $focus = false; // boolean true if this is a focussed timeline, either with focus or creator
+  protected $focus = null; // cpost of the focus item
 
   /**
   * The aummary level for an Aggregator should be 0.
   */
-  public function __construct($summarylevel = 0, $focus = false){
+  public function __construct($summarylevel = 0, $focus = null){
     $this->focus = $focus;
 	$this->summary = $summarylevel;
 	$this->ad = new ApproxDate();
@@ -108,10 +108,10 @@ class Aggregator {
       $m.= '<div class="timeline-link"><div class="timeline-date">'.$this->dateLink($evdate, $event["event_date"]).'</div>';
 	  switch($event["event_type"]){
 		case "BORN":
-		$m.= '<div class="timeline-body">'.$this->objectName().'Born</div>';
+		$m.= '<div class="timeline-body">'.$this->subjectName().'Born</div>';
 		break;
 		case "DIED":
-		$m.= '<div class="timeline-body">'.$this->objectName().'Passed away</div>';
+		$m.= '<div class="timeline-body">'.$this->subjectName().'Passed away</div>';
 		break;
 		case "SON":
 		case "DAU":
@@ -161,6 +161,22 @@ class Aggregator {
   * Return the object name where possible. For a focussed thing the object is always the focus so not needed
   */
   protected function objectName(){
+	  return "";
+  }
+  /**
+  * Return the subject name where possible. if not same as the focus
+  */
+  protected function subjectName(){
+	  if ($this->focus && $this->focus->postid==$this->last["subject"]) return "";
+	  
+      $object = \CPTHelper\CPTHelper::make($this->last["subject"],$this->last["subject_type"]);
+	  $links = [];
+	  if ($this->otherparty) $links[] = $this->otherparty;
+	  $this->otherparty = "";
+	  if ($object) $links[] = $object->simpleLink();
+	  return join(" and ",$links)." ";
+  }
+
 	  return "";
   }
   /**
