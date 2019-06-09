@@ -105,7 +105,7 @@ class TLCounter extends Aggregator {
   protected function addEvent0($event){
 	$newtype = $event["event_type"];
 	if ($newtype=="SON" || $newtype=="DAU") return;
-	if ($this->isDuplicate($newtype)) return;
+	if ($this->isDuplicate($event)) return;
 
 	$this->last = $event;
 	$this->lastkey = substr($event["event_date"],0,$this->lev["compare"]);
