@@ -12,6 +12,7 @@ class Aggregator {
 
   protected $last = null;	// array for the last read record
   protected $focus = null; // cpost of the focus item
+  protected $otherparty = ""; // cpost of the focus item
 
   /**
   * The aummary level for an Aggregator should be 0.
@@ -164,10 +165,10 @@ class Aggregator {
 	  return "";
   }
   /**
-  * Return the subject name where possible. if not same as the focus
+  * Return the subject (source) name where possible. if not same as the focus
   */
   protected function subjectName(){
-	  if ($this->focus && $this->focus->postid==$this->last["subject"]) return "";
+	  if ($this->focus && $this->focus->postid==$this->last["source"]) return "";
 	  
       $object = \CPTHelper\CPTHelper::make($this->last["source"],$this->last["source_type"]);
 	  $links = [];
