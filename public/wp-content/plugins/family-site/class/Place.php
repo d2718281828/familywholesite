@@ -25,8 +25,16 @@ class Place extends FSPost {
   public function indexSection(){
     return $this->afterIndexSection();
   }
-	public function showPosted(){
-		return false;
-	}
+  public function showPosted(){
+	return false;
+  }
+  /**
+  * The index section - this is the timeline for people and events. Could be linked posts for Interest
+  */
+  public function indexSection(){
+    require_once("TimeLine.php");
+    $tl = new TimeLine($this);
+    return $tl->html().$this->afterIndexSection();
+  }
 
 }
