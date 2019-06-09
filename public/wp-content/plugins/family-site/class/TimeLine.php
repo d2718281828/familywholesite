@@ -99,7 +99,7 @@ class TimeLine {
 	* Also aggregator needs a page link maybe?
 	*/
 	if ($this->summary < 10) {
-		if ($isfocussed) $current = new Aggregator($this->summary, $this->focus);
+		if ($this->focus) $current = new Aggregator($this->summary, $this->focus);
 		else $current = new Unique($this->summary, null);
 	} elseif($this->summary < 20) {
 		$current = new Unique($this->summary, $this->focus);

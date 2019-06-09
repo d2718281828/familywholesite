@@ -169,7 +169,7 @@ class Aggregator {
   protected function subjectName(){
 	  if ($this->focus && $this->focus->postid==$this->last["subject"]) return "";
 	  
-      $object = \CPTHelper\CPTHelper::make($this->last["subject"],$this->last["subject_type"]);
+      $object = \CPTHelper\CPTHelper::make($this->last["source"],$this->last["source_type"]);
 	  $links = [];
 	  if ($this->otherparty) $links[] = $this->otherparty;
 	  $this->otherparty = "";
