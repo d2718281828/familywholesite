@@ -1,5 +1,6 @@
 <?php
 namespace FamilySite;
+use CPTHelper\CptHelper;
 require_once("ApproxDate.php");
 require_once("timeline_aux/Aggregator.php");
 require_once("timeline_aux/Unique.php");
