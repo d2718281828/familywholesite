@@ -8,6 +8,7 @@ require_once("timeline_aux/TLCounter.php");
 
 // todo use photo crops
 /* notes
+!!!!there's a bug in addEntry - positional parameters are wrong. esp places
 
 Timelines for places?
 
@@ -170,16 +171,20 @@ class TimeLine {
 	$del = "delete from $timeline";
 	$rc = $wpdb->query($del);
   }
+  /**
+  * Main function for adding record into the timeline table
+  * todo this could be a bit more elegant if we used arrays and properties
+  */
   static function addEntry($event_date, $sid, $stype, $ev, $oid, $otype, $place, $event, $o2=null, $o2type=null, $within=0 ){
 	global $wpdb;
 	$timeline = $wpdb->prefix . "timeline";
-	$ins = "insert into  $timeline(event_date, date_within, source, source_type,event_type, object, object_type, event, place, object2, object2_type) values(%s,%d, %d,%s,%s,%d,%s,%d,%d,%d,%s);";
-	$ins2 = "insert into  $timeline(event_date, date_within, source, source_type,event_type, object, object_type,event, place) values(%s, %d, %d,%s,%s,%d,%s,%d,%d);";
+	$ins = "insert into  $timeline(event_date, date_within,  source, source_type,event_type, object, object_type, event, place, object2, object2_type) values(%s,%d,%d,%s,%s,%d,%s,%d,%d,%d,%s);";
+	$ins2 = "insert into  $timeline(event_date, date_within, source, source_type,event_type, object, object_type, event, place)                        values(%s,%d,%d,%s,%s,%d,%s,%d,%d);";
 	
 	list($cd,$dwithin) = self::correctDate($event_date,$within);
 	$dwithin = $dwithin>0 ? $dwithin : $within;
-	if ($o2===null) $sql = $wpdb->prepare($ins2,$cd,$dwithin, $sid, $stype,$ev,$oid, $otype, $place, $event);
-	else $sql = $wpdb->prepare($ins,$cd,$dwithin,$sid, $stype,$ev, $oid, $otype, $place, $event, $o2, $o2type);
+	if ($o2===null) $sql = $wpdb->prepare($ins2,$cd,$dwithin, $sid, $stype,$ev,$oid, $otype, $event, $place);
+	else $sql =            $wpdb->prepare($ins, $cd,$dwithin,$sid, $stype,$ev, $oid, $otype, $event, $place, $o2, $o2type);
 	
 	$rc = $wpdb->query($sql);
   }
@@ -203,7 +208,7 @@ class TimeLine {
   */
   static function add1($event_date, $sid, $evtype, $place, $event){
 	  self::addEntry($event_date, $sid, "fs_person", $evtype, $sid, "fs_person", $place, $event);
-	  if ($place) self::addEntry($event_date, $sid, "fs_person", $evtype, $place, "fs_place", $place, $event);
+	  if ($place) self::addEntry($event_date, $sid, "fs_person", $evtype, $place, "fs_place", 0, $event);
   }
   /** person sid is child of parent, evtype is SON or DAU
   */
