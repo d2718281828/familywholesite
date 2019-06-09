@@ -217,8 +217,8 @@ class Aggregator {
 	  if ($this->focus) return false;
 	  
 	  // grandsons etc are only there for the object timelines, not needed if we are unfocussed
-	  if (preg_match("/^G+SON$/", $event["type"])) return true;
-	  if (preg_match("/^G+DAU$/", $event["type"])) return true;
+	  if (preg_match("/^G+SON$/", $event["event_type"])) return true;
+	  if (preg_match("/^G+DAU$/", $event["event_type"])) return true;
 	  
 	  if ($event["object_type"]=="fs_place") return true;
 	  
