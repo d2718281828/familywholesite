@@ -9,15 +9,15 @@ require_once("timeline_aux/TLCounter.php");
 // todo use photo crops
 /* notes
 Add a creator column to the timeline... so you can browse all of the work of a particular person.
-it can be stored in object 2!!!!!!!
+	it can be stored in object 2!!!!!!!
 creators on the timeline is a bit more complex
+
+Timelines for places?
 
 Working on the grands-
 	need the descendents version, like ancestors. Decision: it isnt priority yet.
-	Ancestors working OK.
-		I am not doing children's death
-		Might need a dead_by which means we dont know when the death was but it was definitely before dead_by
-	Timelines for places?
+	I am not doing children's death
+	Might need a dead_by which means we dont know when the death was but it was definitely before dead_by
 
 unfocussed timelines need to up-arrow
 
@@ -66,6 +66,7 @@ class TimeLine {
   public function html(){
     global $wpdb;
 	
+	// first get the data from the timeline table
 	$predicates = [];
 	$isfocussed = false;
 	if ($this->focus) {
@@ -75,7 +76,8 @@ class TimeLine {
 	if ($this->creator) {
 		$predicates[] = "object2=".$this->creator->postid;
 		$predicates[] = "event_type='INTEREST'";
-		$isfocussed = true;
+		// creator doesnt count as a focus - multiple pics the same are still possible
+		//$isfocussed = true;
 	}
 	
 	if ($this->timefrom && $this->timeto){
