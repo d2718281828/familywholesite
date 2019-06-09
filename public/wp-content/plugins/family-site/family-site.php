@@ -9,7 +9,6 @@ Author URI:
 */
 /* TODOs
 Before final load
-!!!	test pauls marriages
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
 	Timeline summary, misc bugs

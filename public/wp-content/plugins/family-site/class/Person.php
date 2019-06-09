@@ -228,7 +228,7 @@ class Person extends FSPost {
 	  }  
 	   
   }
-  /**
+  /** WARNING: THIS IS NOT READY YET AND IT IS NOT USED
   * On saving a person post, add a record of the death to all descendants who were alive at the time.
   * The first 3 parms are what you are posting, the rest are whho to post it for
   */

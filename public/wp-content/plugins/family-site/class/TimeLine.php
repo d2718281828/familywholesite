@@ -7,8 +7,12 @@ require_once("timeline_aux/TLCounter.php");
 
 // todo use photo crops
 /* notes
+Add a creator column to the timeline... so you can browse all of the work of a particular person.
+it can be stored in object 2!!!!!!!
+creators on the timeline is a bit more complex
+
 Working on the grands-
-	need the descendents version, like ancestors
+	need the descendents version, like ancestors. Decision: it isnt priority yet.
 	Ancestors working OK.
 		I am not doing children's death
 		Might need a dead_by which means we dont know when the death was but it was definitely before dead_by
@@ -109,9 +113,9 @@ class TimeLine {
   person  SON   parent
   person  DIED	samepers place
   person  MARRIAGE samepers spouse place
-  picture PIC   tagged-pers
-  picture PIC   tagged-event
-  picture PIC   tagged-place
+  picture PIC   tagged-pers creator
+  picture PIC   tagged-event creator
+  picture PIC   tagged-place creator
   event   EVENT  tagged-place
   event   EVENT  tagged-person (wedding)
   */
@@ -198,8 +202,9 @@ class TimeLine {
   }
   /** Interest item, containing $x
   */
-  static function addInterest($event_date, $sid, $stype, $x, $xtype, $date_within=0){
-	  self::addEntry($event_date, $sid, $stype, "INTEREST", $x, $xtype, 0, 0, null, null, $date_within);
+  static function addInterest($event_date, $sid, $stype, $x, $xtype, $creator=null, $date_within=0){
+	  $crtype = $creator ? "fs_person" : null;
+	  self::addEntry($event_date, $sid, $stype, "INTEREST", $x, $xtype, 0, 0, $creator, $crtype, $date_within);
   }
   /** event
   */

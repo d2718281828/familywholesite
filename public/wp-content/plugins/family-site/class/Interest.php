@@ -55,8 +55,10 @@ class Interest extends FSPost {
 	
 	if ($actual_date){
 		$links = $this->getLinks();
+		$creator = $this->getcf($req,"maker");
+		$creator = $creator ?: null;		// turn zero into null for consistency 
 		foreach($links as $link){
-			TimeLine::addInterest($actual_date, $post_id,  $this->getType(), $link->postid, $link->getType(), $date_within );
+			TimeLine::addInterest($actual_date, $post_id,  $this->getType(), $link->postid, $link->getType(), $creator, $date_within );
 		}
 	}
 
