@@ -213,11 +213,15 @@ class Aggregator {
   /**
   * used by unique and TLcounter
   */
-  protected function isDuplicate($type){
+  protected function isDuplicate($event){
 	  if ($this->focus) return false;
 	  
-	  if (preg_match("/^G+SON$/", $type)) return true;
-	  if (preg_match("/^G+DAU$/", $type)) return true;
+	  // grandsons etc are only there for the object timelines, not needed if we are unfocussed
+	  if (preg_match("/^G+SON$/", $event["type"])) return true;
+	  if (preg_match("/^G+DAU$/", $event["type"])) return true;
+	  
+	  if ($event["object_type"]=="fs_place") return true;
+	  
 	  return false;
   }
 }

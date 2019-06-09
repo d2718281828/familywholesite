@@ -27,7 +27,7 @@ class Unique extends Aggregator {
 	  // suppress BORN records because they will also be a SON or DAUGHTER
 	  if ($newtype=="BORN") return null;
 	  
-	  if ($this->isDuplicate($newtype)) return null;
+	  if ($this->isDuplicate($event)) return null;	// all the Grandson etc records are duplicates if no focus
 
 	  // In general if the types arent the same they will not be aggregated
 	  if ($oldtype != $newtype) return $this->makeNew($event);
