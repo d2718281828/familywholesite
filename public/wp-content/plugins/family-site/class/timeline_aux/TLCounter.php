@@ -54,7 +54,7 @@ class TLCounter extends Aggregator {
   * If it isnt, then return a new aggregator of the same type with this->last set to $event.
   */
   public function nextOne($event){
-	  if ($this->isDuplicate($event["event_type"])) return null;
+	  if ($this->isDuplicate($event)) return null;
 
 	  if (!$this->last){
 		  $this->addEvent0($event);

@@ -214,7 +214,7 @@ class Aggregator {
   * used by unique and TLcounter
   */
   protected function isDuplicate($event){
-	  if ($this->focus) return false;
+	  if ($this->focus && $this->focus->post_type=="fs_person") return false;
 	  
 	  // grandsons etc are only there for the object timelines, not needed if we are unfocussed
 	  if (preg_match("/^G+SON$/", $event["event_type"])) return true;
