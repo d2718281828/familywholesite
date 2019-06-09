@@ -177,8 +177,6 @@ class Aggregator {
 	  return join(" and ",$links)." ";
   }
 
-	  return "";
-  }
   /**
   * Link to this page.
   * Normally it will over-write the request values summary, from and to ONLY if non-null value is specified.
