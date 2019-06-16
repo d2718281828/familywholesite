@@ -31,8 +31,13 @@ class FSPost extends CPost {
 
   public function actualDate(){
     $actdate = $this->get("actual_date");
+	
+    require_once("ApproxDate.php");
+	$ad = new ApproxDate();
+	
     if ($actdate){
-      return $actdate;
+	  $within = $this->get("date_within");
+      return $ad->convert($actdate, $within);
     }
     $event = $this->get("event");
     if ($event){
@@ -65,6 +70,44 @@ class FSPost extends CPost {
   */
   public function indexSection(){
     return "";
+  }
+  /*
+  * Add a tabulation of post meta
+  */
+  public function afterIndexSection(){
+	  return $this->showPostMeta();
+  }
+  /*
+  * Show all post meta, but only for me :)
+  */
+  public function showPostMeta(){
+	  // check if we want to dislay this
+	  $u = wp_get_current_user();
+	  if (!$u ) return "";
+	  if ($u->user_login!="derek" && $u->user_login!="derek-storkey") return "";
+	  
+	  // get all post meta
+	  $allmeta = get_post_meta($this->postid);
+	  
+	  $m = "";
+	  foreach ($allmeta as $prop=>$val){
+		  if ($prop=="merg") continue;
+		  $pval = is_array($val) && count($val)==1 ? $val[0] : print_r($val,true);
+		  $m.= "<tr><td>".$prop."</td><td>".$pval."</td></tr>";
+	  }
+	  if ($m) {
+		  $m = "<table>".$m."</table>";
+		  $m = "<div class='after-index-section'>".$m."</div>";
+	  }
+	  return $m;
+  }
+  /**
+  * Crude but effective simple year interval calculation on dates
+  */
+  protected function addYear($dd, $interval){
+	  $year = substr($dd,0,4);
+	  $year = $year + $interval;
+	  return $year.substr($dd,4);
   }
   // TODO the linking process via tags should be moved into base CPost/CptHelper, but not now
   protected function getLinksViaTax($tax,$type){
@@ -226,6 +269,13 @@ class FSPost extends CPost {
 	* Return a WP_Query argument for the posts to show in a slide show, on the single page of this cpost, or null
 	*/
 	public function slideShow(){
+		return null;
+	}
+	/**
+	* download asset info - default is that there is none.
+	* @return null or object containing url and icon properties.
+	*/
+	public function downloadAsset(){
 		return null;
 	}
 }

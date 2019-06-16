@@ -25,6 +25,7 @@ Text Domain: familysite
 	width: 18px;
 	height: 18px;
 	display: inline-block;
+	margin-right: 6px;
 }
 .fs_edit_marker  img {
 	width: 100%;
@@ -62,6 +63,47 @@ Text Domain: familysite
 	margin-top: 10px;
 	background-color: #e7e7e7;
 	font-weight: bold;
+}
+.timeline-link .title {
+	height: 26px;
+	margin-bottom: 2px;
+}
+.exif-data{
+    font-size: 75%;
+    background-color: #ecf5ff;
+    border: 1px solid #999999;
+    margin: 5px 0 5px 0;
+}
+.loader-reference{
+    font-size: 75%;
+    background-color: #fff5ec;
+    border: 1px solid #999999;
+    margin: 5px 0 5px 0;
+}
+.creator_block {
+    font-size: 85%;
+    background-color: #f5ffec;
+    border: 1px solid #999999;
+    margin: 5px 0 5px 0;
+}
+/* SLIDER BUTTONS ===================================== */
+.slick-arrow {
+	display: block;
+    position: absolute;
+    top: 50%;
+    color: white;
+    font-size: 24px;
+    height: 40px;
+    width: 30px;
+    text-align: center;
+    background-color: black;
+    z-index: 5;
+}
+.slick-arrow.prev {
+    left: 30px;
+}
+.slick-arrow.next {
+    right: 30px;
 }
 /* ENTRY FOOTER ===================================== */
 .entry-footer .tagsets {

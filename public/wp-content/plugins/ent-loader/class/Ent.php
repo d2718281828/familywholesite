@@ -67,6 +67,8 @@ class Ent  {
 	protected function digest($lines){
 		$lastprop = "";
 		$this->props["index"] = [];
+		// new <public> tag works the same way as index, can specify it for multiple publications
+		$this->props["public"] = [];
 		
 		foreach($lines as $line){
 			if ($this->isBadLine($line)) continue;
@@ -77,7 +79,7 @@ class Ent  {
 					$last=substr($l,$etag+1);
 					$prop = strtolower(substr($l,1,$etag-1));
 					$lastprop = $prop;
-					if ($prop=="index"){
+					if ($prop=="index" || $prop=="public"){
 						$this->props[$prop][] = explode("<x>", $last);
 					} else $this->props[$lastprop]=$last;
 				}
@@ -106,6 +108,24 @@ class Ent  {
 	}
 	public function get($prop){
 		return isset($this->props[$prop]) ? $this->props[$prop] : null;
+	}
+	/**
+	* We're going to have a new attribute on album items
+	* <public>familysite<x>n
+	* (or y at the end)
+	* which means that this item is definitely NOT, or definitely IS, to be published to familysite.
+	* @return lowercase y, n or null;
+	*/
+	public function getpublic($publication){
+		if (!isset($this->props["public"])) return null;
+		foreach ($this->props["public"] as $pub) {
+			if (strtolower($pub[0])==$publication){
+				$val = strtolower($pub[1]);
+				if ($val=="n" || $val=="no") return "n";
+				if ($val=="y" || $val=="yes") return "y";
+			}
+		}
+		return null;
 	}
 	/**
 	* get all the properties where the property name starts with $start - it needs to be a prop=>val map
@@ -214,7 +234,7 @@ class Ent  {
 	public function showAll(){
 		$m = "";
 		foreach($this->props as $prop=>$val){
-			if ($prop=="index"){
+			if ($prop=="index" || $prop=="public"){
 				$vv = "";
 				foreach ($val as $entry) $vv.="<br />".implode("-",$entry);
 			} elseif(!is_string($val)) {

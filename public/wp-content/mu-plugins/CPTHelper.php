@@ -4,7 +4,7 @@ Plugin Name: CPT Helper
 Plugin URI: https://flipsidegroup.com/
 Description: Provides classes to help with Custom Post Types. This should be in mu-plugins
 Version: 0.1
-Author: Derk Storkey
+Author: Derek Storkey
 Author URI:
 License: GPLv2 or later
 Text Domain: gsgdomain

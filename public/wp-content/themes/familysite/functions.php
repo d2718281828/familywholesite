@@ -1,7 +1,7 @@
 <?php
 global $showside;
 
-$showside = false;
+$showside = ($_SERVER['REQUEST_URI']=="/"); // is_home and is_front_page dont work at  this point
 
 function my_theme_enqueue_styles() {
 
@@ -23,17 +23,44 @@ include("inc/template-tags.php");
 */
 function fs_edit_post($postid = null){
 	global $post, $wpadmin_tab_name;
-	if (current_user_can("edit_posts")){
-		$postid = $postid ?: $post->ID;
+	$postid = $postid ?: $post->ID;
+	if (current_user_can("edit_posts")){		
 		$site = get_site_url();
 		$template = get_stylesheet_directory_uri();
-		$url = "http://dev.storkey.uk/wp-admin/post.php?post=$postid&action=edit";
+		$site = site_url();
+		$url = "$site/wp-admin/post.php?post=$postid&action=edit";
 		echo "<a href='$url' target='".($wpadmin_tab_name ?: "_blank")."' alt='edit'><div class='fs_edit_marker'><img src = '$template/assets/2000px-Blue_pencil.svg.png'></div></a>";
 	}
+	echo fs_crop_image();
+	echo fs_download_image();
+}
+/**
+* Link directly to the image edit page for the featured image of the given post
+*/
+function fs_crop_image($postid = null){
+	global $post, $wpadmin_tab_name;
+	$postid = $postid ?: $post->ID;
+	if (!current_user_can("edit_posts")) return "";
+	
+	$featured = get_post_thumbnail_id($postid);
+	if (!$featured) return "";
+	$url = get_site_url()."/wp-admin/upload.php?item=$featured";
+	$img = get_stylesheet_directory_uri()."/assets/Image_Crop_Icon.svg";
+	$img = "<img src='$img'>";
+	return "<a href='$url' target='".($wpadmin_tab_name ?: "_blank")."'><div class='fs_edit_marker fs_crop_marker'>$img</div></a>";	
+}
+function fs_download_image(){
+	global $cpost;
+	if (!$cpost) return "";
+	if (!($down = $cpost->downloadAsset())) return "";
+	return "<a href='".$down["url"]."' download alt='".$down["alt"]."'><div class='fs_edit_marker fs_download_marker'><img src = '".$down["icon"]."'></div></a>";	
 }
 /**
  * Over-write body_class function in here.
  */
 require get_theme_file_path( '/inc/template-functions.php' );
+
+add_image_size( 'fs-featured-image', 527, 316, true );
+
 
 ?>

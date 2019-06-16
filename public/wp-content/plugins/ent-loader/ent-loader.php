@@ -26,6 +26,8 @@ class EntLoader {
 	protected $report = "";
 	protected $newplaces = [];
 	protected $knownEnts = [];
+	protected $thisSite = "familysite";
+	protected $creators = [];		// list of stored creators
 
   public function __construct(){
 	  add_action("init", [$this,"init"]);
@@ -34,11 +36,23 @@ class EntLoader {
 	  $this->testset = ["neils","marians","joans","rhians","20-raglan-st-lowestoft-suffolk",
 	  "euston-thetford-norfolk","58a-robson-avenue-willesden-london-nw10","bens","violet","markmac"];
 	  $this->wantedPeople = [["chrisx","M"],["vivian","F"]];		// anyone not pulled in by the setAncs and setDescs
+
 	  // pictures we definitely dont want
-	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd","ewcndw4","ewcndw5","ewcndw6","ewcndw7",
+	  $this->blackPix = ["problems","dscn7147","dscn7159","dscn7161","dscn7198","dscn7199","mdeufbd",
+	  "ewcndw4","ewcndw5","ewcndw6","ewcndw7","gmmhkoxd","gmmhkoxc","eopasmk2","abz4le06","abz4le07","abz4le08",
+	  "abz4le09","abz4le11","abz4le12","abz4le13","abz4le14","abz4le15","abz4le17","abz4le21","abz4le22",
+	  "abz4le23","sjnkht00","mkkfeppl","jstzz022","jstzz025","jstzz024","jstzz023",
+	  "jstzz030", "jstzz031", "jstzz032", "jstzz033","jstzz034","dscn7107", "dscn7108", "dscn7109",
+	  "foskxnv1", "foskxnv2", "foskxnv3", "foskxnv4", "foskxnv5", "foskxnv6", "foskxnv7","sjnkht00",
+	  "ioddtey","iodds3d","iodds3c","iodds3b","iodds3a",
+	  "dagvcj4","dagvcj3","dagvcj2","dagvcj1","avfsdsvg","avfsdsvh",
+	  "jstnu003","jstnu004",
+	  "jstpinv1","jstpinv2","jstpinv3","jstpinv4","jstpinv5","imga4569",
+	  "jstpinv6","jstpinv7","jstpinv8","jstpinv9","jstpinva","kjnsdkcn","onwjcnf",
+	  "abz4le00","abz4le04","shsjhyx9","yxw7o091","yxw7o092","jst4924a","jst4924b","jst4925a","jst4925b",
 	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
 	  
-	  $this->picBatchSize = 18;
+	  $this->picBatchSize = 10;
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();
@@ -89,7 +103,7 @@ class EntLoader {
 	  $this->phase3();		// re-save and convert text in the descriptions
 	  
 	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m.= $this->reports("loaded","phase1","phase2","phase3","placecode");
+	  $m.= $this->reports("builtsample","phase1","phase2","phase3","placecode");
 	  return $m;
 	  
   }
@@ -139,41 +153,144 @@ class EntLoader {
 		  $cp->destroy();
 		  $m.= ", ".$post;
 	  }
+	  \FamilySite\TimeLine::clearAll();
 	  return $m;
   }
   /**
   * COMMAND read in pics from album
   */
   public function loadPics(){
+	  $starttime = microtime();
 	  $up = wp_upload_dir();
 	  $this->input = $up["basedir"]."/album";
 	  
-	  //$testset = ["dscn7218"];
-	  //$testset = null;
+	  $justThese = null;
+	  //$justThese = ["dscn7229"];
 
 	  $this->load();
+	  set_time_limit(60); 
 	  
 	  $this->wantedPics();
 	  $this->reportLoad(false);
+	  set_time_limit(60); 
 	  
 	  foreach($this->set as $id=>$obj) $obj->reorg();
 	  
 	  $this->build();		// create cposts out of ents
+	  set_time_limit(60); 
 	  
-	  $testset = $this->nextBatch($this->picBatchSize);
+	  $testset = $justThese ?: $this->nextBatch($this->picBatchSize);
 	  if (!$testset) return "<p>No further pictures to load.".$this->reports("stats");
 	  echo "<p>Test set ".implode(", ",$testset);
 	  
 	  $this->phase1($testset);		// initial WP create of everything.
+	  set_time_limit(60); 
 
 	  $this->phase2($testset);		// resolve references in parameters, like mother, father
+	  set_time_limit(60); 
 	  
 	  $this->phase3($testset);		// re-save and convert text in the descriptions
 	  
 	  $m = "<p>Available reports: ".implode(",",array_keys($this->report));
-	  $m.= $this->reports("loaded","builtsample","stats","phase1","phase2","phase2a","phase3");
+	  $m.= $this->reports("loaded","builtsample","stats",/* "phase1","phase2",*/ "phase2a","phase3");
+	  $m.= "<p>Elapsed time : ".$this->timeDiff(microtime(),$starttime);
 	  return $m;
 	  
+  }
+  /**
+  * Things to be done after all pics loaded
+  */
+  public function complete(){
+	  $m = $this->resaveAll();
+	  return $m.$this->addNodePics();
+  }
+  /**
+  * Things to be done after all pics loaded
+  */
+  public function addNodePics(){
+	  global $wpdb;
+	  //  find all posts with a node pic for which a post exists
+	  $nodepics = 'select P.ID, P.post_title , PIC.post_id as media
+	  from '.$wpdb->posts.' P, '.$wpdb->postmeta.' PN, '.$wpdb->postmeta.' PIC
+	  where PN.post_id = P.ID and PN.meta_value = PIC.meta_value
+	  and P.post_status="publish"
+	  and PN.meta_key = "ent_link_featured" and PIC.meta_key = "ent_ref"
+	  ;';
+	  $res = $wpdb->get_results($nodepics,ARRAY_A);
+	  
+	  $m = "<p>NOTE: this hasnt been finished yet, waiting for something to show up in the list below";
+	  $m.= "<p>SQL=".$nodepics;
+	  $m.= "<table>";
+	  $m.= "<tr><td>ID with nodepic</td><td>post title</td><td>the pic node</td></tr>";
+	  for ($k=0; $k<count($res);  $k++){
+		  $id = $res[$k]["ID"];
+		  $pp = "<a href='".get_permalink($id)."' target='_blank'>".$res[$k]["post_title"]."</a>";
+		  
+		  $picurl = wp_get_attachment_url($res[$k]["media"]);
+		  $pic = "<a href='$picurl'>".$res[$k]["media"]."</a>";
+		  $m.= "<tr><td>".$id."</td><td>".$pp."</td><td>".$pic."</td></tr>";		  
+	  }
+	  $m.= "</table>";
+	  $m.= "<p>Found ".count($res);
+	  return $m;
+	  
+  }
+  /**
+  *
+  */
+  public function resaveAll(){
+	  global $wpdb;
+	  //  find all ent loaded posts
+	  $allents = 'select P.*
+	  from '.$wpdb->posts.' P, '.$wpdb->postmeta.' PM 
+	  where PM.post_id = P.ID and PM.meta_key = "ent_ref"
+	  ;';
+	  $res = $wpdb->get_results($allents);
+	  $m = "<p>Found ".count($res)." ent-created items";
+	  
+	  for ($k=0; $k<count($res); $k++){
+		  $cp = CptHelper::make($res[$k]);
+		  $cp->on_update(2);
+	  }
+	  
+	  return $m;
+  }
+  /**
+  * COMMAND look for and fix any pictures which didnt load properly - most probably due to a timeout.  Fix or delete?
+  * I am a bit confused by this one, there's an edit link put out after the post is deleted.
+  * It seems to be picking out all posts with ent_curly_desc...
+  */
+  public function fixPics(){
+	  global $wpdb;
+	  //  just list them to start
+	  $aborted = 'select P.ID, P.post_title 
+	  from '.$wpdb->posts.' P, '.$wpdb->postmeta.' PM
+	  where PM.post_id = P.ID 
+	  and P.post_type="post" and P.post_status="publish" and P.post_content="pending"
+	  and PM.meta_key = "ent_curly_desc"
+	  ;';
+	  $res = $wpdb->get_results($aborted,ARRAY_A);
+	  
+	  $m = "<table>";
+	  $m.= "<tr><td>ID</td><td>post</td><td>edit</td></tr>";
+	  for ($k=0; $k<count($res);  $k++){
+		  $id = $res[$k]["ID"];
+		  $pp = "<a href='".get_permalink($id)."' target='_blank'>".$res[$k]["post_title"]."</a>";
+		  $ed = "<a href='".get_site_url()."/wp-admin/post.php?post=".$id."&action=edit' target='_blank'>Edit</a>";
+ 		  wp_delete_post( $id, true );
+		  $m.= "<tr><td>".$id."</td><td>".$pp."</td><td>".$ed."</td></tr>";		  
+	  }
+	  $m.= "</table>";
+	  $m.= "<p>Found ".count($res);
+	  return $m;
+  }
+  /**
+  * Subtract microtimes. microtime format is two numbers separated by a space, both are in seconds.
+  */
+  public function timeDiff($a,$b){
+	  $av = explode(" ",$a);
+	  $bv = explode(" ",$b);
+	  return $av[0]-$bv[0] + ($av[1]-$bv[1]);
   }
   protected function nextBatch($batchsize = 5){
 	  $res = [];
@@ -247,7 +364,7 @@ class EntLoader {
 		  $this->report["buildplaces"] = $m;
 	  }
 	  $m = "<h2>Sample of Built items</h2>";
-	  $sample = ["violet","dscn7225","shubil20","alelnl17","herinl16"];
+	  $sample = ["vvbjwav","dscn7229","vvbjwav4","herinl16"];
 	  foreach($sample as $item){
 		  if (!isset($this->cposts[$item])) continue;
 		  $m.="<h3>".$item."</h3>";
@@ -275,17 +392,95 @@ class EntLoader {
 		
 		if ((isset($this->set[$id])) && $pic = $this->set[$id]->getImageFile()){
 			$pic = str_replace("//","/",$pic);
-			$m.=" Image=".$pic;
-			$id = $this->sideload($pic, 0);
+			$caption = ["caption"=> $cp->get("post_title") ];
+			$id = $this->sideload($pic, 0, $caption);
 			if ( is_wp_error($id)) $m.="<br />Error loading image ".implode("<br/>",$id->get_error_messages());
 			else {
-				$m.=" Loaded image into item ".$id;
-				set_post_thumbnail($cp->postid, $id);
+				$mtype = $this->typeOfFile($pic);
+				if ($mtype == "img"){
+					$m.=" Loaded image ".$id;
+					set_post_thumbnail($cp->postid, $id);					
+				} else {
+					update_post_meta($cp->postid, "featured_media", $id);					
+					update_post_meta($cp->postid, "featured_media_type", $mtype);					
+				}
 			}
 		}
 	  }
 	  $this->report["phase1"] = $m;
 	  return $m;
+  }
+  // this is copied from mediaType
+	protected function typeOfFile($fname){
+		$p = strrpos($fname,".");
+		if ($p===false) return "unk";
+		$t = strtolower(substr($fname,$p+1));
+		switch($t){
+			case 'jpg':
+			case 'jpeg':
+			case 'png':
+			case 'gif':
+			case 'bmp':
+			return 'img';
+			
+			case 'pdf':
+			return 'pdf';
+			
+			case 'htm':
+			case 'html':
+			return 'htm';
+			
+			case 'mp3':
+			case 'ogg':
+			case 'wav':
+			return 'aud';
+			
+			case 'txt':
+			return 'txt';
+			
+			case 'doc':
+			case 'ppt':
+			case 'docx':
+			case 'pptx':
+			return 'doc';
+			
+			default:
+			return 'unk';
+		}
+	}
+  /**
+  * is it an image based on the filetype?
+  */
+  protected function is_image_Obs($fname){
+	  $dot = strrpos($fname,".");
+	  if ($dot===false) return false;
+	  $ext = strtolower(substr($fname,$dot+1));
+	  switch($ext){
+		  case "jpg":
+		  case "jpeg":
+		  case "png":
+		  case "gif":
+		  return true;
+		  
+		  // this stuff is just to write out a warning if we dont recognise the type at all
+		  case "pdf":
+		  
+		  case "ppt":
+		  case "doc":
+		  case "docx":
+		  
+		  case "mov":
+		  case "mp4":
+		  
+		  case "mp3":
+		  case "ogg":
+		  case "wav":
+		  return false;
+		  
+	  }
+	  echo "<p>WARNING unknown file extension $ext on file $fname";
+	  return false;
+	  
   }
   protected function makePlaces(){
 	  $m = "<h2>Making places</h2>";
@@ -432,6 +627,24 @@ class EntLoader {
   public function wantedPics(){
 	  foreach($this->set as $id=>$ent){
 		  $entid = $ent->key();
+		  
+		  // check the public attribute - this overrides anyother rules. 
+		  // <public>familysite<x>y
+		  $public = $ent->get("public");
+		  if ($public){
+			  if (is_array($public) && is_array($public[0]) && $public[0][0]=="familysite"){
+				if ($public[0][1]=="y" || $public[0][1]=="yes") {
+					$ent->setWanted(true);
+					continue;
+				}
+				if ($public[0][1]=="n" || $public[0][1]=="no") {
+				  $ent->setWanted(false);
+				  continue;	
+				}	
+			  }
+				print_r($public);
+			  echo "<p>Public attribute not set correctly in ".$id.", ignored: ".($public[0])."-".($public[1]);
+		  }
 		  $ix = $ent->get("index");
 		  $picdate = $ent->get("date_created");
 		  // if any current nodes have this as a featured image
@@ -441,22 +654,31 @@ class EntLoader {
 		  }
 		  // if the index is a tag for any known node
 		  // except for the immediate family.
+		  if ($ix){
 		  foreach($ix as $ixentry){
 			  if ($cpost=$this->get_cpost_by_entref($ixentry[0])){
-				$eid = $ixentry[0];
+				$eid = strtolower($ixentry[0]);
 				if ($eid!="derek" && $eid!="anna" && $eid!="maja" && $eid!="alex" && $eid!="yvonne") $ent->setWanted();
 				$ent->tagWith($cpost);
 			  }
 		  }
+		  }
 		  // if the picture is on the same date as an existing event (only if exactly one event)
-		  if ($theevent=$this->getEventWithDate($picdate)){
+		  // I have decided to take this off, i think it is pulling in a lot of un-necessary stuff
+		  if (false && $theevent=$this->getEventWithDate($picdate)){
 			  $ent->setWanted();
 			  $ent->set("event",$theevent);			  
 		  }
 	  }
-	  // go through again, chcking against the blaclist
+	  // go through again, checking against the blacklist
+	  // and also check the public attribute 
 	  foreach($this->set as $id=>$ent){
 		  if (in_array($id,$this->blackPix)) $ent->setWanted(false);
+		  $pub = $ent->getPublic($this->thisSite);
+		  // override all of the above
+		  if ($pub=="n") $ent->setWanted(false);
+		  if ($pub=="y") $ent->setWanted(true);
+		  if ($pub) echo "<br />NOTE new public attribute set for ".$id." to ".$pub;
 	  }
   }
   protected function isImageFor($entid){
@@ -497,7 +719,10 @@ class EntLoader {
 	  return $cp;
   }
   public function wantedEvents(){
-	  $events = ["slub","vvcaleb","wedpsan","vvwpedor","vvwmarhe","vvwjonpa","vvwaldor",];
+	  $events = ["slub","vvcaleb","wedpsan","vvwpedor","vvwmarhe","vvwjonpa","vvwaldor",
+	  "w0020713","vvcoln02","vvcot05","w0070707","vvbjwav4","vvbikl13","vvbikl13","vvbjwav4","vvbjwav",
+	  "vvcoln00","vvcoln02","vvcoln04","vvcot05","vvcot06","vvhook02","vvhook03","vvhook05","vvware99",
+	  ];
 	  foreach ($events as $m) {
 		  if ($v=$this->get($m)) $v->setWanted();
 	  }
@@ -524,14 +749,26 @@ class EntLoader {
 	if (WP_DEBUG) error_log("media handle sideload with ".$file_array['name'].", ".$file_array['tmp_name']);
 
 	// do the validation and storage stuff
-	$id = media_handle_sideload( $file_array, $post_id ?: 0, $description ?: $file_array['name'] );
+	$filetitle = $description && array_key_exists("title",$description) ? $description["title"] : $file_array['name'] ;
+	$id = media_handle_sideload( $file_array, $post_id ?: 0, $filetitle);
 
 	// If error storing permanently, unlink
 	if ( is_wp_error($id) ) {
+		// this doesnt work, file permissionss
 		@unlink($file_array['tmp_name']);
 		error_log("Error sideloading ".$fullfile." ".$id->get_error_message());
 		return $id;
 	}
+	// set caption for searchability
+	$extras = ["ID"=>$id]; $num=0;
+	foreach ($description as $prop=>$val){
+		if ($prop == "caption") {
+			$extras["post_excerpt"] = $val;
+			$num++;
+		}
+	}
+	if ($num > 0)  wp_update_post($extras);
+	
 	return $id;
   }
   protected function listWanted(){
@@ -599,6 +836,94 @@ class EntLoader {
 		  $this->get($dad)->setMale(true); 
 		  $this->setAncs($dad);
 	  }
+  }
+  /**
+  * Lookup and cache creator names
+  * @return two emelements, the maker, or null, and the maker_text, or null.
+  */
+  public function getCreator($creatorName){
+	  // is it cached?
+	  if (array_key_exists($creatorName, $this->creators)) return $this->creators[$creatorName];
+	  
+	  $wpname = $this->convertCreatorName($creatorName);
+	  if (!$wpname) {
+		  $this->creators[$creatorName] = [null, $creatorName];
+		  return [null, $creatorName];
+	  }
+	  $wpid = $this->getIdBySlug($wpname, "fs_person");
+	  if ($wpid) $res = [ $wpid, null];
+	  else $res = [null, $creatorName];
+	  $this->creators[$creatorName] = $res;
+	  return $res;
+  }
+  public function getIdBySlug($slug, $type){
+	global $wpdb;
+	$s = "select ID from ".$wpdb->posts." where post_type=%s and post_status='publish' and post_name=%s;";
+	$res = $wpdb->get_results($wpdb->prepare($s, $type, $slug),ARRAY_A);
+	if (count($res)==0) return null;
+	return $res[0]["ID"];
+  }
+  /**
+  * cross reference from names which have been used in the album to WP names
+  */
+  protected function convertCreatorName($creatorName){
+	  switch($creatorName){
+		  case "Derek":
+		  case "derek":
+		  return "derek-storkey";
+		  case "Peter":
+		  case "peter":
+		  return "peter-storkey";
+		  case "{ a johns}":
+		  case "John Storkey-Taylor":
+		  case "John S-T":
+		  case "{a johns:JST}":
+		  return "john-storkeytaylor";
+		  case "Matthew":
+		  return "matthew-storkey";
+		  case "Anna":
+		  return "anna-storkey";
+		  case "Alex":
+		  return "alex-storkey";
+		  case "Verity":
+		  return "verity-mitchell";
+		  case "Neil":
+		  return "neil-storkey";
+		  //case "Jonathan":		// since i dont know, leave it out, it could be done manually one day
+		  //return "";
+		  case "Hazel":
+		  return "hazel-bustin";
+		  case "Rowan":
+		  return "rowan-lloyd";
+		  case "John S":
+		  case "John Stephens":
+		  return "john-stephens";
+		  case "Joan Storkey":
+		  return "joan-storkey";
+		  case "Jenny":
+		  return "jenny-heritage";
+		  case "Judith":
+		  return "judith-turner";
+		  case "Phil":
+		  return "phil-turner";
+		  case "Maja":
+		  return "maja-storkey";
+		  case "Brian":
+		  return "brian-heritage";
+		  case "Pauline":
+		  return "pauline-stephens";
+		  case "Marian":
+		  return "marian-mackintosh";
+		  case "Yvonne":
+		  return "yvonne-storkey";
+		  case "Mark Stephens":
+		  return "mark-stephens";
+		  case "Alan Storkey":
+		  return "alan-storkey";
+		  case "Chris Patrick":
+		  return "chris-patrick";
+	  }
+	  return null;
   }
   protected function placeNorm($place){
 	  switch($place){

@@ -10,6 +10,10 @@ class EntCPost  {
 	protected $entloader;
 		
 	public function __construct($loader){
+		$this->exifFields = ["ApertureFNumber","camera_make","camera_model","Orientation","fnumber",
+			"iso","exposure","flash","focal_length","max_aperture","width","height",
+		];
+		
 		$this->entloader = $loader;
 	}
 	/**
@@ -22,6 +26,8 @@ class EntCPost  {
 		$enttype = $ent->get("type");
 		$new["post_type"] = $this->xlateType($enttype);
 		$new["post_title"] = $ent->get("title");
+		if ($ent->key()=="slub") $new["post_title"] = "Derek and Anna's wedding";
+		
 		// this will need to be translated when all the cposts are in.
 		$new["post_content"] = "pending";
 		$new["ent_curly_desc"] = $ent->get("description");		// for subsequent translation, after everything is loaded.
@@ -56,13 +62,29 @@ class EntCPost  {
 			
 			case "fs_event":
 			$new["post_name"] = self::makeName($ent->get("title"));
+			$this->cpDate($new, "actual_date" , $ent, "date_created");
+			$this->    cp($new, "date_within" , $ent, "date_within");
 			break;
 			
 			case "post":
 			$new["post_name"] = self::makeName($ent->get("title"));
 			$new["uploader_ref"] = $ent->key();
-			// what about all the camera fields?
+			
+			// all the EXIF camera fields
+			foreach($this->exifFields as $ex){
+				$val = $ent->get($ex);
+				if ($val) $new["exif"][$ex] = $val;				
+			}
+			
 			$this->cpDate($new, "actual_date" , $ent, "date_created");
+			$this->    cp($new, "date_within" , $ent, "date_within");
+			$creator = $ent->get("created_by");
+			if ($creator) {
+				$maker = $this->entloader->getCreator($creator);		
+				//echo "<p>created by example : ".$creator." = ".$maker[0]." / ".$maker[1];
+				if ($maker[0]) $new["maker"] = $maker[0];
+				if ($maker[1]) $new["maker_text"] = $maker[1];
+			}
 			break;
 		}
 		
@@ -112,19 +134,36 @@ class EntCPost  {
 				$including = true;
 				break;
 				case "a":
-				$args = self::get_postname_by_entref($pair[1][0]);
+				$name_type = self::get_postdata_by_entref($pair[1][0]);
+				$args = $name_type[0];
 				if (count($pair[1])>1) {
 					$args.=" ";
 					if (strpos($pair[1][1]," ")!==false) $args.='"'.$pair[1][1].'"';
 					else $args.=$pair[1][1];
 				} 
-				if ($including) $o.="[".$pair[0]." ".$args."]";
+				if ($including) $o.="[".$this->cpostName($name_type[1])." ".$args."]";
 				break;
 				default:
 				if ($including) $o.="[".$pair[0]." ".$pair[1]."]";
 			}
 		}
 		return $o;
+	}
+	/**
+	* return the name of the [a] tag for a given post type.
+	*/
+	public function cpostName($posttype){
+		switch($posttype){
+			case 'fs_person':
+				return 'person';
+			case 'fs_event':
+				return 'event';
+			case 'fs_place':
+				return 'place';
+			default:
+				return 'interest';
+		}
+		return 'interest';
 	}
 	/**
 	* Convert the description and resave
@@ -135,6 +174,7 @@ class EntCPost  {
 		// resolve the descriptions
 		$desc = $cpost->get("ent_curly_desc");	// should be array
 		$cpost->set("post_content", $this->wpRender($desc));
+		$cpost->set("post_excerpt", $this->wpRender($desc));
 		
 		$cpost->on_update(2);		// re-save it, checking the custom fields and ensuring consistency
 		$m.="<br />Phase 3 on ".$cpost->show();
@@ -196,12 +236,20 @@ class EntCPost  {
 		  return $pid;
 	  }
 	  static function get_postname_by_entref($entref){
+		  $pdata = self::get_postdata_by_entref($entref);
+		  if ($pdata) return $pdata[0];
+		  return null;
+	  }
+	  /**
+	  * @return two element array or nothing
+	  */
+	  static function get_postdata_by_entref($entref){
 		  global $wpdb;
-		  $s = "select post_name from ".$wpdb->postmeta." PM,
+		  $s = "select post_name, post_type from ".$wpdb->postmeta." PM,
 			".$wpdb->posts." P 
 			where P.ID = PM.post_id and P.post_status = 'publish' and 
 			meta_key = 'ent_ref' and meta_value=%s;";
-		  $pid = $wpdb->get_var($wpdb->prepare($s,$entref));
+		  $pid = $wpdb->get_row($wpdb->prepare($s,$entref),ARRAY_N);
 		  return $pid;
 	  }
 

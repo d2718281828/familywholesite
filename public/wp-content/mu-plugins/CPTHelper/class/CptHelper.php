@@ -53,6 +53,8 @@ class CptHelper {
     protected $urlslug = null;
     protected $showInQueries = false;
     protected $supports = [];
+    protected $supportsExtra = [];
+    protected $taxonomiesExtra = [];
     protected $metaFields = [];
     protected $constants = [];
     protected $instanceClass = 'CPost';
@@ -86,6 +88,7 @@ class CptHelper {
               register_activation_hook( $pluginfile, [$this,'flush'] );
               register_deactivation_hook( $pluginfile, [$this,'flush'] );
             }
+			$this->shcName = str_replace(" ","_",strtolower($name));	// for the shortcode
         }
         add_action( 'init', [$this,'register'] );
 
@@ -132,23 +135,30 @@ class CptHelper {
                 //$optslist['rewrite']['ep_mask'] = EP_PERMALINK;
                 $optslist['rewrite']['with_front'] = false;
             }
-            if ($this->supports){
-                $optslist["supports"] = $this->supports;
+            if ($this->supports || $this->supportsExtra){
+                $optslist["supports"] = array_merge($this->supports, $this->supportsExtra);
             }
             if ($this->metaFields) $optslist["supports"][] = 'custom_fields';
+			
+			$taxes = array_key_exists("taxonomies", $optslist) ? $optslist["taxonomies"] : [];
+			$taxes = array_merge($taxes, $this->taxonomiesExtra);
+            if ($taxes) $optslist["taxonomies"] = $taxes;
 
-            if (TRACEIT) traceit("!!!!!!!!actually registering the post type ".print_r($optslist,true));
+            //if (TRACEIT) traceit("!!!!!!!!actually registering the post type ".print_r($optslist,true));
             $cpt = register_post_type($this->posttype(), $optslist);
 
-            if ($this->showInQueries){
-                add_action( 'pre_get_posts', [$this,'add_to_query'] );
-            }
+			add_shortcode($this->shcName,[$this,"do_shc"]);
+
 
             if ($this->flushRules) {
                 //if (TRACEIT) traceit("!!!!!!!!!!!!!!Flushing rules on plugin activation after CPT registration");
                 flush_rewrite_rules();   // only on plugin (de)activation
             }
         }
+        if ($this->showInQueries){
+            add_action( 'pre_get_posts', [$this,'add_to_query'] );
+        }
+
         self::$registrations[$this->posttype()] = $this;
         if ($this->metaFields){
             add_action( 'add_meta_boxes', [$this, 'addMetaBox'] );
@@ -173,6 +183,17 @@ class CptHelper {
 	  $cp->on_update(true);
       //$this->on_save($post_id,$post);
     }
+	  public function do_shc($att,$content,$tag){
+		  if (isset($att[0]) && $att[0]){
+			  $cp = self::makeByName($att[0],$this->posttype());
+			  if ($cp===null) return "-".$att[0]." not known-";
+			  if ($content) $text = do_shortcode($content);
+			  elseif (isset($att[1]) && $att[1]) $text = $att[1];
+			  else $text = null;
+			  return $cp->simpleLink($text);
+		  }
+		  return "";
+	  }
 	/**
 	* This function is callable directly when a post is created by wp_insert_post instead of in an online save
 	* @param $data array/null If called directly then this is for an array of custom field values.
@@ -193,10 +214,15 @@ class CptHelper {
     public function posttype(){
         return $this->builtin ? $this->slug : $this->prefix.$this->slug;
     }
-    // TODO got to get the current list and add ours to it
     public function add_to_query($query){
-        if ( is_home() && $query->is_main_query() ){
-            $query->set( 'post_type', array( 'post', $this->posttype() ) );
+		$applies = false;
+		if ( is_home() && array_search("home", $this->showInQueriesWhich)!==false ) $applies = true;
+		if ( is_category() && array_search("category", $this->showInQueriesWhich)!==false ) $applies = true;
+		
+        if ( $applies && $query->is_main_query() ){
+			$currentTypes = $query->get('post_type');
+			$currentTypes[] = $this->posttype();
+            $query->set( 'post_type', $currentTypes );
         }
          return $query;
     }
@@ -265,8 +291,9 @@ class CptHelper {
      * Call this function straight after object creation to add the CPT to general queries
      * Returns $this to allow chaining.
      */
-    public function addToQueries(){
+    public function addToQueries($which = ["home"]){
         $this->showInQueries = true;
+		$this->showInQueriesWhich = $which;
         return $this;
     }
 
@@ -275,11 +302,11 @@ class CptHelper {
      * @return $this
      */
     public function allowComments(){
-        $this->supports[] = "comments";
+        $this->supportsExtra[] = "comments";
         return $this;
     }
     public function allowExcerpt(){
-        $this->supports[] = "excerpt";
+        $this->supportsExtra[] = "excerpt";
         return $this;
     }
     public function addField($field)
@@ -356,15 +383,27 @@ class CptHelper {
         }
         return null;
     }
-	static function makeByName($name){
+	static function makeByName($name,$posttype = null){
 		global $wpdb;
-		$s = "select * from ".$wpdb->posts." where post_name=%s;";
-		$res = $wpdb->get_results($wpdb->prepare($s,$name));	// return object
+		if ($posttype){
+			$s = "select * from ".$wpdb->posts." where post_name=%s and post_status='publish' and post_type=%s;";
+			$res = $wpdb->get_results($wpdb->prepare($s,$name, $posttype));	// return object
+		} else {
+			$s = "select * from ".$wpdb->posts." where post_name=%s and post_status='publish';";
+			$res = $wpdb->get_results($wpdb->prepare($s,$name));	// return object
+		}
 		if (count($res)==0) return null;
-		$cpt = self::get($res[0]->post_type);
-        $class = $cpt->instanceClass;
-		$z = new $class($res[0]);
-		return $z;
+		// I have seen multiple records with different post types. Return the first with a posttype we know
+		//if (count($res)>1) error_log("WARNING search for $name returned more than 1 post");
+		
+		for ($k=0; $k<count($res); $k++) {
+			$cpt = self::get($res[$k]->post_type);
+			if (!$cpt) continue;
+			$class = $cpt->instanceClass;
+			$z = new $class($res[$k]);
+			return $z;
+		}
+		return null;
 	}
 	/**
 	* Make an html select element for all objects of this type.

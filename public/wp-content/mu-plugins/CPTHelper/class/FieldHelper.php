@@ -74,9 +74,16 @@ class FieldHelper {
         if (!$this->user_can_update()) return;
         if (TRACEIT) traceit("FIELD UPDATE for post=".$post_id);
         if ($post_id){
-            update_post_meta($post_id, $this->id, $this->setValue($this->rqValue()));
+            update_post_meta($post_id, $this->id, $this->setValue($v=$this->rqValue()));
+			$this->updateAction($post_id,$v);
         }
     }
+	/**
+	* Overrideable - additional actions for when the value is set
+	*/
+	protected function updateAction($post_id,$v){
+		
+	}
     public function get()
     {
         if ($this->valueIsSet) return $this->value;

@@ -13,13 +13,16 @@ class EventCPT extends FSCpt {
     parent::setup();
 	$this
         ->set_taxonomy("event_tax")
+		->addToQueries(["category", "home"])
+		->allowExcerpt()
         ->setClass("FamilySite\Event")
         ->addField(new DateHelper("actual_date", "Actual date", "Date event started"))
+        ->addField(new FieldHelper("date_within", "Date within (days)", "The true date should be within this number of days of the date given"))
         ->addField(new FieldHelper("duration", "Duration", "The length of the event in days - leave blank if it took place on only one day"))
         ->addField(new CPTSelectHelper("event_place", "Place of the event", "Place where the event occurred", ["posttype"=>"fs_place"]))
     ;
   }
-  public function on_save($post_id, $post){
+  public function on_save_obs($post_id, $post){
     if (WP_DEBUG) error_log("in FamilySite::EventCPT::on_save method");
 	parent::on_save($post_id, $post);
 
