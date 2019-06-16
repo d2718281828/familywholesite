@@ -52,7 +52,7 @@ class EntLoader {
 	  "abz4le00","abz4le04","shsjhyx9","yxw7o091","yxw7o092","jst4924a","jst4924b","jst4925a","jst4925b",
 	  "kdfmdyur","mcdlvs0","mcdlvs1","mcdlvs2","mcdlvs3"];
 	  
-	  $this->picBatchSize = 20;
+	  $this->picBatchSize = 10;
   }
   public function init(){
 	  if (is_admin()) $this->wp_init();

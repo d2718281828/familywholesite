@@ -191,6 +191,8 @@ class FamilySite {
   }
   public function admin_init(){
     wp_enqueue_style( 'family-site-admin-css', plugin_dir_url( __FILE__ ).'css/admin.css' );
+	require_once("admin/MainPage.php");
+	$main = new MainPage($this); 
   }
   /**
   * I just want to 'leave a comment', not a reply
