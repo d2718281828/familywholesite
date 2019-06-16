@@ -5,7 +5,7 @@ use \AdminPage\BaseAdmin;
 class MainPage extends BaseAdmin {
 
   protected function setOpts(){
-    $this->parms = ["Editec MC", "Editec MC", "edit_posts", "editec_multichannel"];
+    $this->parms = ["FamilySite", "FamilySite", "activate_plugins", "family_site"]; // admin only
     $this->options = [
       ["Create", "createtab"],
     ];
@@ -16,7 +16,8 @@ class MainPage extends BaseAdmin {
   * It should echo, not return the text.
   */
   public function page_content() {
-	echo "Event Tools";
+	echo "<h2>Family Site</h2>";
+	echo "<h3>Event Tools</h3>";
   }
 
 }
