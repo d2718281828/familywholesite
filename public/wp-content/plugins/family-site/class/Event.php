@@ -49,7 +49,8 @@ class Event extends FSPost {
   public function slideShow(){
 	return array(
 		'meta_key'   => 'event',
-		'meta_value' => $this->postid
+		'meta_value' => $this->postid,
+		'posts_per_page'=>-1
 	);
   }
   public function on_update($req = false){
