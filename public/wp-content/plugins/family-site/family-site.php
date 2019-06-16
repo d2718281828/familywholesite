@@ -11,8 +11,8 @@ Author URI:
 Before final load
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
-!!!	the pdf viewer is showing cookie messages!!!
 
+The timeline should show edit, crop and download icons - via a hook
 		
 !!! test the movie files from 13/7/2002 in  /agd/mov207
 	mpg file just shows as a link
@@ -76,7 +76,6 @@ page for the second cousins
 Quiz - what is the relationship between two randomly chosen persons?
 
 --after release
-need timeline or a slideshow for a single day.
 
 lookup by uploaders reference
 
@@ -109,6 +108,38 @@ OK  Manual image crop is not working, it is now working, whhy didnt itt before?
 OK Places should be tagged with places (nearby) and people and events
 New <public> attribute:
 <public>familysite<x>y
+
+loaded:
+aga/ 
+	d0001/ d0012/
+agc/ 
+	D0201
+age/ 
+	d0211
+agf/ 
+	d0207
+agg/ 
+	d0206/ d0212/
+agh/ 
+	d0303/ d0305/
+bgm/ 
+cgs/ 
+	/d0412
+dgt/ 
+	d0501/ d0506/ d0507/
+egu/ 
+	d0512/ d0608/ d0701/
+fgv/ 
+	/d0706
+jgw/ 
+	d1007
+ggw
+	* /ggw/d0802 need to do it but after I have tagged Caleb's wedding (and not all of them)
+kgw/ 
+	d0308c/ d1307/
+lgw/
+	d1801/ d1809/
+	* d1901 1906
 */
 namespace FamilySite;
 use CPTHelper\CptHelper;
@@ -170,7 +201,6 @@ class FamilySite {
   }
   public function wp_head(){
     // if this is a single page set up the cpost which will be used in templates
-    error_log("In WP HEAD");
     if (is_single()){
       global $post;
       $GLOBALS["cpost"] = CptHelper::make($post);

@@ -39,7 +39,6 @@ class Event extends FSPost {
   */
   public function indexSection(){
 	return $this->afterIndexSection();
-	return "";
   }
   public function getLinks(){
 	  return [];

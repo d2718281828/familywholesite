@@ -6,11 +6,12 @@ require_once("timeline_aux/Aggregator.php");
 require_once("timeline_aux/Unique.php");
 require_once("timeline_aux/TLCounter.php");
 
-// todo use photo crops
 /* notes
 !!!!there's a bug in addEntry - positional parameters are wrong. esp places
 
-Timelines for places?
+interest items in draft should be removed from timeline.
+
+Picture count should separate out sounds and movies and pdfs
 
 Working on the grands-
 	need the descendents version, like ancestors. Decision: it isnt priority yet.
