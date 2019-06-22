@@ -194,7 +194,9 @@ class FamilySite {
   public function admin_init(){
     wp_enqueue_style( 'family-site-admin-css', plugin_dir_url( __FILE__ ).'css/admin.css' );
 	require_once("admin/MainPage.php");
+	require_once("admin/EventsAdmin.php");
 	$main = new MainPage($this); 
+	$events	= new EventsAdmin($this, $main); 
   }
   /**
   * I just want to 'leave a comment', not a reply

@@ -2,7 +2,7 @@
 namespace FamilySite;
 use \AdminPage\BaseAdmin;
 
-class MainPage extends BaseAdmin {
+class EventsAdmin extends BaseAdmin {
 
   protected function setOpts(){
     $this->parms = ["FamilySite", "FamilySite", "activate_plugins", "family_site"]; // admin only
@@ -16,8 +16,7 @@ class MainPage extends BaseAdmin {
   * It should echo, not return the text.
   */
   public function page_content() {
-	echo "<h2>Family Site</h2>";
-	echo "<p>Helpful tools.</p>";
+	echo "<h3>Event Tools</h3>";
   }
 
 }
