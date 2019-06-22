@@ -188,6 +188,8 @@ class FamilySite {
 	// add shortcodes to excerpts. This doesnt work.
 	add_filter( 'the_excerpt', 'shortcode_unautop');
 	add_filter( 'the_excerpt', 'do_shortcode');
+	  
+	if (is_admin()) $this->admin_init();
   }
   public function admin_init(){
     wp_enqueue_style( 'family-site-admin-css', plugin_dir_url( __FILE__ ).'css/admin.css' );
