@@ -26,12 +26,16 @@ class FieldHelper {
      */
     public function admin_init(){
     }
+    public function user_can_update(){
+      return true;
+    }
     /**
      * If you want the label after the field, just override this function.
      * @return string
      */
     // parametrise this - make it data???
     public function html(){
+        if (!$this->user_can_update()) return '';
         return '<div class="metabox-field">'.
           '<div class="metabox-label">'.$this->labelDiv().'</div>'.$this->descDiv().
           '<div class="metabox-value">'.$this->fieldDiv().'</div>'.
@@ -41,6 +45,9 @@ class FieldHelper {
     {
         return '<label for="'.$this->id.'">'.$this->label.'</label>';
     }
+	/**
+	* Actually write out the input field in the meta-box
+	*/
     public function fieldDiv()
     {
         $id = $this->id;
@@ -50,6 +57,9 @@ class FieldHelper {
     {
         return '<div class="metabox-field-desc">'.$this->description.'</div>';
     }
+	/**
+	* Get the request value
+	*/
     public function rqValue(){
         return $_REQUEST[$this->id];
     }
@@ -61,11 +71,19 @@ class FieldHelper {
     }
     public function update($post_id)
     {
+        if (!$this->user_can_update()) return;
         if (TRACEIT) traceit("FIELD UPDATE for post=".$post_id);
         if ($post_id){
-            update_post_meta($post_id, $this->id, $this->setValue($this->rqValue()));
+            update_post_meta($post_id, $this->id, $this->setValue($v=$this->rqValue()));
+			$this->updateAction($post_id,$v);
         }
     }
+	/**
+	* Overrideable - additional actions for when the value is set
+	*/
+	protected function updateAction($post_id,$v){
+		
+	}
     public function get()
     {
         if ($this->valueIsSet) return $this->value;

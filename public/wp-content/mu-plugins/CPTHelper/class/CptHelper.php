@@ -1,13 +1,50 @@
 <?php
 namespace CPTHelper;
-//use CPTHelper\FieldHelper;
-
-//require_once("serviceFunctions.php");
+// WARNING DO NOT MERGE THE WORK CPTHELPER WITHOUT CARE
 /**
  * Class CptHelper - represents a custom post type.
- * You can also add custom fields for the post type, using FieldHelper and related classes.
+ * You can also add custom fields for the post type, using addField(new FieldHelper()) and related classes.
+ * You can extend this class to provide a standard prefix and further modify behaviour
+ * There are a lot of methods apart from addField to modify the behaviour. They all return $this to allow chaining.
+ *
+ * There will always be an instance of this in the system for each post type, so it is where all the hooks need to be set.
+ * However, I think it is easier to understand if all CPT specific behaviour is moved into the CPost rather than the CptHelper child
+ *
+ * Compared to just using register_post_type() directly it doesnt add much value, but it is much more useful when you also add fields.
+ * It is just one more line to add a new field which automatically gets added to the meta box for the post and gets saved for you.
+ *
+ * CPost is an instance class for the CPT, which feed off the CptHelper to get info about their custom data values.
+ */
+
+/*
+ * Sample usage 
+       $case = new CptHelper("casestudy","Case Study","Case Studies",[],__FILE__);
+       $case->urlSlug('case_studies')
+		   ->setPrefix("gsg_")
+           ->addField(new FieldHelper("post-class","Post-specific CSS classes","The class will be added to post and to links. Can be multiple, separated by spaces."))
+           ->addField(new PostSelector("author_contact","Author contact or organisation","The real author, if a known contact in the system",["posttypes"=>["gsg_contact","gsg_nab"]]))
+           ->addField(new FieldHelper("actual_author","Actual Case Study Author","The real author, if not a contact in the system"))
+           ->addField(new MediaSelector2("author_image","Author Photo","If not a contact, upload the image to the media library first, then refer to it here."))
+           ->addField(new FieldHelper("video_url","Video URL","Works for Youtube and Vimeo hosted videos - include the entire URL. We dont host videos on our own server."))
+           ->addField(new FieldHelper("sub-heading","Subheading under the main header","This appears just below the white box on the page."))
+           ->addField(new FieldHelper("title-short","Short version of the title","The default will be an abbreviation to ".$this->title_chars_short." chars"))
+           ->addField(new FieldHelper("title-very-short","Very short version of the title","The default will be an abbreviation to ".$this->title_chars_very_short." chars"))
+           ->addField(new MediaSelector2("casestudy_logo","Logo for the case study","If there is one, it will be shown below the hero image."))
+           ->addField(new FieldHelper("sequence","Sequence","Used to infuence the order that posts, pages etc are shown.".$seqdesc))
+           ->allowComments()
+           ->allowExcerpt();
+
+ */
+ 
+ /* Revision history
+ added setPrefix
+ on_save no longer checks for presence of method
  */
 class CptHelper {
+
+    // class variable to keep track of them all
+    static protected $registrations = [];
+	static protected $allInstances = null;
 
     protected $slug;
     protected $labels;
@@ -16,8 +53,11 @@ class CptHelper {
     protected $urlslug = null;
     protected $showInQueries = false;
     protected $supports = [];
+    protected $supportsExtra = [];
+    protected $taxonomiesExtra = [];
     protected $metaFields = [];
     protected $constants = [];
+    protected $instanceClass = 'CPost';
     protected $flushRules = false;
     /**
     * Is the post type built-in, or created somewhere else.
@@ -28,9 +68,10 @@ class CptHelper {
         // builtin call is for adding a metabox to an existing type.
         $this->slug = $slug;
 
+        $this->setup();
         $this->builtin = ($name===null);
         if (!$this->builtin){
-            if (TRACEIT) traceit("NEW CPT ".$slug);
+            if (WP_DEBUG) error_log("NEW CPT ".$slug);
             $this->labels = ['name'=>$plural, 'singular_name'=>$name,
               'add_new'=>"Add new ".$name,
               'add_new_item'=>"Add new ".$name,
@@ -41,22 +82,37 @@ class CptHelper {
               ];
             $this->options = $optionslist;
             $this->supports = (isset($optionslist["supports"])) ? $optionslist["supports"] : ["title", "editor", "thumbnail", "author"];
-            $this->setup();
 
             if ($pluginfile){
               //if (TRACEIT) traceit("!!!!!!!registering hook for file ".$pluginfile);
               register_activation_hook( $pluginfile, [$this,'flush'] );
               register_deactivation_hook( $pluginfile, [$this,'flush'] );
             }
+			$this->shcName = str_replace(" ","_",strtolower($name));	// for the shortcode
         }
         add_action( 'init', [$this,'register'] );
+
     }
 
     /**
-     * This function is present to allow child classes to set up other things.
+     * This function is present to allow child classes to set prefix and add fields
      */
     protected function setup(){
 
+    }
+	/**
+	* Set the class name of the associated CPT instance - will be a CPost extension
+	*/
+    public function setClass($class){
+      $this->instanceClass = $class;
+      return $this;
+    }
+	/**
+	* Set the prefix for the custom post type name
+	*/
+    public function setPrefix($pref){
+      $this->prefix = $pref;
+      return $this;
     }
     /**
      * Fired on plugin activation or deactivation
@@ -79,37 +135,72 @@ class CptHelper {
                 //$optslist['rewrite']['ep_mask'] = EP_PERMALINK;
                 $optslist['rewrite']['with_front'] = false;
             }
-            if ($this->supports){
-                $optslist["supports"] = $this->supports;
+            if ($this->supports || $this->supportsExtra){
+                $optslist["supports"] = array_merge($this->supports, $this->supportsExtra);
             }
             if ($this->metaFields) $optslist["supports"][] = 'custom_fields';
+			
+			$taxes = array_key_exists("taxonomies", $optslist) ? $optslist["taxonomies"] : [];
+			$taxes = array_merge($taxes, $this->taxonomiesExtra);
+            if ($taxes) $optslist["taxonomies"] = $taxes;
 
-            if (TRACEIT) traceit("!!!!!!!!actually registering the post type ".print_r($optslist,true));
+            //if (TRACEIT) traceit("!!!!!!!!actually registering the post type ".print_r($optslist,true));
             $cpt = register_post_type($this->posttype(), $optslist);
 
-            if ($this->showInQueries){
-                add_action( 'pre_get_posts', [$this,'add_to_query'] );
-            }
+			add_shortcode($this->shcName,[$this,"do_shc"]);
+
 
             if ($this->flushRules) {
                 //if (TRACEIT) traceit("!!!!!!!!!!!!!!Flushing rules on plugin activation after CPT registration");
                 flush_rewrite_rules();   // only on plugin (de)activation
             }
         }
+        if ($this->showInQueries){
+            add_action( 'pre_get_posts', [$this,'add_to_query'] );
+        }
+
+        self::$registrations[$this->posttype()] = $this;
         if ($this->metaFields){
             add_action( 'add_meta_boxes', [$this, 'addMetaBox'] );
 
-            //add_action('save_post',[$this, 'saveMetaBox'], 1,2);
             add_action('pre_post_update',[$this, 'saveMetaBox'], 1,2);
 
             add_action( 'admin_enqueue_scripts', [$this,'enqueueStyle'] );
             add_action( 'admin_init', [$this,'admin_init'] );
 
         }
+        add_action('save_post',[$this, 'save_post'], 1,2);
+		if ($this->labels["name"]) add_shortcode(strtolower($this->labels["name"]), [$this, 'list_them']);
     }
     public function admin_init(){
         foreach($this->metaFields as $field) $field->admin_init();
     }
+    public function save_post($post_id,$post){
+      if (WP_DEBUG) error_log("in save_post hook id=".$post_id.", type=".$post->post_type);
+      if ( wp_is_post_revision( $post_id ) ) return;
+      if ($post->post_type != $this->posttype()) return;
+	  $cp = self::make($post);
+	  $cp->on_update(true);
+      //$this->on_save($post_id,$post);
+    }
+	  public function do_shc($att,$content,$tag){
+		  if (isset($att[0]) && $att[0]){
+			  $cp = self::makeByName($att[0],$this->posttype());
+			  if ($cp===null) return "-".$att[0]." not known-";
+			  if ($content) $text = do_shortcode($content);
+			  elseif (isset($att[1]) && $att[1]) $text = $att[1];
+			  else $text = null;
+			  return $cp->simpleLink($text);
+		  }
+		  return "";
+	  }
+	/**
+	* This function is callable directly when a post is created by wp_insert_post instead of in an online save
+	* @param $data array/null If called directly then this is for an array of custom field values.
+	*/
+	public function on_save($post_id,$post){
+		
+	}
     protected function globaldefault(){
         return [
             'has_archive'         => true,
@@ -123,10 +214,15 @@ class CptHelper {
     public function posttype(){
         return $this->builtin ? $this->slug : $this->prefix.$this->slug;
     }
-    // TODO got to get the current list and add ours to it
     public function add_to_query($query){
-        if ( is_home() && $query->is_main_query() ){
-            $query->set( 'post_type', array( 'post', $this->posttype() ) );
+		$applies = false;
+		if ( is_home() && array_search("home", $this->showInQueriesWhich)!==false ) $applies = true;
+		if ( is_category() && array_search("category", $this->showInQueriesWhich)!==false ) $applies = true;
+		
+        if ( $applies && $query->is_main_query() ){
+			$currentTypes = $query->get('post_type');
+			$currentTypes[] = $this->posttype();
+            $query->set( 'post_type', $currentTypes );
         }
          return $query;
     }
@@ -169,6 +265,7 @@ class CptHelper {
     public function saveMetaBox($post_id)
     {
         if (TRACEIT) traceit("=================== Save MetaBox has been triggered post=".$post_id);
+	if (!isset($_REQUEST[$this->noncefield()])) return;
         if (!wp_verify_nonce( $_REQUEST[$this->noncefield()], plugin_basename( __FILE__ ))) return;
 
         if (TRACEIT) traceit("=================== nonce is good");
@@ -194,8 +291,9 @@ class CptHelper {
      * Call this function straight after object creation to add the CPT to general queries
      * Returns $this to allow chaining.
      */
-    public function addToQueries(){
+    public function addToQueries($which = ["home"]){
         $this->showInQueries = true;
+		$this->showInQueriesWhich = $which;
         return $this;
     }
 
@@ -204,11 +302,11 @@ class CptHelper {
      * @return $this
      */
     public function allowComments(){
-        $this->supports[] = "comments";
+        $this->supportsExtra[] = "comments";
         return $this;
     }
     public function allowExcerpt(){
-        $this->supports[] = "excerpt";
+        $this->supportsExtra[] = "excerpt";
         return $this;
     }
     public function addField($field)
@@ -224,18 +322,111 @@ class CptHelper {
         $this->constants[] = [$name,$value];
         return $this;
     }
-    // for debug
-    protected function trace_delete($m){
-        error_log($m);
-        //echo '<br />'.$m;
-        $logfile = fopen("application.trace", "a");
-        fwrite($logfile,"\n".$m);
-        fclose($logfile);
-    }
     protected function tracePost(){
         global $post;
         if (TRACEIT) traceit( ($post) ? "POST-".$post->ID : "No Post");
     }
+	/**
+	* shortcode handler to list the custom posts on a page, in a table form
+	*/
+	public function list_them($atts,$content,$tag){
+		global $wpdb;
+		$s = "select * from ".$wpdb->posts." where post_type=%s and post_status='publish';";
+		$res = $wpdb->get_results($wpdb->prepare($s, $this->posttype()));
+		$m = "<table class='use-data-tables'>";
+		$m.= "<thead><tr>".$this->list_heading()."</tr></thead><tbody>";
+		foreach($res as $post) {
+			$cpost = self::make($post);
+			$m.="<tr>".$this->list_row($cpost)."</tr>";
+		}
+		$m.= "</tbody></table>";
+		return $m;
+	}
+	protected function list_heading(){
+		return "<th>".$this->labels["singular_name"]."</th>";
+	}
+	protected function list_row($cpost){
+		$url = $cpost->permalink();
+		$m = '<td><a href="'.$url.'">'.$cpost->get("post_title").'</a></td>';
+		return $m;
+	}
+    /**
+     * Static function which uses a class static variable which stores all of the CptHelpers indexed by the post type.
+     * @param $slug
+     * @return mixed|null
+     */
+    static function get($slug){
+        return isset(self::$registrations[$slug]) ? self::$registrations[$slug] : null;
+    }
+    static function make($p,$type = null){
+        if (is_object($p)) {
+            $cpt = self::get($p->post_type);
+            if (!$cpt) return null;
+            $class = $cpt->instanceClass;
+            return new $class($p);
+        } elseif (is_numeric($p)){
+			if (!$type) $type = get_post_type($p);
+            if (!$type) return null;
+            $cpt = self::get($type);
+            if (!$cpt) return null;
+            $class = $cpt->instanceClass;
+			$z = new $class($p);
+			$z->setType($type);
+			return $z;
+        } elseif (is_array($p)){
+            $cpt = self::get($p["post_type"]);
+            if (!$cpt) return null;
+            $class = $cpt->instanceClass;
+            return new $class($p);
+        } else {
+            return null;
+        }
+        return null;
+    }
+	static function makeByName($name,$posttype = null){
+		global $wpdb;
+		if ($posttype){
+			$s = "select * from ".$wpdb->posts." where post_name=%s and post_status='publish' and post_type=%s;";
+			$res = $wpdb->get_results($wpdb->prepare($s,$name, $posttype));	// return object
+		} else {
+			$s = "select * from ".$wpdb->posts." where post_name=%s and post_status='publish';";
+			$res = $wpdb->get_results($wpdb->prepare($s,$name));	// return object
+		}
+		if (count($res)==0) return null;
+		// I have seen multiple records with different post types. Return the first with a posttype we know
+		//if (count($res)>1) error_log("WARNING search for $name returned more than 1 post");
+		
+		for ($k=0; $k<count($res); $k++) {
+			$cpt = self::get($res[$k]->post_type);
+			if (!$cpt) continue;
+			$class = $cpt->instanceClass;
+			$z = new $class($res[$k]);
+			return $z;
+		}
+		return null;
+	}
+	/**
+	* Make an html select element for all objects of this type.
+	* Cache the db call in self::$allInstances in case of multiple calls.
+	*/
+	static function selector($name, $type,$currentvalue){
+		global $wpdb;
+		$res = self::$allInstances;
+		if ($res===null){
+			$s = "select ID, post_title from ".$wpdb->posts." where post_type=%s and post_status='publish' order by post_title;";
+			$res = $wpdb->get_results($wpdb->prepare($s,$type),ARRAY_A);
+			self::$allInstances = $res;
+		}
+		$m = "<select name='$name'>";
+		$m.= "<option value='-1'>None</option>";
+		foreach($res as $item){
+			$sel = ($item["ID"]==$currentvalue) ? " selected" : "";
+			$m.= "<option value='".$item["ID"]."'$sel>".$item["post_title"]."</option>";
+		}
+		$m.= "</select>";
+		
+		return $m;
+	}
 }
 
 ?>

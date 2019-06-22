@@ -22,10 +22,16 @@ class MediaSelector2 extends SelectHelper {
         $s = "select ID, post_title from ".$wpdb->posts." where $posttypes
               post_status in ('publish','inherit') $ftype order by post_date desc;";
 
-        $this->selOptions = $wpdb->get_results($s, ARRAY_N);
+        $this->selOptions = $this->filterOptions($wpdb->get_results($s, ARRAY_N));
 
         array_splice($this->selOptions,0,0,[[0, "None of these"]]);
     }
+	/**
+	* Filter out any options which are not wanted. Can be overridden.
+	*/
+	protected function filterOptions($list){
+		return $list;
+	}
     public function fieldExtra(){
         $val = $this->get();
         if ($val) return '<img style="width: 80px;" src="'.wp_get_attachment_url($val).'">';

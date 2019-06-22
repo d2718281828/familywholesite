@@ -1,0 +1,151 @@
+/*
+Theme Name: Family Site
+Theme URI:
+Author:Derek Storkey
+Author URI:
+Template:     twentyseventeen
+Description: Child theme of 2017 so display family site info
+Version: 0.1
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: familysite
+
+*/
+/* HOME PAGE ********************************************** */
+#wp-custom-header img {    
+	-webkit-filter: sepia(100%); /* Safari 6.0 - 9.0 */
+    filter: sepia(100%);
+}
+/* POST ********************************************** */
+.posted-info {
+  font-size: 12px;
+}
+/* EDIT BUTTON  ***************************************** */
+.fs_edit_marker {
+	width: 18px;
+	height: 18px;
+	display: inline-block;
+	margin-right: 6px;
+}
+.fs_edit_marker  img {
+	width: 100%;
+    height: 100%;
+}
+/* INFO BOX ***************************************** */
+.info-box {
+  border: solid 1px #555;
+  margin-bottom: 15px;
+}
+.info-bit {
+  width: 100%;
+}
+.info-bit:nth-child(even) {
+  background-color: #e7e7e7;
+}
+.info-bit .info-head {
+  display: inline-block;
+  width: 30%;
+  font-weight: bold;
+  padding-left: 8px;
+}
+.info-bit .info-body {
+  display: inline-block;
+  width: 70%;
+}
+/* TIMELINE ========================================== */
+.timeline-wrap {
+	width: 100%;
+	max-width: 560px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.timeline-link .timeline-date {
+	margin-top: 10px;
+	background-color: #e7e7e7;
+	font-weight: bold;
+}
+.timeline-link .title {
+	height: 26px;
+	margin-bottom: 2px;
+}
+.exif-data{
+    font-size: 75%;
+    background-color: #ecf5ff;
+    border: 1px solid #999999;
+    margin: 5px 0 5px 0;
+}
+.loader-reference{
+    font-size: 75%;
+    background-color: #fff5ec;
+    border: 1px solid #999999;
+    margin: 5px 0 5px 0;
+}
+.creator_block {
+    font-size: 85%;
+    background-color: #f5ffec;
+    border: 1px solid #999999;
+    margin: 5px 0 5px 0;
+}
+/* SLIDER BUTTONS ===================================== */
+.slick-arrow {
+	display: block;
+    position: absolute;
+    top: 50%;
+    color: white;
+    font-size: 24px;
+    height: 40px;
+    width: 30px;
+    text-align: center;
+    background-color: black;
+    z-index: 5;
+}
+.slick-arrow.prev {
+    left: 30px;
+}
+.slick-arrow.next {
+    right: 30px;
+}
+/* ENTRY FOOTER ===================================== */
+.entry-footer .tagsets {
+  width: 100%;
+}
+.entry-footer .tagsets .tagset .title {
+  font-weight: bold;
+  width: 100%;
+  margin-bottom: 10px;
+}
+a.link-small-wrap:hover{
+	box-shadow: none;
+	color: red;
+}
+.entry-footer .tagsets .tagset .link-small {
+  display: inline-block;
+  margin: 10px;
+  padding: 5px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-family: "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
+  color: white;
+}
+.entry-footer .tagsets .tagset .link-small:hover {
+  color: #ffa;
+}
+.entry-footer .tagsets .tagset .link-small.fs_person {
+  background-color: #525;
+}
+.entry-footer .tagsets .tagset .link-small.fs_place {
+  background-color: #543;
+}
+.entry-footer .tagsets .tagset .link-small.fs_event {
+  background-color: #351;
+}
+.entry-footer .tagsets .tagset .link-small.fs_person:hover {
+  background-color: #636;
+}
+.entry-footer .tagsets .tagset .link-small.fs_place:hover {
+  background-color: #654;
+}
+.entry-footer .tagsets .tagset .link-small.fs_event:hover {
+  background-color: #462;
+}
