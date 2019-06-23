@@ -48,7 +48,7 @@ class GatherInterest {
 			  $added++;
 		  }
 	  }
-	  $m.= "<p>Added $added to the event, and $already already had an event set.";
+	  $m.= "<p>Added $added to ".$event->get("post_title").", and $already already had an event set.";
 	  return $m;
   }
 
