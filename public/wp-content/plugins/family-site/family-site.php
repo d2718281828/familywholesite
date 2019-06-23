@@ -344,6 +344,11 @@ class FamilySite {
 	  }
 	  return $m;
   }
+  public function gatherInterestForEvent($eventId){
+	  require_once("services/GatherInterest.php");
+	  $service = new GatherInterest();
+	  return $service->process($eventId);
+  }
 
 }
 global $wpadmin_tab_name;

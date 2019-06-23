@@ -358,6 +358,12 @@ class CptHelper {
     static function get($slug){
         return isset(self::$registrations[$slug]) ? self::$registrations[$slug] : null;
     }
+	/**
+	* Create a CPT helper object of the appropriate type.
+	* The parameter can be a post id, a post object, or an array of post data.
+	* If the type is not specified, it is looked up.
+	* If the type is wrong for this post ????
+	*/
     static function make($p,$type = null){
         if (is_object($p)) {
             $cpt = self::get($p->post_type);
