@@ -18,7 +18,8 @@ class EventsAdmin extends BaseAdmin {
   public function page_content() {
 	echo "<h3>Event Tools</h3>";
 	
-	$event_value=$_REQUEST["gatherevent"] ?: 0; // Allow URL to suggest a value so it can be a link
+	$event_value=array_key_exists("gatherevent",_REQUEST ) && is_numeric($_REQUEST["gatherevent"]) ? $_REQUEST["gatherevent"] : 0; 
+	// Allow URL to suggest a value so it can be a link
 	
 	echo "<p>Gather all interest items with the same date and add them to this event</p>";
 	echo "<p><input name='eventid_to_gather' value='$event_value'> Event id to gather.";
