@@ -1,7 +1,7 @@
 <?php
 namespace FamilySite;
-use CptHelper;
-require_once("../class/Interest.php");
+use CPTHelper\CptHelper;
+//require_once("../class/Interest.php");
 
 // Find all interest items with the same date as the given eventt, and add them to this event
 class GatherInterest {
@@ -24,10 +24,11 @@ class GatherInterest {
 	  // get posts with the same actual date
 	  $s = "select P.ID
 	  from ".$wpdb->posts." P, ".$wpdb->postmeta." AD
-	  where P.ID = AD.post_id and P.post_type = 'post' and P.status = 'published'
+	  where P.ID = AD.post_id and P.post_type = 'post' and P.post_status = 'publish'
 	  and AD.meta_key = 'actual_date' and AD.meta_value = %s";
 	  
-	  $res = $wpdb->get_results($wpdb->prepare($s,$actual_date), ARRAY_A);
+	  $sprep = $wpdb->prepare($s,$actual_date);
+	  $res = $wpdb->get_results($sprep, ARRAY_A);
 	  
 	  if (count($res)==0) return "Found no posts with actual date $actual_date";
 	  
@@ -38,7 +39,7 @@ class GatherInterest {
 	  
 	  for ($k=0; $k<count($res); $k++) {
 		  $postid = $res[$k]["ID"];
-		  $int = CptHelper::make($postid, "fs_interest");	// could I use just a new here?
+		  $int = CptHelper::make($postid, "post");	// could I use just a new here?
 		  if ($int->get("event")) {
 			  $already++;
 		  } else {
