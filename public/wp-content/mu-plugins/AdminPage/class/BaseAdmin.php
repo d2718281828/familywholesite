@@ -32,6 +32,9 @@ abstract class BaseAdmin {
     add_action( 'admin_head', [$this,'queueCSS' ]);
     add_action( 'admin_init', [$this,'admin_init' ]);
   }
+  /**
+  * Parms: page title, menu title, capability, slug (arguments to add_menu_page
+  */
   protected function setOpts(){
     $this->parms = ["Editec MC", "Editec MC", "edit_posts", "editec_multichannel"];
     $this->options = [
