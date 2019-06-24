@@ -15,7 +15,7 @@ class CPost {
 
     public $postid = -1;		// -1 means it is a CPost that has not been instantiated
     protected $type = null;
-    public $post = null;
+    public $post = null;			// the actual post object
     protected $cpthelper = null;
     protected $is_error = false;        // true if this object is in error and cannot be used
     public $error_message = null;      // message to explain the problem.

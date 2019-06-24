@@ -40,7 +40,7 @@ class Interest extends FSPost {
 	if (WP_DEBUG) error_log("Interest::on_update for ".$post_id.", ".($req?"REQ":"props"));
 	TimeLine::clearSource($post_id);
 	
-	$status = $this->getcf($req,"post_status");
+	$status = $this->get("post_status");
 	if ($status!="publish") return;		// could be trash or draft
 
 	$actual_date = "";
