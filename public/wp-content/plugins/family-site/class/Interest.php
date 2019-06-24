@@ -34,7 +34,7 @@ class Interest extends FSPost {
 	  if (WP_DEBUG) error_log("getEventCpost: found event ".$evob->show());
 	  return [$evob];
   }
-  public function on_update($req = false){
+  public function on_update($req = 0){
 	$post_id = $this->postid;
 	parent::on_update($req);
 	if (WP_DEBUG) error_log("Interest::on_update for ".$post_id.", ".($req?"REQ":"props"));

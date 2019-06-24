@@ -75,7 +75,7 @@ class CPost {
 	 * Children should use getcf($req) for each data value they need
      * @return 
      */
-    public function on_update($req = false){
+    public function on_update($req = 0){
 		if (WP_DEBUG) error_log("CPOST::on_update for ".$this->postid);
 			
     }
