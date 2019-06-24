@@ -21,7 +21,8 @@ class EventsAdmin extends BaseAdmin {
 	$event_value=array_key_exists("gatherevent",$_REQUEST ) && is_numeric($_REQUEST["gatherevent"]) ? $_REQUEST["gatherevent"] : 0; 
 	// Allow URL to suggest a value so it can be a link
 	
-	echo "<p>Gather all interest items with the same date and add them to this event</p>";
+	echo "<p>Gather all interest items with the same date and add them to this event,
+	which could be a quicker way of adding lots of pictures to the same event.</p>";
 	echo "<p><input name='eventid_to_gather' value='$event_value'> Event id to gather.";
 	echo "<input type='submit' name='action' value='Gather'></p>";
   }

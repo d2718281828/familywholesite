@@ -59,6 +59,9 @@ class Event extends FSPost {
 	if (WP_DEBUG) error_log("Event::on_update for ".$post_id.", ".($req?"REQ":"props"));
 	TimeLine::clearSource($post_id);
 
+	$status = $this->getcf($req,"post_status");
+	if ($status!="publish") return;		// could be trash or draft
+
 	$actual_date = "";
 	if ($actual_date=$this->getcf($req,"actual_date")) {
 		$date_within = $this->getcf($req,"date_within");

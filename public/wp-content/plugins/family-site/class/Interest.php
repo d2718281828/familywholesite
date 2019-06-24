@@ -37,8 +37,11 @@ class Interest extends FSPost {
   public function on_update($req = false){
 	$post_id = $this->postid;
 	parent::on_update($req);
-	if (WP_DEBUG) error_log("Person::on_update for ".$post_id.", ".($req?"REQ":"props"));
+	if (WP_DEBUG) error_log("Interest::on_update for ".$post_id.", ".($req?"REQ":"props"));
 	TimeLine::clearSource($post_id);
+	
+	$status = $this->getcf($req,"post_status");
+	if ($status!="publish") return;		// could be trash or draft
 
 	$actual_date = "";
 	if (!$actual_date=$this->getcf($req,"actual_date")) {

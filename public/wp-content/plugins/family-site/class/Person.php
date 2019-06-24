@@ -139,12 +139,15 @@ class Person extends FSPost {
 	  $app = ($dob && $dob<"1920") ? " (".substr($dob,0,4).")" : "";
 	  return $title.$app;
   }
-  public function on_update($req = 0){
+  public function on_update($req = false){
 		$post_id = $this->postid;
 		parent::on_update($req);
 		if (WP_DEBUG) error_log("Person::on_update for ".$post_id.", REQ=".$req);
 		TimeLine::clearSource($post_id);
 		
+		$status = $this->getcf($req,"post_status");
+		if ($status!="publish") return;		// could be trash or draft
+
 		//if (WP_DEBUG) error_log("Person::on_update date_birth= ".$this->getcf($req,"date_birth","none"));
 		if ($birthdate=$this->getcf($req,"date_birth")){
 			$place = $this->getcf($req,"place_birth",0);

@@ -170,19 +170,36 @@ class CptHelper {
 
         }
         add_action('save_post',[$this, 'save_post'], 1,2);
+		add_action('before_delete_post', [$this, 'delete_post'], 1,2);
 		if ($this->labels["name"]) add_shortcode(strtolower($this->labels["name"]), [$this, 'list_them']);
     }
     public function admin_init(){
         foreach($this->metaFields as $field) $field->admin_init();
     }
+	/**
+	* When a post is being saved, fire on_update
+	* Beware that this fires also when a post is sent to trash and when it is saved as draft.
+	* The on_update should check post_status.
+	*/
     public function save_post($post_id,$post){
       if (WP_DEBUG) error_log("in save_post hook id=".$post_id.", type=".$post->post_type);
       if ( wp_is_post_revision( $post_id ) ) return;
+	  
       if ($post->post_type != $this->posttype()) return;
 	  $cp = self::make($post);
-	  $cp->on_update(true);
-      //$this->on_save($post_id,$post);
+	  // The meta data may not be saved at this point but it will be in REQUEST, UNLESS the post
+	  // has been moved to and from trash via the posts list.
+	  $lookInRequest = array_key_exists("post_title",$_REQUEST);
+	  $cp->on_update($lookInRequest);		// true because latest data is in $_REQUEST
     }
+	/**
+	* Just before a post is being deleted, fire on_delete
+	*/
+	public function delete_post($post_id){
+	  $cp = self::make($post_id);
+	  $cp->on_destroy();
+	}
+	
 	  public function do_shc($att,$content,$tag){
 		  if (isset($att[0]) && $att[0]){
 			  $cp = self::makeByName($att[0],$this->posttype());
