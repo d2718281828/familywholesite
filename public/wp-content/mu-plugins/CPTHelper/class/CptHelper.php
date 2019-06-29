@@ -89,7 +89,7 @@ class CptHelper {
               register_deactivation_hook( $pluginfile, [$this,'flush'] );
             }
         }
-		$this->shcName = str_replace(" ","_",strtolower($name));	// for the shortcode
+		$this->shcName = $name ? str_replace(" ","_",strtolower($name), $slug);	// for the shortcode
 		
         add_action( 'init', [$this,'register'] );
 
