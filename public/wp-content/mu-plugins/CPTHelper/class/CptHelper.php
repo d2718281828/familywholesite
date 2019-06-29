@@ -88,8 +88,9 @@ class CptHelper {
               register_activation_hook( $pluginfile, [$this,'flush'] );
               register_deactivation_hook( $pluginfile, [$this,'flush'] );
             }
-			$this->shcName = str_replace(" ","_",strtolower($name));	// for the shortcode
         }
+		$this->shcName = str_replace(" ","_",strtolower($name));	// for the shortcode
+		
         add_action( 'init', [$this,'register'] );
 
     }
@@ -147,14 +148,13 @@ class CptHelper {
             //if (TRACEIT) traceit("!!!!!!!!actually registering the post type ".print_r($optslist,true));
             $cpt = register_post_type($this->posttype(), $optslist);
 
-			add_shortcode($this->shcName,[$this,"do_shc"]);
-
-
             if ($this->flushRules) {
                 //if (TRACEIT) traceit("!!!!!!!!!!!!!!Flushing rules on plugin activation after CPT registration");
                 flush_rewrite_rules();   // only on plugin (de)activation
             }
         }
+		add_shortcode($this->shcName,[$this,"do_shc"]);
+
         if ($this->showInQueries){
             add_action( 'pre_get_posts', [$this,'add_to_query'] );
         }
