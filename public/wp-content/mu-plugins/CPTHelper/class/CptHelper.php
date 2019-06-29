@@ -190,7 +190,7 @@ class CptHelper {
 	  
 	  // The meta data may not be saved at this point but it will be in REQUEST, UNLESS the post
 	  // has been moved to and from trash via the posts list.
-	  $lookInRequest = array_key_exists("post_title",$_REQUEST) ? 1 : 0;
+	  $lookInRequest = array_key_exists("post_title",$_REQUEST) ? 1 : 2;
 	  $cp->on_update($lookInRequest);		// true because latest data is in $_REQUEST
     }
 	/**

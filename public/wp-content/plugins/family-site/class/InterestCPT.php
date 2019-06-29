@@ -96,8 +96,8 @@ class InterestCPT extends FSCpt {
 		  case "pdf":
 		  return $this->pdfBlock($url);
 		  
-		  case "mpg":
-		  return $this->movieBlock($url);
+		  case "mp4":
+		  return $this->movieBlockMp4($url);
 		  
 		  case "ppt":
 		  case "doc":
@@ -105,7 +105,7 @@ class InterestCPT extends FSCpt {
 		  return $this->docBlock($url);
 		  
 		  case "mov":
-		  case "mp4":
+		  case "mpg":
 		  //case "mpg":
 		  
 		  case "mp3":
@@ -151,7 +151,11 @@ class InterestCPT extends FSCpt {
   * A movie
   * @return {string} html
   */
-  protected function movieBlock($url){
+  protected function movieBlockMp4($url){
+	  $sc = "[video mp4='$url'][/video]";
+	return do_shortcode($sc);
+  }
+  protected function movieBlock_undo($url){
 	  $html = "<video controls>
 		<source src='".$url."' type='video/mpg'>
 		Your browser does not support the video tag.
