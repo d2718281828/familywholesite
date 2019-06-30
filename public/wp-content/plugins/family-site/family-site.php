@@ -161,6 +161,7 @@ require_once("class/PlaceCPT.php");
 require_once("class/EventCPT.php");
 require_once("class/InterestCPT.php");
 require_once("class/TimeLine.php");
+require_once("services/GatherFrontUpload.php");
 
 class FamilySite {
 
@@ -189,6 +190,8 @@ class FamilySite {
 	// add shortcodes to excerpts. This doesnt work.
 	add_filter( 'the_excerpt', 'shortcode_unautop');
 	add_filter( 'the_excerpt', 'do_shortcode');
+	
+	$this->fup = new GatherFrontUpload();
 	  
 	if (is_admin()) $this->admin_init();
   }
