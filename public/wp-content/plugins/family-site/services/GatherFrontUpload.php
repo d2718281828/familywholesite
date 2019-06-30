@@ -17,10 +17,11 @@ class="required" description="Your Photo" multiple="multiple"]
 */
 class GatherFrontUpload {
 
+  /**
+  * Constructor - assume this is instantiated in wp_init
+  */
   public function __construct(){
-	  add_action("wp_init", [$this, "init"]);
-  }
-  public function init(){
+	  error_log("adding the fu action");
 	  add_action("fu_after_upload", [$this, "gather"]);
   }
 
