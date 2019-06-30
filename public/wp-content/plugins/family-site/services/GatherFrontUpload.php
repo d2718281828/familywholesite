@@ -22,7 +22,7 @@ class GatherFrontUpload {
   */
   public function __construct(){
 	  error_log("adding the fu action");
-	  add_action("fu_after_upload", [$this, "gather"]);
+	  add_action("fu_after_upload", [$this, "gather"],10,3); // signal 3 arguments
   }
 
   /**
