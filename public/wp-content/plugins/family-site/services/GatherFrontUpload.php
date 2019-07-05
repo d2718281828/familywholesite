@@ -1,6 +1,6 @@
 <?php
 namespace FamilySite;
-require_once("../class/Interest.php");
+require_once(dirname(__FILE__)."/../class/Interest.php");
 //use CPTHelper\CptHelper;
 
 // If the Front End Uploader is in use, then this module will attach the uploaded media file to the post
@@ -46,13 +46,14 @@ class GatherFrontUpload {
 	  if (count($attachment_ids)==0) return;
 	  $this->attach($attachment_ids[0],$post_id);
   }
-  protected attach($media, $post){
+  protected function attach($media, $post){
 	  // we have to find out what it is
 	  $url = wp_get_attachment_url($media);
 	  if (!$url) return;
 	  $lastdot = strrpos($url,".");
 	  if ($lastdot===false) return;
-	  $type = substr($url,$lastdot+1);
+	  $type = strtolower(substr($url,$lastdot+1));
+	error_log("Identified attachhment file type  as ".$type);
 	  
 	  $newItem = new Interest($post);
 	  
@@ -61,11 +62,12 @@ class GatherFrontUpload {
 		  $newpost->set("featured_media", $media);
 	  } else {
 		  error_log("setting post thumbnail");
-		  set_post_thumbnail($post, $pic);
+		  set_post_thumbnail($post, $media);
 		  // does the picture have a date?
-		  $meta = get_post_meta($pic,"_wp_attachment_metadata");
-		  error_log("attachment meta for ".$pic." = ".print_r($meta,true));
-		  
+		  $meta = get_post_meta($media,"_wp_attachment_metadata");
+		  error_log("attachment meta for ".$media." = ".print_r($meta,true));
+		  $exif = exif_read_data(get_attached_file($media)); 
+		  error_log("exif for ".$media." = ".print_r($exif,true));
 	  }
 	  
   }
