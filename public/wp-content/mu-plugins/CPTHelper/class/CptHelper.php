@@ -198,7 +198,7 @@ class CptHelper {
 	*/
 	public function delete_post($post_id){
 	  $cp = self::make($post_id);
-	  $cp->on_destroy();
+	  if ($cp) $cp->on_destroy();
 	}
 	
 	  public function do_shc($att,$content,$tag){
