@@ -15,6 +15,14 @@ id="my-textarea" description="Description (optional)"]
 class="required" description="Your Photo" multiple="multiple"]
 [input type="submit" class="btn" value="Submit"]
 [/fu-upload-form]
+
+_wp_attachment_metadata examples
+[image_meta][created_timestamp] => 	920185762; 2002/10/15 = 1034683200
+Maybe the time on the camera was wrong
+[camera] => KODAK DC240 ZOOM DIGITAL CAMERA
+
+
+
 */
 
 class GatherFrontUpload {
