@@ -16,10 +16,14 @@ class="required" description="Your Photo" multiple="multiple"]
 [input type="submit" class="btn" value="Submit"]
 [/fu-upload-form]
 
-_wp_attachment_metadata examples
+_wp_attachment_metadata examples - not reliable
 [image_meta][created_timestamp] => 	920185762; 2002/10/15 = 1034683200
 Maybe the time on the camera was wrong
 [camera] => KODAK DC240 ZOOM DIGITAL CAMERA
+
+Use exif:
+[DateTime] => 2005:10:07 21:44:32
+[DateTimeOriginal] => 2005:08:24 19:36:22
 
 
 
@@ -45,17 +49,26 @@ class GatherFrontUpload {
 	  error_log("Front End after upload ".$post_id." ".print_r($attachment_ids,true));
 	  if (count($attachment_ids)==0) return;
 	  $this->attach($attachment_ids[0],$post_id);
+	  if (count($attachment_ids)>1) {
+		  error_log("WARNING, some media items not attached - ".implode(",",$attachment_ids));
+	  }
   }
   protected function attach($media, $post){
-	  // we have to find out what it is
+	  $newItem = new Interest($post);
+	  
+	  // did the  user specify a date
+	  $udate = $newItem->get("user_date");
+	  $ureq = $_REQUEST["user_date"];
+	  error_log("user date with post meta ",$udate.", with request ".$ureq);
+	  
+	  // is it a picture?
 	  $url = wp_get_attachment_url($media);
 	  if (!$url) return;
 	  $lastdot = strrpos($url,".");
 	  if ($lastdot===false) return;
 	  $type = strtolower(substr($url,$lastdot+1));
-	error_log("Identified attachhment file type  as ".$type);
 	  
-	  $newItem = new Interest($post);
+	  error_log("Attaching ".$media." to ".$post);
 	  
 	  if (array_search($type,$this->pictypes)===false) {
 		  error_log("setting featured media");
@@ -64,12 +77,22 @@ class GatherFrontUpload {
 		  error_log("setting post thumbnail");
 		  set_post_thumbnail($post, $media);
 		  // does the picture have a date?
-		  $meta = get_post_meta($media,"_wp_attachment_metadata");
-		  error_log("attachment meta for ".$media." = ".print_r($meta,true));
+		  //tried _wp_attachment_metadata but it didnt have dates for images
 		  $exif = exif_read_data(get_attached_file($media)); 
-		  error_log("exif for ".$media." = ".print_r($exif,true));
+		  if (!$exif) return;
+		  //error_log("exif for ".$media." = ".print_r($exif,true));
+		  $exifDateTime = $exif["DateTime"] ?: ($exif["DateTimeOriginal"] ?: null);
+		  if ($exifDateTime){
+			  $newpost->set("actual_date", $this->formatExifDate($exifDateTime));
+		  }
 	  }
 	  
+  }
+  /**
+  * convert from exif format '2005:08:24 19:36:22'
+  */
+  protected function formatExifDate($exifdt){
+	  return str_replace(":","-",substr($exifdt,0,10));
   }
 
 }
