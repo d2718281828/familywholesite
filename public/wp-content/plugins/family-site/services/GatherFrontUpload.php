@@ -82,7 +82,7 @@ class GatherFrontUpload {
 	  
 	  if (array_search($type,$this->pictypes)===false) {
 		  error_log("setting featured media");
-		  $newpost->set("featured_media", $media);
+		  $newItem->set("featured_media", $media);
 	  } else {
 		  error_log("setting post thumbnail");
 		  set_post_thumbnail($post, $media);

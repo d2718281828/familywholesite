@@ -152,7 +152,11 @@ class InterestCPT extends FSCpt {
   * @return {string} html
   */
   protected function movieBlockMp4($url){
-	  $sc = "[video mp4='$url'][/video]";
+	$data = $this->get("_wp_attachment_metadata");
+	if ($data) {
+	  $dims = ' height="'.$data["height"].'" width="'.$data["width"].'"';
+	} else $dims = "";
+	$sc = "[video$dims mp4='$url']Your browser does not support video.[/video]";
 	return do_shortcode($sc);
   }
   protected function movieBlock_undo($url){

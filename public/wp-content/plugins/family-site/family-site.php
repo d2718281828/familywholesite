@@ -8,7 +8,7 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-Front end form - tested with date, now test photo date
+Front end form - works
 movies should use attachment meta for width and height
 
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
