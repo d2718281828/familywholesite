@@ -162,6 +162,7 @@ require_once("class/EventCPT.php");
 require_once("class/InterestCPT.php");
 require_once("class/TimeLine.php");
 require_once("services/GatherFrontUpload.php");
+require_once("services/DateRange.php");
 
 class FamilySite {
 
@@ -194,6 +195,7 @@ class FamilySite {
 	$this->fup = new GatherFrontUpload();
 	  
 	if (is_admin()) $this->admin_init();
+	$this->DateRangeTester();
   }
   public function admin_init(){
     wp_enqueue_style( 'family-site-admin-css', plugin_dir_url( __FILE__ ).'css/admin.css' );
@@ -352,6 +354,18 @@ class FamilySite {
 	  require_once("services/GatherInterest.php");
 	  $service = new GatherInterest();
 	  return $service->process($eventId);
+  }
+  /**
+  *
+  */
+  protected DateRangeTester(){
+	  $cases = [
+			["1988","1988/06/30",181]
+	  ];
+	  for ($k=0; $k<count($cases);$k++){
+		  $dr = new DateRange($cases[$k][0];
+		  error_log("DR Test ".$cases[$k][0]." - ".$dr->mid. " ".$dr->within);
+	  }
   }
 
 }

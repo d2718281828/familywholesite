@@ -1,6 +1,7 @@
 <?php
 namespace FamilySite;
 require_once(dirname(__FILE__)."/../class/Interest.php");
+require_once(dirname(__FILE__)."/DateRange.php");
 //use CPTHelper\CptHelper;
 
 // If the Front End Uploader is in use, then this module will attach the uploaded media file to the post
@@ -58,8 +59,9 @@ class GatherFrontUpload {
 	  
 	  // did the  user specify a date
 	  $udate = $newItem->get("user_date");
-	  $ureq = $_REQUEST["user_date"];
-	  error_log("user date with post meta ",$udate.", with request ".$ureq);
+	  $haveuserdate = false;
+	  //$ureq = $_REQUEST["user_date"];
+	  //error_log("user date with post meta ",$udate.", with request ".$ureq);
 	  
 	  // is it a picture?
 	  $url = wp_get_attachment_url($media);
@@ -76,14 +78,18 @@ class GatherFrontUpload {
 	  } else {
 		  error_log("setting post thumbnail");
 		  set_post_thumbnail($post, $media);
-		  // does the picture have a date?
-		  //tried _wp_attachment_metadata but it didnt have dates for images
-		  $exif = exif_read_data(get_attached_file($media)); 
-		  if (!$exif) return;
-		  //error_log("exif for ".$media." = ".print_r($exif,true));
-		  $exifDateTime = $exif["DateTime"] ?: ($exif["DateTimeOriginal"] ?: null);
-		  if ($exifDateTime){
-			  $newpost->set("actual_date", $this->formatExifDate($exifDateTime));
+		  if (!$haveuserdate){
+			  // does the picture have a date?
+			  //tried _wp_attachment_metadata but it didnt have dates for images
+			  $exif = exif_read_data(get_attached_file($media)); 
+			  if (!$exif) return;
+			  //error_log("exif for ".$media." = ".print_r($exif,true));
+			  $exifDT = array_key_exists("DateTime", $exif) ? $exif["DateTime"] : null;
+			  if (!$exifDT) $exifDT = array_key_exists("DateTimeOriginal", $exif) ? $exif["DateTimeOriginal"] : null;
+			  if ($exifDT){
+				  error_log("Setting actual date to be ".$this->formatExifDate($exifDT));
+				  $newpost->set("actual_date", $this->formatExifDate($exifDT));
+			  }
 		  }
 	  }
 	  
