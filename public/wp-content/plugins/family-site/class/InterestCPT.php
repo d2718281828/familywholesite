@@ -156,6 +156,7 @@ class InterestCPT extends FSCpt {
 
 	if ($data) {
 	  $dims = ' height="'.$data["height"].'" width="'.$data["width"].'"';
+	  error_log("moveie block found dimension data ".$dims);
 	} else $dims = "";
 	$sc = "[video$dims mp4='$url']Your browser does not support video.[/video]";
 	return do_shortcode($sc);
