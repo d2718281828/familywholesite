@@ -8,7 +8,9 @@ Version: 0.1
 Author URI:
 */
 /* TODOs
-Before final load
+Front end form - tested with date, now test photo date
+movies should use attachment meta for width and height
+
 tst person pictures - nodepic - might already be done, might just need a final tidyup button on ent load
 		cant progress this until a picture has been loaded
 
@@ -195,7 +197,8 @@ class FamilySite {
 	$this->fup = new GatherFrontUpload();
 	  
 	if (is_admin()) $this->admin_init();
-	$this->DateRangeTester();
+	
+	if (!$this->DateRangeTester()) error_log("DR - date range tester had errors");
   }
   public function admin_init(){
     wp_enqueue_style( 'family-site-admin-css', plugin_dir_url( __FILE__ ).'css/admin.css' );
@@ -361,17 +364,22 @@ class FamilySite {
   protected function DateRangeTester(){
 	  $cases = [
 			["1988","1988-07-01",182],
-			["1958-61", "1959-12-31",730],
+			["1958-61", "1960-01-01",730],
 			["2012/07-11","2012-09-15",76],
 			["2002/12/13","2002-12-13",0],
-			["24/7/58","1958-07-24",0]
+			["24/7/58","1958-07-24",0],
+			["1990/5/4-6/1","1990-05-18",14]
 	  ];
-	  error_log("DR Test - Doing some tests"
+	  error_log("DR Test - Doing some tests");
+	  $ok = true;
 	  for ($k=0; $k<count($cases);$k++){
 		  $dr = new DateRange($cases[$k][0]);
-		  if ($dr->mid!=$cases[$k][1] || $dr->within!=$cases[$k][2])
+		  if ($dr->mid!=$cases[$k][1] || $dr->within!=$cases[$k][2]) {
 				error_log("DR Test ".$cases[$k][0]." - ".$dr->mid. " +/- ".$dr->within);
+				$ok = false;
+		  }
 	  }
+	  return $ok;
   }
 
 }

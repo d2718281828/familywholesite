@@ -96,7 +96,7 @@ class GatherFrontUpload {
 			  if (!$exifDT) $exifDT = array_key_exists("DateTimeOriginal", $exif) ? $exif["DateTimeOriginal"] : null;
 			  if ($exifDT){
 				  error_log("Setting actual date to be ".$this->formatExifDate($exifDT));
-				  $newpost->set("actual_date", $this->formatExifDate($exifDT));
+				  $newItem->set("actual_date", $this->formatExifDate($exifDT));
 			  }
 		  }
 	  }
