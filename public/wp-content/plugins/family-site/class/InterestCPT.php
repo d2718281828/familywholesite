@@ -97,7 +97,7 @@ class InterestCPT extends FSCpt {
 		  return $this->pdfBlock($url);
 		  
 		  case "mp4":
-		  return $this->movieBlockMp4($url);
+		  return $this->movieBlockMp4($url, $mldoc);
 		  
 		  case "ppt":
 		  case "doc":
@@ -151,8 +151,9 @@ class InterestCPT extends FSCpt {
   * A movie
   * @return {string} html
   */
-  protected function movieBlockMp4($url){
-	$data = $this->get("_wp_attachment_metadata");
+  protected function movieBlockMp4($url,$postid){
+	$data = get_post_meta($postid,"_wp_attachment_metadata",true);
+
 	if ($data) {
 	  $dims = ' height="'.$data["height"].'" width="'.$data["width"].'"';
 	} else $dims = "";

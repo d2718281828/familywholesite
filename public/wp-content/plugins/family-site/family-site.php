@@ -370,7 +370,6 @@ class FamilySite {
 			["24/7/58","1958-07-24",0],
 			["1990/5/4-6/1","1990-05-18",14]
 	  ];
-	  error_log("DR Test - Doing some tests");
 	  $ok = true;
 	  for ($k=0; $k<count($cases);$k++){
 		  $dr = new DateRange($cases[$k][0]);
