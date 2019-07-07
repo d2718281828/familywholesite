@@ -38,9 +38,9 @@ class DateRange {
 	  //$userdate = str_replace("/","-",$userdate);
 	  $range = explode("-",$userdate);
 	  switch(count($range)){
-		  case 0: return $this->oneDate(str_replace("/","-",$userdate));
-		  case 1: return $this->twoDates(str_replace("/","-",$range[0]),str_replace("/","-",$range[1]));
-		  case 2: return $this->oneDate($userdate);
+		  case 1: return $this->oneDate(str_replace("/","-",$userdate));
+		  case 2: return $this->twoDates(str_replace("/","-",$range[0]),str_replace("/","-",$range[1]));
+		  case 3: return $this->oneDate($userdate);
 		  default: return null;		// dont understand, so invalid
 	  }
   }
@@ -123,8 +123,8 @@ class DateRange {
 	  $ix = count($adate)-count($over);
 	  $adate[$ix] = $this->strover($adate[$ix], $over[0]);
 	  // copy across any remaining
-	  for ($k=1, $k<count($over); $k++){
-		  $adate[$ix+$k] = strlen($over[$k)==1 ? "0".$over[$k] : $over[$k];
+	  for ($k=1; $k<count($over); $k++){
+		  $adate[$ix+$k] = strlen($over[$k])==1 ? "0".$over[$k] : $over[$k];
 	  }
 	  return $adate;
   }
@@ -142,14 +142,14 @@ class DateRange {
   protected function range($a0,$a1,$a2,$b0,$b1,$b2){
 	  $d1 = date_create($a0."/".$a1."/".$a2);
 	  $d2 = date_create($b0."/".$b1."/".$b2);
-	  error_log("calculating range ".$a0."/".$a1."/".$a2." = ".$d1);
+	  error_log("calculating range ".$a0."/".$a1."/".$a2." = ".$d1->format("Y-m-d"));
 	  $int = $d1->diff($d2);
 	  $within = floor(($int->days)/2);
-	  $dmid = $d1->add(new DateInterval('P'.$within.'D'));
-	  error_log("end result ".$dmid." +/- ".$within);
+	  $dmid = $d1->add(new \DateInterval('P'.$within.'D'));
 	  $this->within = $within;
 	  $this->mid = $dmid->format("Y-m-d");
-	  return $x.$s2;
+	  error_log("end result ".$this->mid." +/- ".$within);
+	  return null;
   }
   /**
   * If the above not working, an alternative
@@ -158,7 +158,7 @@ class DateRange {
 	  $pats = [
 		["(\d\d\d\d)" ],
 		["(\d\d\d\d)-(\d+)" ],
-		["(\d\d\d\d)/()"
+		["(\d\d\d\d)/()"]
 	  ];
   }
 
