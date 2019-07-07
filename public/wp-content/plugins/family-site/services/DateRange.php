@@ -142,14 +142,17 @@ class DateRange {
   protected function range($a0,$a1,$a2,$b0,$b1,$b2){
 	  $d1 = date_create($a0."/".$a1."/".$a2);
 	  $d2 = date_create($b0."/".$b1."/".$b2);
-	  error_log("calculating range ".$a0."/".$a1."/".$a2." = ".$d1->format("Y-m-d"));
+	  //error_log("calculating range ".$a0."/".$a1."/".$a2." = ".$d1->format("Y-m-d"));
 	  $int = $d1->diff($d2);
 	  $within = floor(($int->days)/2);
 	  $dmid = $d1->add(new \DateInterval('P'.$within.'D'));
 	  $this->within = $within;
 	  $this->mid = $dmid->format("Y-m-d");
-	  error_log("end result ".$this->mid." +/- ".$within);
+	  //error_log("end result ".$this->mid." +/- ".$within);
 	  return null;
+  }
+  public function show(){
+	  return $this->mid."+/-".$this->within;
   }
   /**
   * If the above not working, an alternative

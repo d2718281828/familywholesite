@@ -362,13 +362,15 @@ class FamilySite {
 	  $cases = [
 			["1988","1988-07-01",182],
 			["1958-61", "1959-12-31",730],
-			["2012/07-11","2012-09-15",75],
+			["2012/07-11","2012-09-15",76],
 			["2002/12/13","2002-12-13",0],
 			["24/7/58","1958-07-24",0]
 	  ];
+	  error_log("DR Test - Doing some tests"
 	  for ($k=0; $k<count($cases);$k++){
 		  $dr = new DateRange($cases[$k][0]);
-		  error_log("DR Test ".$cases[$k][0]." - ".$dr->mid. " +/- ".$dr->within);
+		  if ($dr->mid!=$cases[$k][1] || $dr->within!=$cases[$k][2])
+				error_log("DR Test ".$cases[$k][0]." - ".$dr->mid. " +/- ".$dr->within);
 	  }
   }
 

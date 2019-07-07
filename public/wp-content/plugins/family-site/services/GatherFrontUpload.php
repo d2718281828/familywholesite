@@ -60,6 +60,14 @@ class GatherFrontUpload {
 	  // did the  user specify a date
 	  $udate = $newItem->get("user_date");
 	  $haveuserdate = false;
+	  if ($udate){
+		  error_log("user date specified ".$udate);
+		  $dr = new DateRange($udate);
+		  $newItem->set("actual_date",$dr->mid);
+		  $newItem->set("date_within",$dr->within);
+		  error_log("--- which is  ".$dr->show());
+		  $haveuserdate = true;
+	  }
 	  //$ureq = $_REQUEST["user_date"];
 	  //error_log("user date with post meta ",$udate.", with request ".$ureq);
 	  
