@@ -55,9 +55,11 @@ class VeilOfSecrecy {
         $m = "";
         $login = wp_login_url();
         $m = "<form method='post'>";
+	$m.= "<div class='vos-signin-box'>";
         $m.= "<p>For quick access to view the site, enter group password <input type='password' name='vos_password'> </p>";
         $m.= "<p><input type='checkbox' value='1' name='rememberme'> Remember me - only if this is your computer. If it is not your computer, close your browser when you have finished.</p>";
         $m.= "<p><input type='submit' value='Login to View'></p>";
+	$m.= "</div>";
         $m.= "<p>To make changes to the site you must <a href='$login'>Sign In</a> with your own password.</p>";
         $m.="</form>";
         return $m;
